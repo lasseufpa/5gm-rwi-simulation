@@ -25,7 +25,7 @@ if __name__ == '__main__':
     antenna = txrxFile['Rx'].location_list[0]
 
     shutil.copytree(base_insite_project_path, results_base_model_dir, )
-    for i in range(2):
+    for i in range(n_run):
         run_dir = os.path.join(results_dir, 'run{:05d}'.format(i))
         os.makedirs(run_dir)
 

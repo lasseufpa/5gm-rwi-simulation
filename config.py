@@ -7,6 +7,7 @@ base_insite_project_path = os.path.join(os.path.dirname(os.path.realpath(__file_
 # Where to store the results (will create subfolders for each "run")
 results_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                            'restuls')
+n_run = 2
 
 results_base_model_dir = os.path.join(results_dir, 'base')
 # InSite project path
@@ -18,3 +19,4 @@ object_dst_file_name = os.path.join(base_insite_project_path, "random-line.objec
 txrx_dst_file_name = os.path.join(base_insite_project_path, 'model.txrx')
 
 tfrecord_options = tf.python_io.TFRecordOptions(tf.python_io.TFRecordCompressionType.GZIP)
+tfrecord_file_name = 'rwi.tfrecord'
