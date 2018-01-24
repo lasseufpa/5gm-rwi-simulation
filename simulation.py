@@ -2,25 +2,13 @@ import os
 import shutil
 
 import numpy as np
-
-from placement import place_on_line
 from rwimodeling import insite, objects, txrx
 
+from config import *
+from placement import place_on_line
+
 if __name__ == '__main__':
-    base_insite_project_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'SimpleFunciona')
-
-    # Where to store the results (will create subfolders for each "run")
-    results_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                               'restuls')
-    results_base_model_dir = os.path.join(results_dir, 'base')
-    # InSite project path
-    path = os.path.join(base_insite_project_path, 'model.setup')
-    # Where the InSite project will store the results (Study Area name)
-    project_output_dir = os.path.join(base_insite_project_path, 'study')
     project = insite.InSiteProject(path, project_output_dir)
-
-    object_dst_file_name = os.path.join(base_insite_project_path, "random-line.object")
-    txrx_dst_file_name = os.path.join(base_insite_project_path, 'model.txrx')
 
     with open(os.path.join(base_insite_project_path, "base.object")) as infile:
         objFile = objects.ObjectFile.from_file(infile)
