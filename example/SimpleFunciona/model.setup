@@ -34,33 +34,33 @@ final_interaction_only yes
 end_<diffuse_scattering>
 autoboundary 1
 begin_<model> 
-full3d
-raytracingmode sbr
+x3d
+num_threads 12
+use_gpu no
+initial_ray_mode uniform_sweep
+foliage_model 0
+foliage_attenuation_vert 1
+foliage_attenuation_hor 1
+ray_spacing 1
 plane_wave_phase_reference automatic
 616.069 542.41 87.6583
 begin_<OutputRequests> 
 CEF no
 ComplexImpulseResponse no
 DelaySpread yes
-FieldAnimation no
 DirectionOfArrival yes
 DirectionOfDeparture yes
-ElectricFieldVsFrequency no
-ElectricFieldVsTime no
-EMFields no
+ElectroMagneticFields no
 FSPathloss no
 FSPower no
-InputData no
 MeanDirectionOfArrival no
 MeanDirectionOfDeparture no
 MeanTimeOfArrival no
 Pathloss yes
 Paths yes
 Power yes
-PowerDelayProfile no
 TimeOfArrival no
 XPathloss no
-TerrainProfile no
 end_<OutputRequests>
 end_<model>
 begin_<boundary> 
@@ -79,6 +79,28 @@ nVertices 4
 863.2119140625 797.396667480469 0
 368.925506591797 797.396667480469 0
 end_<boundary>
+begin_<MonteCarlo> 
+monte_carlo_updated no
+monte_carlo_active no
+monte_carlo_mean yes
+monte_carlo_min no
+monte_carlo_max no
+monte_carlo_median no
+monte_carlo_sdev no
+monte_carlo_iterations 10
+monte_carlo_seed 1
+end_<MonteCarlo>
+begin_<MPE> 
+mpe_is_active inactive
+mpestandard controlled
+mpe_averaging_time 300
+mpe_averaging_time_short 0.1
+mpe_user_efield_peak 100000
+mpe_user_efield_rms 61.4
+mpe_user_hfield_rms 0.163
+mpe_user_power_short 10
+mpe_user_power 2
+end_<MPE>
 end_<studyarea>
 begin_<feature> 
 feature 0

@@ -38,7 +38,7 @@ begin_<Translations>
 2d 0 0 0
 end_<Translations>
 begin_<Scale> 
-3dOrthographic 4.19806 4.19806 0.9
+3dOrthographic 0.9 0.9 0.9
 3dPerspective 1 1 1
 2d 0.895739 0.895739 1
 end_<Scale>

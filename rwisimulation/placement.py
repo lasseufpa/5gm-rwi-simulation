@@ -3,7 +3,7 @@ import os
 
 import numpy as np
 
-from rwimodeling import errors, objects, txrx
+from rwimodeling import errors, objects, txrx, X3dXmlFile
 
 
 def place_on_line(origin_array, destination_list, dim_list, space, object,
@@ -76,11 +76,17 @@ def place_on_line(origin_array, destination_list, dim_list, space, object,
     else:
         return structure_group
 
-if __name__=='__main__':
+if __name__ == '__main__':
+    import sys
+    print(sys.path)
+    import config as c
 
-    with open(os.path.join("SimpleFunciona", "base.object")) as infile:
+    with open(os.path.join("example", "SimpleFunciona", "base.object")) as infile:
         obj = objects.ObjectFile.from_file(infile)
-    with open(os.path.join('SimpleFunciona', 'base.txrx')) as infile:
+
+    x3d_xml = X3dXmlFile(os.path.join("example", "SimpleFunciona", "model.Study.xml"))
+
+    with open(os.path.join("example", 'SimpleFunciona', 'base.txrx')) as infile:
         txrxFile = txrx.TxRxFile.from_file(infile)
     obj.clear()
 
@@ -91,12 +97,15 @@ if __name__=='__main__':
 
     city_origin = np.array((648, 456, 0.2))
     antenna_origin = np.array((car.height / 2, car.width / 2, car.height))
-    antenna = txrxFile['Rx'].location_list[0]
+    vertice_list = txrxFile['Rx'].location_list[0]
 
-    structure_group, location = place_on_line(
-        city_origin, 531, 1, lambda: np.random.uniform(1, 3), car_structure, antenna, antenna_origin)
+    structure_group, placed_vertice_list = place_on_line(
+        city_origin, 531, 1, lambda: np.random.uniform(1, 3), car_structure, vertice_list, antenna_origin)
     obj.add_structure_groups(structure_group)
-    obj.write(os.path.join("SimpleFunciona", "random-line.object"))
+    obj.write(os.path.join('example', "SimpleFunciona", "random-line.object"))
 
-    txrxFile['Rx'].location_list[0] = location
-    txrxFile.write(os.path.join('SimpleFunciona', 'model.txrx'))
+    x3d_xml.add_vertice_list(placed_vertice_list, c.dst_txrx_xpath)
+    x3d_xml.write(os.path.join("example", "SimpleFunciona", 'gen.study.xml'))
+
+    txrxFile['Rx'].location_list[0] = placed_vertice_list
+    txrxFile.write(os.path.join('example', 'SimpleFunciona', 'model.txrx'))

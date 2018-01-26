@@ -26,7 +26,7 @@
                     </APGAccelerationParameters>
                 </APGAccelerationParameters>
                 <CPUThreads>
-                    <Integer Value="4"/>
+                    <Integer Value="12"/>
                 </CPUThreads>
                 <Diffractions>
                     <Integer Value="1"/>
@@ -34,7 +34,7 @@
                 <DiffuseScatteringParameters>
                     <DiffuseScatteringParameters>
                         <DiffuseScatteringDiffractions>
-                            <Integer Value="2"/>
+                            <Integer Value="1"/>
                         </DiffuseScatteringDiffractions>
                         <DiffuseScatteringEnabled>
                             <Boolean Value="true"/>
@@ -419,7 +419,7 @@
                     <Double Value="1013.25"/>
                 </Pressure>
                 <RaySpacing>
-                    <Double Value="0.25"/>
+                    <Double Value="1"/>
                 </RaySpacing>
                 <Reflections>
                     <Integer Value="6"/>
@@ -437,12 +437,12 @@
                     <Integer Value="0"/>
                 </Transmissions>
                 <UseGPU>
-                    <Boolean Value="true"/>
+                    <Boolean Value="false"/>
                 </UseGPU>
             </X3D>
         </Model>
         <OutputLocation>
-            <String Value="Study"/>
+            <String Value="study"/>
         </OutputLocation>
         <OutputPrefix>
             <String Value="model"/>
@@ -452,7 +452,7 @@
                 <Filename>
                     <FileDescription>
                         <Filename>
-                            <String Value="./Study/model.Study.sqlite"/>
+                            <String Value="./study/model.study.sqlite"/>
                         </Filename>
                         <FilenameChecksum>
                             <String/>
@@ -652,13 +652,13 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="650.04798386801235"/>
+                                                    <Double Value="750.95000000153243"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="441.88763961052814"/>
+                                                    <Double Value="553.97000000051571"/>
                                                 </Y>
                                                 <Z>
-                                                    <Double Value="10"/>
+                                                    <Double Value="5"/>
                                                 </Z>
                                             </CartesianPoint>
                                         </ProjectedPoint>
@@ -740,10 +740,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="458.26999999985622"/>
+                                                    <Double Value="472.269999999969"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -753,10 +753,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="465.49501206487042"/>
+                                                    <Double Value="480.66544647894"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -766,10 +766,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="471.35889276265823"/>
+                                                    <Double Value="491.0236640074146"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -779,10 +779,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="478.32945533844457"/>
+                                                    <Double Value="501.28811649389712"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -792,10 +792,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="484.50441826893842"/>
+                                                    <Double Value="507.71091706191589"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -805,10 +805,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="491.68190384513957"/>
+                                                    <Double Value="514.31204960693424"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -818,10 +818,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="497.72478569862824"/>
+                                                    <Double Value="523.19298040488798"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -831,10 +831,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="503.99235157783113"/>
+                                                    <Double Value="533.29366090616531"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -844,10 +844,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="510.53252464159465"/>
+                                                    <Double Value="540.42029385127"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -857,10 +857,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="516.40335767202725"/>
+                                                    <Double Value="550.30713180365649"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -870,10 +870,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="523.80531466825335"/>
+                                                    <Double Value="557.16016757576665"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -883,10 +883,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="529.92015921764983"/>
+                                                    <Double Value="563.85905083332057"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -896,10 +896,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="537.43114939845589"/>
+                                                    <Double Value="571.90688913949896"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -909,10 +909,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="543.03506772951175"/>
+                                                    <Double Value="581.83072403993151"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -922,10 +922,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="549.06747513592302"/>
+                                                    <Double Value="591.82740658012142"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -935,10 +935,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="555.7413277208899"/>
+                                                    <Double Value="602.34054968022758"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -948,10 +948,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="563.21273149217575"/>
+                                                    <Double Value="611.41864856401264"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -961,10 +961,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="570.63971851451049"/>
+                                                    <Double Value="621.90520347019026"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -974,10 +974,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="577.64394138246655"/>
+                                                    <Double Value="631.05023698721766"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -987,10 +987,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="756.13000000156387"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="584.43334447272503"/>
+                                                    <Double Value="640.83998438127253"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1000,10 +1000,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="591.43761644825065"/>
+                                                    <Double Value="472.269999999969"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1013,10 +1013,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="597.29813611091959"/>
+                                                    <Double Value="482.5210831930126"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1026,10 +1026,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="603.62329797850782"/>
+                                                    <Double Value="488.93283298101022"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1039,10 +1039,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="611.14290930245431"/>
+                                                    <Double Value="498.41190601848882"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1052,10 +1052,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="617.39100270024369"/>
+                                                    <Double Value="504.49080586703832"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1065,10 +1065,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="623.07301619009934"/>
+                                                    <Double Value="512.71004830444258"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1078,10 +1078,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="629.16207256425787"/>
+                                                    <Double Value="520.4648048338596"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1091,10 +1091,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="635.04777540608598"/>
+                                                    <Double Value="528.31233392297213"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1104,10 +1104,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="641.42488238090664"/>
+                                                    <Double Value="536.2193703076033"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1117,10 +1117,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="646.97818236517537"/>
+                                                    <Double Value="545.22415665441406"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1130,10 +1130,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="654.29090089121121"/>
+                                                    <Double Value="555.53844973886112"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1143,10 +1143,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="661.01418049229301"/>
+                                                    <Double Value="562.28351738986373"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1156,10 +1156,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="668.52219004621622"/>
+                                                    <Double Value="570.06486977394195"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1169,10 +1169,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="674.32108243676862"/>
+                                                    <Double Value="576.58785281632913"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1182,10 +1182,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="680.11525868159379"/>
+                                                    <Double Value="585.08736061338698"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1195,10 +1195,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="687.52765984592054"/>
+                                                    <Double Value="595.21520061911519"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1208,10 +1208,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="693.46005398534351"/>
+                                                    <Double Value="602.35950081051021"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1221,10 +1221,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="699.78942541314962"/>
+                                                    <Double Value="611.14401005252125"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1234,10 +1234,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="707.22545125530917"/>
+                                                    <Double Value="621.60884083082658"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1247,10 +1247,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="714.37923686196586"/>
+                                                    <Double Value="630.99029035763692"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>
@@ -1260,23 +1260,10 @@
                                         <ProjectedPoint>
                                             <CartesianPoint>
                                                 <X>
-                                                    <Double Value="648.73500000057709"/>
+                                                    <Double Value="761.13000000171337"/>
                                                 </X>
                                                 <Y>
-                                                    <Double Value="721.24042220845672"/>
-                                                </Y>
-                                                <Z>
-                                                    <Double Value="1.6699999999999999"/>
-                                                </Z>
-                                            </CartesianPoint>
-                                        </ProjectedPoint>
-                                        <ProjectedPoint>
-                                            <CartesianPoint>
-                                                <X>
-                                                    <Double Value="648.73500000057709"/>
-                                                </X>
-                                                <Y>
-                                                    <Double Value="727.34018836196265"/>
+                                                    <Double Value="639.19489535330308"/>
                                                 </Y>
                                                 <Z>
                                                     <Double Value="1.6699999999999999"/>

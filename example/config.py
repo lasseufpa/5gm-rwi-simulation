@@ -11,12 +11,17 @@ try:
 except ImportError:
     position_matrix_per_object_shape = None
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
 working_directory = os.path.dirname(os.path.realpath(__file__))
 # Directory where the RWI project will run on
 base_insite_project_path = os.path.join(working_directory, 'SimpleFunciona')
 # InSite project path
 setup_path = os.path.join(base_insite_project_path, 'model.setup')
 setup_path = setup_path.replace(' ', '\ ')
+# InSite X3D study area path
+base_x3d_xml_path = os.path.join(base_insite_project_path, 'model.Study.xml')
 # Where the InSite project will store the results (Study Area name)
 project_output_dir = os.path.join(base_insite_project_path, 'study')
 # Name (basename) of the paths file generated in the simulation
@@ -29,6 +34,10 @@ dst_object_file_name = os.path.join(base_insite_project_path, "random-line.objec
 base_txrx_file_name = os.path.join(base_insite_project_path, "base.object")
 # txrx which will be modified in the RWI project
 dst_txrx_file_name = os.path.join(base_insite_project_path, 'model.txrx')
+
+dst_x3d_txrx_xpath = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSet/OutputID/Integer[@Value='2']" +
+                      "/../../ControlPoints/ProjectedPointList")
+dst_x3d_xml_path = os.path.join(base_insite_project_path, 'gen.Study.xml')
 
 # dimensions of the cars which will be placed on `dst_object_file_name`
 car_dimensions = (1.76, 4.54, 1.47)
@@ -88,3 +97,6 @@ calcprop_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wire
                 'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
                 '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/ ' +
                 '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/calcprop_3.2.0.3')
+wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wireless/WI32_UFPA1_DEMO_180224.lic ' +
+               'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
+               '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
