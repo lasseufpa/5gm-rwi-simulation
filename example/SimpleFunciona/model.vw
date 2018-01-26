@@ -24,21 +24,21 @@ gridspacing 0.000833333
 gridQuadrants 0
 grid 0
 legend 0
-descriptions on
+descriptions off
 description_backgrounds on
 end_<States>
 begin_<Rotations> 
-3dOrthographic -37.0286 0 87.5159
+3dOrthographic 0 0 0
 3dPerspective 0 0 0
 2d 0 0 0
 end_<Rotations>
 begin_<Translations> 
-3dOrthographic 34.2013 49.461 -47.1644
+3dOrthographic 0 0 0
 3dPerspective 0 0 0
 2d 0 0 0
 end_<Translations>
 begin_<Scale> 
-3dOrthographic 2.4215 2.4215 0.9
+3dOrthographic 4.19806 4.19806 0.9
 3dPerspective 1 1 1
 2d 0.895739 0.895739 1
 end_<Scale>
