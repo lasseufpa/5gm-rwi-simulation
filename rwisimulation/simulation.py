@@ -34,7 +34,7 @@ def main():
     antenna = txrxFile[c.antenna_points_name].location_list[0]
 
     shutil.copytree(c.base_insite_project_path, c.results_base_model_dir, )
-    for i in range(c.n_run):
+    for i in c.n_run:
         run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
         os.makedirs(run_dir)
 

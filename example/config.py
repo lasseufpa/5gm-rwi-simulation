@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import itertools
 
 try:
     import tensorflow as tf
@@ -64,7 +65,9 @@ results_dir = os.path.join(working_directory, 'restuls')
 def base_run_dir_fn(i):
     """returns the `run_dir` for run `i`"""
     return "run{:05d}".format(i)
-n_run = 1
+# iterator for number of times to repeat
+#n_run = range(1)
+n_run = itertools.count() # infinite
 # Copy of the RWI project used in the simulation
 results_base_model_dir = os.path.join(results_dir, 'base')
 # TFRecord compression, can be NONE
