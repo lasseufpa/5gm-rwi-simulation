@@ -1,15 +1,17 @@
+import os
+
 import tensorflow as tf
 import numpy as np
 
 from rwimodeling import objects
 from rwiparsing import P2mPaths
 
-from config import *
-from positionmatrix import calc_position_matrix, matrix_plot
-from calcrxpower import calc_rx_power
+import config as c
+from .positionmatrix import calc_position_matrix, matrix_plot
+from .calcrxpower import calc_rx_power
 
 
-def to_tfrecord(object_file_name, paths_file_name, resolution=1, antenna_number=4):
+def to_tfrecord(analysis_area, object_file_name, paths_file_name, resolution=1, antenna_number=4):
     with open(object_file_name) as infile:
         obj = objects.ObjectFile.from_file(infile)
 
@@ -19,9 +21,9 @@ def to_tfrecord(object_file_name, paths_file_name, resolution=1, antenna_number=
             for sub_structure in structure:
                 polygon_list.append(sub_structure.as_polygon())
 
-    matrix = calc_position_matrix((633, 456, 663, 531), polygon_list, resolution)
+    matrix = calc_position_matrix(analysis_area, polygon_list, resolution)
 
-    print(matrix.shape)
+    #print(matrix.shape)
     #matrix_plot(matrix[1])
 
     paths = P2mPaths(paths_file_name)
@@ -50,11 +52,15 @@ def to_tfrecord(object_file_name, paths_file_name, resolution=1, antenna_number=
         yield example
 
 
-if __name__ == '__main__':
-    with tf.python_io.TFRecordWriter(tfrecord_file_name, tfrecord_options) as tfr_writer:
-        for run_i in range(n_run):
-            run_dir = os.path.join(results_dir, "run{:05d}".format(run_i))
-            object_file_name = os.path.join(run_dir, 'random-line.object')
-            paths_file_name = os.path.join(run_dir, 'study', 'model.paths.t001_01.r002.p2m')
-            for example in to_tfrecord(object_file_name, paths_file_name, 1):
+def main():
+    with tf.python_io.TFRecordWriter(c.tfrecord_file_name, c.tfrecord_options) as tfr_writer:
+        for run_i in range(c.n_run):
+            run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(run_i))
+            object_file_name = os.path.join(run_dir, os.path.basename(c.dst_object_file_name))
+            abs_paths_file_name = os.path.join(run_dir, os.path.basename(c.project_output_dir), c.paths_file_name)
+            for example in to_tfrecord(c.analysis_area, object_file_name, abs_paths_file_name,
+                                       c.analysis_area_resolution, c.antenna_number):
                 tfr_writer.write(example.SerializeToString())
+
+if __name__ == '__main__':
+    main()
