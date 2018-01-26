@@ -1,14 +1,14 @@
 import os
 import shutil
+import argparse
 
-import numpy as np
 from rwimodeling import insite, objects, txrx
 
 import config as c
 from .placement import place_on_line
 
 
-def main():
+def main(args):
     project = insite.InSiteProject(c.setup_path, c.project_output_dir, c.calcprop_bin)
 
     with open(os.path.join(c.base_insite_project_path, "base.object")) as infile:
@@ -40,7 +40,12 @@ def main():
         txrxFile.write(c.dst_txrx_file_name)
         shutil.copy(c.dst_txrx_file_name, run_dir)
 
-        project.run(output_dir=run_dir, delete_temp=True)
+        if not args.place_only:
+            project.run(output_dir=run_dir, delete_temp=True)
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-p', '--place-only', action='store_true',
+                        help='Run only the objects placement')
+    args = parser.parse_args()
+    main(args)

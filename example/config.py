@@ -40,20 +40,22 @@ antenna_points_name = 'Rx'
 # antenna to be placed above the cars
 antenna_origin = (car_dimensions[0] / 2, car_dimensions[1] / 2, car_dimensions[2])
 # origin and destination of the line to place the cars
-line_origin = (648, 456, 0.2)
-line_destination = 531
+line_origin = ((755.25, 470, 0.2),
+               (755.25 + 5, 470, 0.2),
+               )
+line_destination = 645
 # dimension `line_destination` is indicating to
 line_dimension = 1
 # distance between cars
 def car_distances():
-    return np.random.uniform(1, 3)
+    return np.random.uniform(1.5, 6)
 
 # Where to store the results (will create subfolders for each "run")
 results_dir = os.path.join(working_directory, 'restuls')
 def base_run_dir_fn(i):
     """returns the `run_dir` for run `i`"""
     return "run{:05d}".format(i)
-n_run = 2
+n_run = 1
 # Copy of the RWI project used in the simulation
 results_base_model_dir = os.path.join(results_dir, 'base')
 # TFRecord compression, can be NONE

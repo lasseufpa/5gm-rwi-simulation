@@ -6,13 +6,13 @@ import numpy as np
 from rwimodeling import errors, objects, txrx
 
 
-def place_on_line(origin, destination, dim, space, object,
+def place_on_line(origin_array, destination_list, dim_list, space, object,
                   antenna=None, antenna_origin=None):
     """ Place object in a line separated by space
 
-    :param origin: (x, y, z)
-    :param destination: the maximum coordinate of the line
-    :param dim: 0, 1, 2 for x, y or z
+    :param origin_array: (x, y, z) or ((x, y, z),)
+    :param destination_list: scalar or list the maximum coordinate of the line
+    :param dim_list: 0, 1, 2 for x, y or z (one or list of)
     :param space: function that return the space between `object`
     :param object: a RWI Structure with "origin" in (0, 0, 0) (must have a valid dimension)
     :param antanna_origin: (x, y, z) normally "inside" the object
@@ -20,7 +20,16 @@ def place_on_line(origin, destination, dim, space, object,
     :return: a structure group
     """
 
-    origin = np.array(origin)
+    origin_array = np.array(origin_array, ndmin=2)
+    n_lines = origin_array.shape[0]
+    destination_list = np.array(destination_list, ndmin=1)
+    dim_list = np.array(dim_list, ndmin=1)
+    # if a list of destination and dim is not provided but a list of origin is,
+    # assumes the same destination and dim for all origins
+    if len(destination_list) == 1:
+        destination_list = np.repeat(destination_list, n_lines)
+    if len(dim_list) == 1:
+        dim_list = np.repeat(dim_list, n_lines)
     if object.dimensions is None:
         raise errors.FormatError('"{}" has no dimensions'.format(object))
 
@@ -35,32 +44,33 @@ def place_on_line(origin, destination, dim, space, object,
         else:
             vertice_list_origin = np.array(antenna_origin)
 
+    obj_i = 0
 
-    # position on `dim` accounting for all `object` and `space` placed
-    last_obj_loc = origin[dim]
-    n_obj = 0
-    while True:
-        # no more objects fit (last could be the space)
-        if last_obj_loc >= destination:
-            break
-        # check if object fit
-        if object.dimensions[dim] + last_obj_loc >= destination:
-            break
-        # the object to be added
-        new_object = copy.deepcopy(object)
-        new_object.name += '{:03d}'.format(n_obj)
-        # the origin of the new object
-        new_object_origin = origin
-        new_object_origin[dim] = last_obj_loc
-        # move object to the new origin
-        new_object.translate(new_object_origin)
-        if antenna is not None:
-            vertice_list.add_vertice(new_object_origin + vertice_list_origin)
-        # add the new object to the structure group
-        structure_group.add_structures(new_object)
-        # where new objects should be placed
-        last_obj_loc = new_object_origin[dim] + new_object.dimensions[dim] + space()
-        n_obj += 1
+    for origin, destination, dim in zip(origin_array, destination_list, dim_list):
+        # position on `dim` accounting for all `object` and `space` placed
+        last_obj_loc = origin[dim]
+        while True:
+            # no more objects fit (last could be the space)
+            if last_obj_loc >= destination:
+                break
+            # check if object fit
+            if object.dimensions[dim] + last_obj_loc >= destination:
+                break
+            # the object to be added
+            new_object = copy.deepcopy(object)
+            new_object.name += '{:03d}'.format(obj_i)
+            # the origin of the new object
+            new_object_origin = origin
+            new_object_origin[dim] = last_obj_loc
+            # move object to the new origin
+            new_object.translate(new_object_origin)
+            if antenna is not None:
+                vertice_list.add_vertice(new_object_origin + vertice_list_origin)
+            # add the new object to the structure group
+            structure_group.add_structures(new_object)
+            # where new objects should be placed
+            last_obj_loc = new_object_origin[dim] + new_object.dimensions[dim] + space()
+            obj_i += 1
     if antenna is not None:
         return structure_group, vertice_list
     else:
