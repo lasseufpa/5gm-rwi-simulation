@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='rwisimulation',
-      version='1.1.0',
+      version='1.1.1',
       description='Run simulations in Remcom Wireless InSite',
       author='LASSE',
       author_email='pedosb@gmail.com',

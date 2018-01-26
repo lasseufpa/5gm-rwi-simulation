@@ -57,7 +57,8 @@ def main():
         for run_i in range(c.n_run):
             run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(run_i))
             object_file_name = os.path.join(run_dir, os.path.basename(c.dst_object_file_name))
-            abs_paths_file_name = os.path.join(run_dir, os.path.basename(c.project_output_dir), c.paths_file_name)
+            #abs_paths_file_name = os.path.join(run_dir, os.path.basename(c.project_output_dir), c.paths_file_name)
+            abs_paths_file_name = os.path.join(run_dir, c.paths_file_name)
             for example in to_tfrecord(c.analysis_area, object_file_name, abs_paths_file_name,
                                        c.analysis_area_resolution, c.antenna_number):
                 tfr_writer.write(example.SerializeToString())
