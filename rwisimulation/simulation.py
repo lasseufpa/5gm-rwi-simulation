@@ -8,7 +8,12 @@ import config as c
 from .placement import place_on_line
 
 
-def main(args):
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-p', '--place-only', action='store_true',
+                        help='Run only the objects placement')
+    args = parser.parse_args()
+
     project = insite.InSiteProject(c.setup_path, c.project_output_dir, c.calcprop_bin)
 
     with open(os.path.join(c.base_insite_project_path, "base.object")) as infile:
@@ -44,8 +49,4 @@ def main(args):
             project.run(output_dir=run_dir, delete_temp=True)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--place-only', action='store_true',
-                        help='Run only the objects placement')
-    args = parser.parse_args()
-    main(args)
+    main()
