@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 01/29/18 00:33:22 by SUMO netconvert Version 0.32.0
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <node-files value="ita.nod.xml"/>
+        <edge-files value="ita.edg.xml"/>
+    </input>
+
+    <output>
+        <output-file value="ita.net.xml"/>
+    </output>
+
+</configuration>
+-->
+
+<net version="0.27" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/net_file.xsd">
+
+    <location netOffset="-749.50,-470.00" convBoundary="0.00,0.00,18.25,175.00" origBoundary="749.50,470.00,767.75,645.00" projParameter="!"/>
+
+    <edge id="laneA" from="1" to="2" priority="-1">
+        <lane id="laneA_0" index="0" speed="13.90" length="175.17" shape="19.90,0.07 12.15,175.07"/>
+    </edge>
+    <edge id="laneB" from="4" to="3" priority="-1">
+        <lane id="laneB_0" index="0" speed="13.90" length="175.17" shape="-1.65,174.93 6.10,-0.07"/>
+    </edge>
+
+    <junction id="1" type="dead_end" x="18.25" y="0.00" incLanes="" intLanes="" shape="18.30,0.00 21.50,0.14"/>
+    <junction id="2" type="dead_end" x="10.50" y="175.00" incLanes="laneA_0" intLanes="" shape="13.75,175.14 10.55,175.00"/>
+    <junction id="3" type="dead_end" x="7.75" y="0.00" incLanes="laneB_0" intLanes="" shape="4.50,-0.14 7.70,-0.00"/>
+    <junction id="4" type="dead_end" x="0.00" y="175.00" incLanes="" intLanes="" shape="-0.05,175.00 -3.25,174.86"/>
+
+</net>

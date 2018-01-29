@@ -1,0 +1,16 @@
+<routes>
+    <vTypeDistribution id="typedist1">
+        <vType id="Car" departSpeed="max" accel="2.6" decel="4.5" length="3.91" maxSpeed="30.0" speedDev="0.1" sigma="0.2" minGap="0.3" probability="0.6"/>
+        <vType id="Truck" accel="2.0" decel="4" length="4.41" maxSpeed="25.0" speedDev="0.1" sigma="0.2" minGap="0.3" probability="0.2"/>
+        <vType id="Bus" accel="2.0" decel="4" length="5" maxSpeed="20.0" speedDev="0.1" sigma="0.2" minGap="0.3" probability="0.2"/>
+    </vTypeDistribution>
+    <flow id="laneAProbabilistic" color="1,0,0" begin="0" end= "3000" probability="0.99" type="typedist1">
+        <route edges="laneA"/>
+    </flow>    
+    <flow id="laneADeterministic" color="0,0,1" begin="0" end= "3000" vehsPerHour="2000000" type="typedist1">
+        <route edges="laneA"/>
+    </flow>    
+    <flow id="typeB" color="0,1,0"  begin="0" end= "3000" probability="0.95" type="typedist1">
+        <route edges="laneB"/>
+    </flow>    
+</routes>
