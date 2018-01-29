@@ -103,3 +103,6 @@ calcprop_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wire
 wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wireless/WI32_UFPA1_DEMO_180224.lic ' +
                'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
+sumo_bin = '/Users/psb/ownCloud/Projects/DNNWireless/sumo/bin/sumo-gui'
+sumo_cfg = os.path.join(working_directory, 'sumo', 'ita.sumocfg')
+sumo_cmd = [sumo_bin, '-c', sumo_cfg]
