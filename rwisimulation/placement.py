@@ -10,14 +10,15 @@ from rwimodeling import errors, objects, txrx, X3dXmlFile
 from sumo import coord
 
 
-def place_by_sumo(antenna, car_material_id):
+def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict):
     antenna = copy.deepcopy(antenna)
     antenna.clear()
 
     structure_group = objects.StructureGroup()
     structure_group.name = 'SUMO cars'
 
-    for veh in traci.vehicle.getIDList():
+    veh_i = None
+    for veh_i, veh in enumerate(traci.vehicle.getIDList()):
         (x, y), angle, lane_id, length, width, height = [f(veh) for f in [
             traci.vehicle.getPosition,
             traci.vehicle.getAngle,
@@ -27,7 +28,7 @@ def place_by_sumo(antenna, car_material_id):
             traci.vehicle.getHeight
         ]]
 
-        x, y = coord.convert_distances(lane_id, (x,y))
+        x, y = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict, margin_dict=margin_dict)
 
         car = objects.RectangularPrism(length, width, height, material=car_material_id)
 
@@ -44,6 +45,9 @@ def place_by_sumo(antenna, car_material_id):
 
         #antenna_vertice
         antenna.add_vertice((x, y, height))
+
+    if veh_i is None:
+        return None, None
 
     return structure_group, antenna
 

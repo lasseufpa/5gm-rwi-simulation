@@ -1,10 +1,7 @@
 import numpy as np
 
 
-def convert_distances(lane,
-                      point_sumo,
-                      lane_boundary_dict={'laneA_0':[[757, 645], [768, 470]], 'laneB_0': [[741, 645], [752, 470]]},
-                      margin_dict={'laneA_0':[-1.6532, -0.0975], 'laneB_0':[1.6523, 0.0975]}):
+def convert_distances(lane, point_sumo, lane_boundary_dict=None, margin_dict=None):
     def get_sumo_net_bounds(lane_boundary_dict):
         boundary_array = None
         for lane, boundary in lane_boundary_dict.items():
@@ -15,7 +12,11 @@ def convert_distances(lane,
         return np.min(boundary_array, 0), np.max(boundary_array, 0)
 
     def convert_sumo_to_insite_coordinates(point, net_bounds_min, net_bounds_max, margin):
-        return point + net_bounds_min - margin
+        if True:
+            return point + net_bounds_min - margin
+        else:
+            return (point[0] + net_bounds_min[0] - margin[0],
+                    net_bounds_max[1] - point[1] + margin[1])
 
     margin = np.array(margin_dict[lane])
     net_bounds_min, net_bounds_max = get_sumo_net_bounds(lane_boundary_dict)
