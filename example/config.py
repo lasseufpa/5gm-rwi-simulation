@@ -106,3 +106,4 @@ wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wirel
 sumo_bin = '/Users/psb/ownCloud/Projects/DNNWireless/sumo/bin/sumo-gui'
 sumo_cfg = os.path.join(working_directory, 'sumo', 'ita.sumocfg')
 sumo_cmd = [sumo_bin, '-c', sumo_cfg]
+use_sumo = True
