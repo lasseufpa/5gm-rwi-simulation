@@ -59,6 +59,15 @@ disp('Result:')
 laneCenterA, laneCenterB, laneCenterC, laneCenterD
 
 %This was the final result:
+% laneA.start = [757 457]; %node2
+% laneA.end = [751 657]; %node1
+% laneB.start = [760 457]; %node4
+% laneB.end = [754 657]; %node3
+% laneC.start = [758 657]; %node5
+% laneC.end = [764 457]; %node6
+% laneD.start = [761 657]; %node7
+% laneD.end = [767 457]; %node8
+% directly as XML:
 % <nodes>
 %    <node id="1" x="751" y="657" />
 %    <node id="2" x="757" y="457" />
