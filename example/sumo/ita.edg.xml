@@ -1,4 +1,6 @@
 <edges>
-    <edge from="1" id="laneA" to="2" />
+    <edge from="2" id="laneA" to="1" />
     <edge from="4" id="laneB" to="3" />
-</edges>
+    <edge from="5" id="laneC" to="6" />
+    <edge from="7" id="laneD" to="8" />
+    </edges>
