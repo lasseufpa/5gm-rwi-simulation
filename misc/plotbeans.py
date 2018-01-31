@@ -69,6 +69,9 @@ def main():
             bean_array[run_i,:] = best_tx_rx
         if cache:
             np.savez(cache_file_name, pos_matrix_array=pos_matrix_array, bean_array=bean_array)
+            with open('plotbeans.bin', 'wb') as outfile:
+                outfile.write(pos_matrix_array.astype(np.float32)[:].tobytes())
+                outfile.write(bean_array.astype(np.float32)[:].tobytes())
 
     bean_line = []
     for run_i in range(pos_matrix_array.shape[0]):
@@ -77,7 +80,7 @@ def main():
 
         bean_line.append(best_tx_rx[0] * 16 + best_tx_rx[1])
 
-        ax = plt.subplot(3,10,11 + run_i)
+        ax = plt.subplot(3, 10, 11 + run_i)
         ax.imshow(pos_matrix.T, origin='lower')
     bean_line = np.array(bean_line)
 
