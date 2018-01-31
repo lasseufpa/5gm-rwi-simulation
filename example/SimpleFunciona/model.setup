@@ -36,7 +36,7 @@ autoboundary 1
 begin_<model> 
 x3d
 num_threads 12
-use_gpu no
+use_gpu No
 initial_ray_mode uniform_sweep
 foliage_model 0
 foliage_attenuation_vert 1

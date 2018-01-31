@@ -22,7 +22,7 @@ base_insite_project_path = os.path.join(working_directory, 'SimpleFunciona')
 setup_path = os.path.join(base_insite_project_path, 'model.setup')
 setup_path = setup_path.replace(' ', '\ ')
 # InSite X3D study area path
-base_x3d_xml_path = os.path.join(base_insite_project_path, 'model.Study.xml')
+base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.Study.xml')
 # Where the InSite project will store the results (Study Area name)
 project_output_dir = os.path.join(base_insite_project_path, 'study')
 # Name (basename) of the paths file generated in the simulation
@@ -66,8 +66,8 @@ def base_run_dir_fn(i):
     """returns the `run_dir` for run `i`"""
     return "run{:05d}".format(i)
 # iterator for number of times to repeat
-#n_run = range(1)
-n_run = itertools.count() # infinite
+n_run = range(20)
+#n_run = itertools.count() # infinite
 # Copy of the RWI project used in the simulation
 results_base_model_dir = os.path.join(results_dir, 'base')
 # TFRecord compression, can be NONE
@@ -83,7 +83,7 @@ tfrecord_options = tf.python_io.TFRecordOptions(
     if tf is not None else None
 
 # where to map the received to TFRecords (minx, miny, maxx, maxy)
-analysis_area = (633, 456, 663, 531)
+analysis_area = (729, 453, 666, 666)
 analysis_area_resolution = 0.5
 antenna_number = 4
 
@@ -103,18 +103,26 @@ calcprop_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wire
 wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wireless/WI32_UFPA1_DEMO_180224.lic ' +
                'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
-sumo_bin = '/Users/psb/ownCloud/Projects/DNNWireless/sumo/bin/sumo-gui'
+
+import socket
+if socket.gethostname() == 'Pedros-MacBook-Pro.local':
+    sumo_bin = '/Users/psb/ownCloud/Projects/DNNWireless/sumo/bin/sumo-gui'
+else:
+    sumo_bin = '/usr/bin/sumo'
 sumo_cfg = os.path.join(working_directory, 'sumo', 'ita.sumocfg')
-sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--random', '--step-length', '0.01']
+#sumo_cfg = os.path.join(working_directory, 'sumosimple', 'itasimple.sumocfg')
+#sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--random', '--step-length', '1']
+sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', '1', '--seed', '0']
 use_sumo = True
 
 # to Aldebaro's script
 
-lane_boundary_dict = {'laneA_0': [[757, 457], [751, 657]],
-                      'laneB_0': [[760, 457], [754, 657]],
-                      'laneC_0': [[758, 657], [764, 457]],
-                      'laneD_0': [[761, 657], [767, 457]]}
-margin_dict = {'laneA_0': [-1.6532, -0.0975],
-               'laneB_0': [-1.6532, -0.0975],
-               'laneC_0': [1.6523, 0.0975],
-               'laneD_0': [1.6523, 0.0975]}
+lane_boundary_dict = {"laneA_0": [[758.5,460], [744.5,660]],
+                      "laneB_0": [[761.5,460], [747.5,660]],
+                      "laneC_0": [[766.5,460], [752.5,660]],
+                      "laneD_0": [[769.5,460], [755.5,660]]}
+
+margin_dict = {'laneA_0': [0, 0],
+               'laneB_0': [0, 0],
+               'laneC_0': [0, 0],
+               'laneD_0': [0, 0]}
