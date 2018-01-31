@@ -44,26 +44,46 @@ def to_tfrecord(analysis_area, object_file_name, paths_file_name, resolution=1, 
     return matrix[interest_car_i], best_tx_rx
 
 def main():
-    bean_list = np.zeros((20, 2))
-    pos_matrix_array = np.zeros((20, *c.position_matrix_shape))
-    for run_i in c.n_run:
-        run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(run_i))
-        object_file_name = os.path.join(run_dir, os.path.basename(c.dst_object_file_name))
-        abs_paths_file_name = os.path.join(run_dir, os.path.basename(c.project_output_dir), c.paths_file_name)
-        pos_matrix, best_tx_rx = to_tfrecord(c.analysis_area, object_file_name, abs_paths_file_name,
-                                                  c.analysis_area_resolution, c.antenna_number)
-        #bean_list.append(best_tx_rx[0] * 16 + best_tx_rx[1])
-        #ax = plt.subplot(3,10,11 + run_i)
-        pos_matrix_array[run_i,:] = pos_matrix
-        bean_list[run_i,:] = best_tx_rx
+    cache = True
+    cache_file_name = 'plotbeans.npz'
+    pos_matrix_array = None
+    bean_array = None
+    if cache:
+        try:
+            cache_file = np.load(cache_file_name)
+            pos_matrix_array = cache_file['pos_matrix_array']
+            bean_array = cache_file['bean_array']
+        except FileNotFoundError:
+            pass
 
-        #ax.imshow(pos_matrix.T, origin='lower')
+    if pos_matrix_array is None:
+        bean_array = np.zeros((20, 2))
+        pos_matrix_array = np.zeros((20, *c.position_matrix_shape))
+        for run_i in c.n_run:
+            run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(run_i))
+            object_file_name = os.path.join(run_dir, os.path.basename(c.dst_object_file_name))
+            abs_paths_file_name = os.path.join(run_dir, os.path.basename(c.project_output_dir), c.paths_file_name)
+            pos_matrix, best_tx_rx = to_tfrecord(c.analysis_area, object_file_name, abs_paths_file_name,
+                                                 c.analysis_area_resolution, c.antenna_number)
+            pos_matrix_array[run_i,:] = pos_matrix
+            bean_array[run_i,:] = best_tx_rx
+        if cache:
+            np.savez(cache_file_name, pos_matrix_array=pos_matrix_array, bean_array=bean_array)
 
-    #ax = plt.subplot(3,1,1)
-    #ax.plot(bean_list)
-    #plt.show()
-    np.savetxt('pos_matrix_array.csv', pos_matrix_array, delimiter=',')
-    np.savetxt('bean_list.csv', bean_list, delimiter=',')
+    bean_line = []
+    for run_i in range(pos_matrix_array.shape[0]):
+        pos_matrix = pos_matrix_array[run_i]
+        best_tx_rx = bean_array[run_i]
+
+        bean_line.append(best_tx_rx[0] * 16 + best_tx_rx[1])
+
+        ax = plt.subplot(3,10,11 + run_i)
+        ax.imshow(pos_matrix.T, origin='lower')
+    bean_line = np.array(bean_line)
+
+    ax = plt.subplot(3,1,1)
+    ax.plot(bean_line)
+    plt.show()
 
 if __name__ == '__main__':
     main()
