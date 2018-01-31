@@ -87,6 +87,3 @@ angle=anglerad*180/pi;
 b=lane.end(2)-m*lane.end(1);
 end
 
-function plotLane(lane,mycolor)
-    plot([lane.start(1) lane.end(1)], [lane.start(2) lane.end(2)],mycolor)
-end
