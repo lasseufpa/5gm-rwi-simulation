@@ -10,6 +10,7 @@ import config as c
 from rwisimulation.positionmatrix import calc_position_matrix, matrix_plot
 from rwisimulation.calcrxpower import calc_rx_power
 
+from arrowangle import arrow_angle
 
 def to_tfrecord(analysis_area, object_file_name, paths_file_name, resolution=1, antenna_number=4):
     with open(object_file_name) as infile:
@@ -74,18 +75,34 @@ def main():
                 outfile.write(bean_array.astype(np.float32)[:].tobytes())
 
     bean_line = []
+    pos_matrix_full = np.zeros((pos_matrix_array.shape[2], pos_matrix_array.shape[0] * (pos_matrix_array.shape[1] + 20)))
+    pos_matrix_array = pos_matrix_array + 1
     for run_i in range(pos_matrix_array.shape[0]):
-        pos_matrix = pos_matrix_array[run_i]
+        pos_matrix_full[:,(pos_matrix_array.shape[1] + 20) * run_i:(pos_matrix_array.shape[1])*(run_i+1)+run_i * 20] = pos_matrix_array[run_i].T
         best_tx_rx = bean_array[run_i]
 
         bean_line.append(best_tx_rx[0] * 16 + best_tx_rx[1])
 
-        ax = plt.subplot(3, 10, 11 + run_i)
-        ax.imshow(pos_matrix.T, origin='lower')
-    bean_line = np.array(bean_line)
+        #ax = plt.subplot(3, 10, 11 + run_i)
+        #ax.imshow(pos_matrix.T, origin='lower')
+    #bean_line = np.array(bean_line)
 
-    ax = plt.subplot(3,1,1)
-    ax.plot(bean_line)
+
+    #ax = plt.subplot(3,1,1)
+    #ax.plot(bean_line)
+    plt.imshow(pos_matrix_full, origin='lower')
+
+    for run_i in range(pos_matrix_array.shape[0]):
+        best_tx_rx = bean_array[run_i]
+
+        l1, l2 = arrow_angle(*best_tx_rx)
+        l1[0] = l1[0] + (pos_matrix_array.shape[1] + 20) * run_i + 25
+        l1[1] = l1[1] + 250
+        l2[0] = l2[0] + (pos_matrix_array.shape[1] + 20) * run_i + 25
+        l2[1] = l2[1] + 250
+        plt.plot(*l1, '-xb')
+        plt.plot(*l2, '-or')
+
     plt.show()
 
 if __name__ == '__main__':
