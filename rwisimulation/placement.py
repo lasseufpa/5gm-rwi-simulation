@@ -3,7 +3,53 @@ import os
 
 import numpy as np
 
+import traci
+
 from rwimodeling import errors, objects, txrx, X3dXmlFile
+
+from sumo import coord
+
+
+def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict):
+    antenna = copy.deepcopy(antenna)
+    antenna.clear()
+
+    structure_group = objects.StructureGroup()
+    structure_group.name = 'SUMO cars'
+
+    veh_i = None
+    for veh_i, veh in enumerate(traci.vehicle.getIDList()):
+        (x, y), angle, lane_id, length, width, height = [f(veh) for f in [
+            traci.vehicle.getPosition,
+            traci.vehicle.getAngle,
+            traci.vehicle.getLaneID,
+            traci.vehicle.getWidth,
+            traci.vehicle.getLength,
+            traci.vehicle.getHeight
+        ]]
+
+        x, y = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict, margin_dict=margin_dict)
+
+        car = objects.RectangularPrism(length, width, height, material=car_material_id)
+
+        # na posição final do carro a coordenada do SUMO vai ficar levemente deslocada, digo, ele passa no x, y o
+        # centro da frente do carro, e eu assumo que essa coordenada é o centro do carro, senão eu teria que ver a
+        # direção, acha ok se ficar assim?
+        car.translate((-length/2, -width/2, 0))
+        car.rotate(-angle)
+        car.translate((x, y, 0))
+
+        car_structure = objects.Structure(name=veh)
+        car_structure.add_sub_structures(car)
+        structure_group.add_structures(car_structure)
+
+        #antenna_vertice
+        antenna.add_vertice((x, y, height))
+
+    if veh_i is None:
+        return None, None
+
+    return structure_group, antenna
 
 
 def place_on_line(origin_array, destination_list, dim_list, space, object,

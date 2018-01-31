@@ -54,14 +54,17 @@ def to_tfrecord(analysis_area, object_file_name, paths_file_name, resolution=1, 
 
 def main():
     with tf.python_io.TFRecordWriter(c.tfrecord_file_name, c.tfrecord_options) as tfr_writer:
+        ex_c = 0
         for run_i in c.n_run:
             run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(run_i))
             object_file_name = os.path.join(run_dir, os.path.basename(c.dst_object_file_name))
-            #abs_paths_file_name = os.path.join(run_dir, os.path.basename(c.project_output_dir), c.paths_file_name)
-            abs_paths_file_name = os.path.join(run_dir, c.paths_file_name)
+            abs_paths_file_name = os.path.join(run_dir, os.path.basename(c.project_output_dir), c.paths_file_name)
             for example in to_tfrecord(c.analysis_area, object_file_name, abs_paths_file_name,
                                        c.analysis_area_resolution, c.antenna_number):
+                ex_c += 1
                 tfr_writer.write(example.SerializeToString())
+
+            print('wrote {} examples'.format(ex_c))
 
 if __name__ == '__main__':
     main()

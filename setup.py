@@ -8,7 +8,7 @@ setup(name='rwisimulation',
       author='LASSE',
       author_email='pedosb@gmail.com',
       url='https://gitlab.lasse.ufpa.br/software/python-machine-learning/rwi-simulation',
-      packages=['rwisimulation'],
+      packages=['rwisimulation', 'sumo'],
       entry_points={
           'console_scripts': [
               'rwi-simulation = rwisimulation.simulation:main',

@@ -103,3 +103,18 @@ calcprop_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wire
 wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wireless/WI32_UFPA1_DEMO_180224.lic ' +
                'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
+sumo_bin = '/Users/psb/ownCloud/Projects/DNNWireless/sumo/bin/sumo-gui'
+sumo_cfg = os.path.join(working_directory, 'sumo', 'ita.sumocfg')
+sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--random', '--step-length', '0.01']
+use_sumo = True
+
+# to Aldebaro's script
+
+lane_boundary_dict = {'laneA_0': [[757, 457], [751, 657]],
+                      'laneB_0': [[760, 457], [754, 657]],
+                      'laneC_0': [[758, 657], [764, 457]],
+                      'laneD_0': [[761, 657], [767, 457]]}
+margin_dict = {'laneA_0': [-1.6532, -0.0975],
+               'laneB_0': [-1.6532, -0.0975],
+               'laneC_0': [1.6523, 0.0975],
+               'laneD_0': [1.6523, 0.0975]}

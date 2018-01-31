@@ -43,6 +43,7 @@ def calc_position_matrix(bounds, polygon_list, resolution=1):
     each point in the matrix[polygon_i] is a "pixel", the pixel is 1 when inside any polygon;
     2 when inside polygon_i; and 0 otherwise
     """
+    bounds = np.array(bounds).reshape(2,2)
     n_polygon = len(polygon_list)
     all_polygons = geometry.MultiPolygon(polygon_list)
     # shape each "image"
@@ -60,11 +61,11 @@ def calc_position_matrix(bounds, polygon_list, resolution=1):
             #point = affinity.translate(
             #    geometry.Point(point_np),
             #    *bounds[0])
-            if point.within(all_polygons):
-                matrix[:,i,j] = 1
-                for polygon_i, polygon in enumerate(polygon_list):
-                    if point.within(polygon):
-                        matrix[polygon_i,i,j] = 2
+            #if point.within(all_polygons):
+            for polygon_i, polygon in enumerate(polygon_list):
+                if point.within(polygon):
+                    matrix[:,i,j] = 1
+                    matrix[polygon_i,i,j] = 2
     return matrix
 
 if __name__ == '__main__':

@@ -1,11 +1,15 @@
+import sys
 import os
 import shutil
 import argparse
+import readline
 
-from rwimodeling import insite, objects, txrx, X3dXmlFile
+import traci
+
+from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist
 
 import config as c
-from .placement import place_on_line
+from .placement import place_on_line, place_by_sumo
 
 
 def main():
@@ -14,11 +18,15 @@ def main():
                         help='Run only the objects placement')
     parser.add_argument('-c', '--run-calcprop', action='store_true',
                         help='Run using calcprop')
+    parser.add_argument('-s', '--pause-each-run', action='store_true',
+                        help='Interactive run')
+    parser.add_argument('-o', '--remove-results-dir', action='store_true',
+                        help='ONLY IF YOU KNOW WHAT YOU ARE DOING')
     args = parser.parse_args()
 
     insite_project = insite.InSiteProject(setup_path=c.setup_path, xml_path=c.dst_x3d_xml_path.replace(' ', '\ '),
-                                            output_dir=c.project_output_dir, calcprop_bin=c.calcprop_bin,
-                                            wibatch_bin=c.wibatch_bin)
+                                          output_dir=c.project_output_dir, calcprop_bin=c.calcprop_bin,
+                                          wibatch_bin=c.wibatch_bin)
 
     with open(os.path.join(c.base_insite_project_path, "base.object")) as infile:
         objFile = objects.ObjectFile.from_file(infile)
@@ -33,32 +41,58 @@ def main():
 
     antenna = txrxFile[c.antenna_points_name].location_list[0]
 
-    shutil.copytree(c.base_insite_project_path, c.results_base_model_dir, )
+    try:
+        shutil.copytree(c.base_insite_project_path, c.results_base_model_dir, )
+    except FileExistsError:
+        shutil.rmtree(c.results_dir)
+        shutil.copytree(c.base_insite_project_path, c.results_base_model_dir, )
+
+    if c.use_sumo:
+        traci.start(c.sumo_cmd)
+
     for i in c.n_run:
         run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
-        os.makedirs(run_dir)
+        #os.makedirs(run_dir)
 
         objFile.clear()
-        structure_group, location = place_on_line(c.line_origin, c.line_destination, c.line_dimension,
-              c.car_distances, car_structure, antenna, c.antenna_origin)
+
+        if c.use_sumo:
+            traci.simulationStep()
+            structure_group, location = place_by_sumo(
+                antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict, margin_dict=c.margin_dict)
+            print(traci.simulation.getCurrentTime())
+            # no cars in the environment
+            if location is None:
+                continue
+        else:
+            structure_group, location = place_on_line(c.line_origin, c.line_destination, c.line_dimension,
+                  c.car_distances, car_structure, antenna, c.antenna_origin)
 
         objFile.add_structure_groups(structure_group)
         objFile.write(c.dst_object_file_name)
-        shutil.copy(c.dst_object_file_name, run_dir)
+        #shutil.copy(c.dst_object_file_name, run_dir)
 
         x3d_xml_file.add_vertice_list(location, c.dst_x3d_txrx_xpath)
         x3d_xml_file.write(c.dst_x3d_xml_path)
-        shutil.copy(c.dst_x3d_xml_path, run_dir)
+        #shutil.copy(c.dst_x3d_xml_path, run_dir)
 
         txrxFile[c.antenna_points_name].location_list[0] = location
         txrxFile.write(c.dst_txrx_file_name)
-        shutil.copy(c.dst_txrx_file_name, run_dir)
+        #shutil.copy(c.dst_txrx_file_name, run_dir)
 
         if not args.place_only:
-            insite_project.run_x3d(output_dir=run_dir.replace(' ', '\ '))
+            insite_project.run_x3d(output_dir=c.project_output_dir)
 
         if not args.place_only and args.run_calcprop:
             insite_project.run_calcprop(output_dir=run_dir, delete_temp=True)
+
+        if args.pause_each_run:
+            input('Enter to step')
+            sys.stdin.readline()
+
+        shutil.copytree(c.base_insite_project_path, run_dir)
+
+    traci.close()
 
 if __name__ == '__main__':
     main()
