@@ -51,7 +51,11 @@ def main():
 
         if c.use_sumo:
             traci.simulationStep()
-            structure_group, location = place_by_sumo(antenna, c.car_material_id)
+            structure_group, location = place_by_sumo(
+                antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict, margin_dict=c.margin_dict)
+            # no cars in the environment
+            if location is None:
+                continue
         else:
             structure_group, location = place_on_line(c.line_origin, c.line_destination, c.line_dimension,
                   c.car_distances, car_structure, antenna, c.antenna_origin)
