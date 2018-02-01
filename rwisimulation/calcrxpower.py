@@ -42,6 +42,8 @@ def calc_rx_power(departure_angle, arrival_angle, p_gain, antenna_number, freque
     :param frequency: default
     :return:
     """
+    departure_angle = departure_angle * (np.pi / 180)
+    arrival_angle = arrival_angle * (np.pi / 180)
     c = 3e8
     mlambda = c/frequency
     k = 2 * np.pi / mlambda
@@ -58,9 +60,8 @@ def calc_rx_power(departure_angle, arrival_angle, p_gain, antenna_number, freque
 
     def calc_omega(angle):
         sin = np.sin(angle)
-        k_d_sin = k * d * sin[:, 1]
-        omegay = k_d_sin * sin[:, 0]
-        omegax = k_d_sin * np.cos(angle[:, 0])
+        omegay = k * d * sin[:, 1] * sin[:, 0]
+        omegax = k * d * sin[:, 0] * np.cos(angle[:, 1])
         return np.matrix((omegax, omegay))
     departure_omega = calc_omega(departure_angle)
     arrival_omega = calc_omega(arrival_angle)
