@@ -55,6 +55,7 @@ def calc_rx_power(departure_angle, arrival_angle, p_gain, antenna_number, freque
     gain_dB = p_gain
     path_gain = np.power(10, gain_dB/10)
     antenna_range = np.arange(antenna_number)
+
     def calc_omega(angle):
         sin = np.sin(angle)
         k_d_sin = k * d * sin[:, 1]
@@ -63,6 +64,7 @@ def calc_rx_power(departure_angle, arrival_angle, p_gain, antenna_number, freque
         return np.matrix((omegax, omegay))
     departure_omega = calc_omega(departure_angle)
     arrival_omega = calc_omega(arrival_angle)
+
     def calc_vec_i(i, omega, antenna_range):
         vec = np.exp(1j * omega[:,i] * antenna_range)
         return np.matrix(np.kron(vec[1], vec[0]))

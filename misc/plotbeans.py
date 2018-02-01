@@ -90,19 +90,22 @@ def main():
 
     #ax = plt.subplot(3,1,1)
     #ax.plot(bean_line)
-    plt.imshow(pos_matrix_full, origin='lower')
+    ax = plt.subplot(111)
+    ax.imshow(pos_matrix_full, origin='lower')
 
     for run_i in range(pos_matrix_array.shape[0]):
         best_tx_rx = bean_array[run_i]
 
         l1, l2 = arrow_angle(*best_tx_rx)
-        l1[0] = l1[0] + (pos_matrix_array.shape[1] + 20) * run_i + 25
-        l1[1] = l1[1] + 250
-        l2[0] = l2[0] + (pos_matrix_array.shape[1] + 20) * run_i + 25
-        l2[1] = l2[1] + 250
-        plt.plot(*l1, '-xb')
-        plt.plot(*l2, '-or')
+        ax.quiver((pos_matrix_array.shape[1] + 20) * run_i + 25, 250, *l1, scale=28, width=0.004, color='b')
+        ax.quiver((pos_matrix_array.shape[1] + 20) * run_i + 25, 250, *l2, scale=28, width=0.004, color='r')
+        #plt.plot(*l1, '-xb')
+        #plt.plot(*l2, '-or')
 
+    #plt.xticks(range(0,20))
+    ax.set_yticklabels('')
+    ax.set_xticklabels(['a', 'b'])
+    plt.ylim(0, 320)
     plt.show()
 
 if __name__ == '__main__':
