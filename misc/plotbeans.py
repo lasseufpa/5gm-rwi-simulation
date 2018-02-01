@@ -65,7 +65,7 @@ def main():
             object_file_name = os.path.join(run_dir, os.path.basename(c.dst_object_file_name))
             abs_paths_file_name = os.path.join(run_dir, os.path.basename(c.project_output_dir), c.paths_file_name)
             pos_matrix, best_tx_rx = to_tfrecord(c.analysis_area, object_file_name, abs_paths_file_name,
-                                                 c.analysis_area_resolution, c.antenna_number)
+                                                 c.analysis_area_resolution, c.antenna_number, c.frequency)
             pos_matrix_array[run_i,:] = pos_matrix
             bean_array[run_i,:] = best_tx_rx
         if cache:

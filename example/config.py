@@ -75,7 +75,8 @@ tfrecord_compression = 'GZIP'
 # Generated TFRecord
 tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
 
-
+# frequency for "beam calculation"
+frequency = 6e10
 
 tfrecord_options = tf.python_io.TFRecordOptions(
     eval('tf.python_io.TFRecordCompressionType.{}'.format(tfrecord_compression))
