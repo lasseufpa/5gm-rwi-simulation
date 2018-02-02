@@ -61,7 +61,7 @@ thickness 3.000e-001
 end_<DielectricLayer>
 end_<Material>
 begin_<structure_group> 
-description               Effective permittivity for street level propagation
+description                Effective permittivity for street level propagation
 begin_<structure> small building #2
 begin_<sub_structure> 1
 begin_<face> 1

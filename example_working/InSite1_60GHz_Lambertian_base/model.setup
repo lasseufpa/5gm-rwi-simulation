@@ -17,7 +17,7 @@ max_threads 0
 num_partitions 2
 end_<partitioning>
 begin_<apg_acceleration> 
-enabled yes
+enabled no
 workflow_mode full
 binary_output_mode per_path_utm
 binary_rate 0 active
@@ -26,7 +26,7 @@ path_depth 25
 adjacency_distance 1
 end_<apg_acceleration>
 begin_<diffuse_scattering> 
-enabled yes
+enabled no
 diffuse_reflections 2
 diffuse_diffractions 1
 diffuse_transmissions 0
@@ -47,18 +47,18 @@ plane_wave_phase_reference automatic
 begin_<OutputRequests> 
 CEF no
 ComplexImpulseResponse no
-DelaySpread yes
-DirectionOfArrival yes
-DirectionOfDeparture yes
+DelaySpread no
+DirectionOfArrival no
+DirectionOfDeparture no
 ElectroMagneticFields no
 FSPathloss no
 FSPower no
 MeanDirectionOfArrival no
 MeanDirectionOfDeparture no
 MeanTimeOfArrival no
-Pathloss yes
+Pathloss no
 Paths yes
-Power yes
+Power no
 TimeOfArrival no
 XPathloss no
 end_<OutputRequests>
@@ -74,10 +74,10 @@ end_<reference>
 zmin 16.366584777832
 zmax 144.366577148438
 nVertices 4
-664.703853444872 284.64361204032 0
-863.211914064652 287.422760012673 0
-863.211914064652 797.396667483377 0
-653.357844135781 798.23492808216 0
+664.703853445974 284.64361204032 0
+863.211914065754 287.422760012673 0
+863.211914065754 797.396667483377 0
+653.357844136883 798.23492808216 0
 end_<boundary>
 begin_<MonteCarlo> 
 monte_carlo_updated no
@@ -157,10 +157,10 @@ FieldAnimationIncrement 10
 FieldAnimationTimeAveraged yes
 CEF no
 ComplexImpulseResponse no
-DelaySpread yes
+DelaySpread no
 FieldAnimation no
-DirectionOfArrival yes
-DirectionOfDeparture yes
+DirectionOfArrival no
+DirectionOfDeparture no
 ElectricFieldVsFrequency no
 ElectricFieldVsTime no
 EMFields no
@@ -170,9 +170,9 @@ InputData no
 MeanDirectionOfArrival no
 MeanDirectionOfDeparture no
 MeanTimeOfArrival no
-Pathloss yes
+Pathloss no
 Paths yes
-Power yes
+Power no
 PowerDelayProfile no
 TimeOfArrival no
 XPathloss no
