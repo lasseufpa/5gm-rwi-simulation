@@ -18,7 +18,8 @@ def convert_distances(lane, point_sumo, lane_boundary_dict=None, margin_dict=Non
             return (point[0] + net_bounds_min[0] - margin[0],
                     net_bounds_max[1] - point[1] + margin[1])
 
-    margin = np.array(margin_dict[lane])
+    #margin = np.array(margin_dict[lane])
+    margin = [0, 0]
     net_bounds_min, net_bounds_max = get_sumo_net_bounds(lane_boundary_dict)
 
     return convert_sumo_to_insite_coordinates(point_sumo, net_bounds_min, net_bounds_max, margin)
