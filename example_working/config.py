@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import itertools
+import numpy as np
 
 try:
     import tensorflow as tf
@@ -69,6 +70,10 @@ def base_run_dir_fn(i):
 # iterator for number of times to repeat
 #n_run = range(20)
 n_run = itertools.count() # infinite
+sampling_interval = 0.1
+time_between_episodes = int(10 / sampling_interval) # in steps
+time_of_episode = int(5 / sampling_interval) # in steps
+n_antenna_per_episode = 10
 # Copy of the RWI project used in the simulation
 results_base_model_dir = os.path.join(results_dir, 'base')
 # TFRecord compression, can be NONE
@@ -106,24 +111,30 @@ wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wirel
                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
 
 import socket
-if socket.gethostname() == 'Pedros-MacBook-Pro.local':
+if socket.gethostname() == 'Pedros-MacBook-Pro.local' or \
+   socket.gethostname() == 'pedro-macbook-wifi.psb-home.psbc.com.br':
     sumo_bin = '/Users/psb/ownCloud/Projects/DNNWireless/sumo/bin/sumo-gui'
+elif socket.gethostname() == 'LAPTOP-8R7EBD20':
+    sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe' #'/usr/bin/sumo'
+    sumo_cfg = r'D:\linux_gits\rwi-simulation\example\sumo\quickstart.sumocfg'
 else:
     sumo_bin = '/usr/bin/sumo'
-sumo_cfg = os.path.join(working_directory, '..', 'example', 'sumo', 'ita.sumocfg')
-#sumo_cfg = os.path.join(working_directory, 'sumosimple', 'itasimple.sumocfg')
-#sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--random', '--step-length', '1']
-sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', '1', '--seed', '0']
+sumo_cfg = os.path.join(working_directory, '..', 'example', 'sumo',
+                        'quickstart.sumocfg')
+
+seed = 1517605264
+np.random.seed(seed)
+sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', str(sampling_interval), '--seed', '{}'.format(seed)]
 use_sumo = True
 
 # to Aldebaro's script
-
+# (take only min and max for x and y and put there:
 lane_boundary_dict = {"laneA_0": [[758.5,460], [744.5,660]],
-                      "laneB_0": [[761.5,460], [747.5,660]],
-                      "laneC_0": [[766.5,460], [752.5,660]],
-                      "laneD_0": [[769.5,460], [755.5,660]]}
+                      "laneB_0": [[658.82,460], [747.5,358.76]],
+                      "laneC_0": [[658.82,460], [752.5,675.90]],
+                      "laneD_0": [[840.08,460], [755.5,660]]}
 
-margin_dict = {'laneA_0': [0, 0],
-               'laneB_0': [0, 0],
-               'laneC_0': [0, 0],
-               'laneD_0': [0, 0]}
+#not used anymore (Pedro's bugged code, from Aldebaro's Matlab)
+margin_dict = {'H1_0': [0, 0],
+               'V1_1': [0, 0],
+               'V2_1': [0, 0],}
