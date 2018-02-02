@@ -4,7 +4,7 @@ ortho 1
 wireframe 0
 normals 0
 hilites 0
-cities 1
+cities 0
 terrain 1
 foliage 1
 floorplan 1
@@ -28,12 +28,12 @@ descriptions off
 description_backgrounds on
 end_<States>
 begin_<Rotations> 
-3dOrthographic 319.718 0 -377.752
+3dOrthographic 315.364 0 -41.9782
 3dPerspective 0 0 0
 2d 0 0 0
 end_<Rotations>
 begin_<Translations> 
-3dOrthographic 142.091 -0.000516176 -50.4752
+3dOrthographic 142.091 -0.000516176 -7.29171
 3dPerspective 0 0 0
 2d 0 0 0
 end_<Translations>

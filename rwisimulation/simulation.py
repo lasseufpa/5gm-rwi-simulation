@@ -2,6 +2,8 @@ import sys
 import os
 import shutil
 import argparse
+import numpy as np
+import logging
 import readline
 
 import traci
@@ -50,6 +52,7 @@ def main():
     if c.use_sumo:
         traci.start(c.sumo_cmd)
 
+    scene_i = np.inf
     for i in c.n_run:
         run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
         #os.makedirs(run_dir)
@@ -57,9 +60,22 @@ def main():
         objFile.clear()
 
         if c.use_sumo:
-            traci.simulationStep()
+
+            # when to start a new episode
+            if scene_i >= c.time_of_episode:
+                scene_i = 0
+                # step time_between_episodes from the last one
+                for count in range(c.time_between_episodes):
+                    traci.simulationStep()
+                while len(traci.vehicle.getIDList()) < c.n_antenna_per_episode:
+                    logging.error('not enough cars')
+                    traci.simulationStep()
+                cars_with_antenna = np.random.choice(traci.vehicle.getIDList(), c.n_antenna_per_episode, replace=False)
+
+            scene_i += 1
             structure_group, location = place_by_sumo(
-                antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict, margin_dict=c.margin_dict)
+                antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict, margin_dict=c.margin_dict,
+                cars_with_antenna=cars_with_antenna)
             print(traci.simulation.getCurrentTime())
             # no cars in the environment
             if location is None:

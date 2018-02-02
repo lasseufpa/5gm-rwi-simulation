@@ -10,7 +10,7 @@ from rwimodeling import errors, objects, txrx, X3dXmlFile
 from sumo import coord
 
 
-def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict):
+def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict, cars_with_antenna=None):
     antenna = copy.deepcopy(antenna)
     antenna.clear()
 
@@ -18,6 +18,7 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict):
     structure_group.name = 'SUMO cars'
 
     veh_i = None
+    c_present = False
     for veh_i, veh in enumerate(traci.vehicle.getIDList()):
         (x, y), angle, lane_id, length, width, height = [f(veh) for f in [
             traci.vehicle.getPosition,
@@ -29,6 +30,7 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict):
         ]]
 
         x, y = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict, margin_dict=margin_dict)
+        #print((x, y, -angle, veh))
 
         car = objects.RectangularPrism(length, width, height, material=car_material_id)
 
@@ -44,7 +46,12 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict):
         structure_group.add_structures(car_structure)
 
         #antenna_vertice
-        antenna.add_vertice((x, y, height))
+        if cars_with_antenna is None or veh in cars_with_antenna:
+            c_present = True
+            antenna.add_vertice((x, y, height))
+
+    if not c_present:
+        return None, None
 
     if veh_i is None:
         return None, None
