@@ -66,17 +66,17 @@ def base_run_dir_fn(i):
     """returns the `run_dir` for run `i`"""
     return "run{:05d}".format(i)
 # iterator for number of times to repeat
-n_run = range(20)
-#n_run = itertools.count() # infinite
+#n_run = range(20)
+n_run = itertools.count() # infinite
+time_between_episodes = 20 / 0.05 # in steps
+time_of_episode = 4 / 0.05 # in steps
+n_antenna_per_episode = 20
 # Copy of the RWI project used in the simulation
 results_base_model_dir = os.path.join(results_dir, 'base')
 # TFRecord compression, can be NONE
 tfrecord_compression = 'GZIP'
 # Generated TFRecord
 tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
-
-# frequency for "beam calculation"
-frequency = 6e10
 
 tfrecord_options = tf.python_io.TFRecordOptions(
     eval('tf.python_io.TFRecordCompressionType.{}'.format(tfrecord_compression))
@@ -87,6 +87,8 @@ tfrecord_options = tf.python_io.TFRecordOptions(
 analysis_area = (729, 453, 666, 666)
 analysis_area_resolution = 0.5
 antenna_number = 4
+# frequency for "beam calculation"
+frequency = 6e10
 
 position_matrix_shape = position_matrix_per_object_shape(analysis_area, analysis_area_resolution) \
     if position_matrix_per_object_shape is not None else None
@@ -113,7 +115,10 @@ else:
 sumo_cfg = os.path.join(working_directory, 'sumo', 'ita.sumocfg')
 #sumo_cfg = os.path.join(working_directory, 'sumosimple', 'itasimple.sumocfg')
 #sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--random', '--step-length', '1']
-sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', '1', '--seed', '0']
+import numpy as np
+seed = 1517605264
+np.random.seed(seed)
+sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', '0.05', '--seed', '{}'.format(seed)]
 use_sumo = True
 
 # to Aldebaro's script
