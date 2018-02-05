@@ -17,7 +17,7 @@ max_threads 0
 num_partitions 2
 end_<partitioning>
 begin_<apg_acceleration> 
-enabled no
+enabled yes
 workflow_mode full
 binary_output_mode per_path_utm
 binary_rate 0 active
@@ -26,7 +26,7 @@ path_depth 25
 adjacency_distance 1
 end_<apg_acceleration>
 begin_<diffuse_scattering> 
-enabled no
+enabled yes
 diffuse_reflections 2
 diffuse_diffractions 1
 diffuse_transmissions 0
@@ -41,24 +41,24 @@ initial_ray_mode uniform_sweep
 foliage_model 0
 foliage_attenuation_vert 1
 foliage_attenuation_hor 1
-ray_spacing 0.25
+ray_spacing 1
 plane_wave_phase_reference automatic
 616.069 542.41 87.6583
 begin_<OutputRequests> 
 CEF no
 ComplexImpulseResponse no
-DelaySpread no
-DirectionOfArrival no
-DirectionOfDeparture no
+DelaySpread yes
+DirectionOfArrival yes
+DirectionOfDeparture yes
 ElectroMagneticFields no
 FSPathloss no
 FSPower no
 MeanDirectionOfArrival no
 MeanDirectionOfDeparture no
 MeanTimeOfArrival no
-Pathloss no
+Pathloss yes
 Paths yes
-Power no
+Power yes
 TimeOfArrival no
 XPathloss no
 end_<OutputRequests>
@@ -157,10 +157,10 @@ FieldAnimationIncrement 10
 FieldAnimationTimeAveraged yes
 CEF no
 ComplexImpulseResponse no
-DelaySpread no
+DelaySpread yes
 FieldAnimation no
-DirectionOfArrival no
-DirectionOfDeparture no
+DirectionOfArrival yes
+DirectionOfDeparture yes
 ElectricFieldVsFrequency no
 ElectricFieldVsTime no
 EMFields no
@@ -170,9 +170,9 @@ InputData no
 MeanDirectionOfArrival no
 MeanDirectionOfDeparture no
 MeanTimeOfArrival no
-Pathloss no
+Pathloss yes
 Paths yes
-Power no
+Power yes
 PowerDelayProfile no
 TimeOfArrival no
 XPathloss no
