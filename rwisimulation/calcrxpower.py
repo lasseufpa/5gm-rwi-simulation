@@ -42,8 +42,8 @@ def calc_rx_power(departure_angle, arrival_angle, p_gain, antenna_number, freque
     :param frequency: default
     :return:
     """
-    departure_angle = departure_angle * (np.pi / 180)
-    arrival_angle = arrival_angle * (np.pi / 180)
+    departure_angle = np.deg2rad(departure_angle)
+    arrival_angle = np.deg2rad(arrival_angle)
     c = 3e8
     mlambda = c/frequency
     k = 2 * np.pi / mlambda
