@@ -201,11 +201,11 @@ def main():
                     episode = Episode(c.analysis_area, c.analysis_area_resolution, c.antenna_number, c.frequency,
                                       c.n_paths_to_tfrecord, simulation_info['cars_with_antenna'])
                 else:
-                    if episode.cars_with_antenna != simulation_info['cars_with_antenna']:
-                        raise UnexpectedCarsWithAntennaChangeError('In run {}'.format(run_dir))
                     try:
                         episode.add_scene(object_file_name, abs_paths_file_name, simulation_info['scene_i'])
                         # go to next scene
+                        if episode.cars_with_antenna != simulation_info['cars_with_antenna']:
+                            raise UnexpectedCarsWithAntennaChangeError('In run {}'.format(run_dir))
                         break
                     # episode is over, write and start a new one
                     except SceneNotInEpisodeSequenceError:

@@ -1,5 +1,6 @@
 import os
 import datetime
+import multiprocessing
 from operator import itemgetter
 
 import numpy as np
@@ -35,6 +36,38 @@ def position_matrix_per_object_shape(bounds, resolution):
     return tuple(shape)
 
 
+def _calc_position_matrix_row(args):
+    i, matrix, polygon_list, resolution, bounds, polygons_of_interest_idx_list, report_to, start = args
+    for j in range(matrix.shape[2]):
+        # create the point starting in (0, 0) with resolution "1"
+        point_np = np.array((i, j))
+        # apply the resolution and translate to the "area of interest"
+        point_np = (point_np * resolution) + bounds[0]
+        point = geometry.Point(point_np)
+        #point = affinity.translate(
+        #    geometry.Point(point_np),
+        #    *bounds[0])
+        #if point.within(all_polygons):
+        for polygon_i, polygon in enumerate(polygon_list):
+            if point.within(polygon):
+                matrix[:, i, j] = 1
+                if polygon_i in polygons_of_interest_idx_list:
+                    polygon_idx = polygons_of_interest_idx_list.index(polygon_i)
+                    matrix[polygon_idx, i, j] = 2
+    if report_to is not None:
+        if i != 0:
+            completed_perc = (i / matrix.shape[1]) * 100
+            if np.int(np.round(completed_perc)) % 10 == 0:
+                now = datetime.datetime.today()
+                time_p_perc = (datetime.datetime.today() - start) / completed_perc
+                finish_at = time_p_perc * (100 - completed_perc) + now
+            report_to.write('\rCalculating position matrix: {:.2f}% time/%: {} finish at: {}'.format(
+                completed_perc,
+                time_p_perc,
+                finish_at,
+            ))
+    return matrix
+
 def calc_position_matrix(bounds, polygon_list, resolution=1, polygons_of_interest_idx_list=None, report_to=None):
     """Represents the receivers and other objects in a position matrix
 
@@ -58,35 +91,27 @@ def calc_position_matrix(bounds, polygon_list, resolution=1, polygons_of_interes
     matrix = np.zeros(shape, dtype=np.uint8)
     start = datetime.datetime.today()
     time_p_perc = np.inf
+
+    args = []
     for i in range(matrix.shape[1]):
-        for j in range(matrix.shape[2]):
-            # create the point starting in (0, 0) with resolution "1"
-            point_np = np.array((i, j))
-            # apply the resolution and translate to the "area of interest"
-            point_np = (point_np * resolution) + bounds[0]
-            point = geometry.Point(point_np)
-            #point = affinity.translate(
-            #    geometry.Point(point_np),
-            #    *bounds[0])
-            #if point.within(all_polygons):
-            for polygon_i, polygon in enumerate(polygon_list):
-                if point.within(polygon):
-                    matrix[:, i, j] = 1
-                    if polygon_i in polygons_of_interest_idx_list:
-                        polygon_idx = polygons_of_interest_idx_list.index(polygon_i)
-                        matrix[polygon_idx, i, j] = 2
-        if report_to is not None:
-            if i != 0:
-                completed_perc = (i / matrix.shape[1]) * 100
-                if np.int(np.round(completed_perc)) % 10 == 0:
-                    now = datetime.datetime.today()
-                    time_p_perc = (datetime.datetime.today() - start) / completed_perc
-                    finish_at = time_p_perc * (100 - completed_perc) + now
-                report_to.write('\rCalculating position matrix: {:.2f}% time/%: {} finish at: {}'.format(
-                    completed_perc,
-                    time_p_perc,
-                    finish_at,
-                ))
+        args.append((i, matrix, polygon_list, resolution, bounds, polygons_of_interest_idx_list, report_to, start))
+
+    with multiprocessing.Pool() as pool:
+        matrix_out = pool.map(_calc_position_matrix_row, args)
+
+    for mat in matrix_out:
+        matrix += mat
+
+    #import matplotlib as mpl
+    #mpl.use('Agg')
+    #from matplotlib import pyplot as plt
+
+    #plt.imshow(matrix[0].T, origin='lower')
+    #plt.savefig('oi.png')
+
+    #import IPython
+    #IPython.embed()
+
     if report_to is not None:
         report_to.write('\n')
     return matrix
