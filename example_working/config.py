@@ -29,6 +29,8 @@ base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.Study.xml')
 project_output_dir = os.path.join(base_insite_project_path, 'study')
 # Name (basename) of the paths file generated in the simulation
 paths_file_name = 'model.paths.t001_01.r002.p2m'
+# Name (basename) of the simulation info file
+simulation_info_file_name = 'wri-simulation.info'
 # Base object file to generate the `object_dst_file_name`
 base_object_file_name = os.path.join(base_insite_project_path, "base.object")
 # Object which will be modified in the RWI project
@@ -81,6 +83,9 @@ tfrecord_compression = 'GZIP'
 # Generated TFRecord
 tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
 
+# String (len) of then objects file
+dtype_of_obj_path = 'U100'
+
 tfrecord_options = tf.python_io.TFRecordOptions(
     eval('tf.python_io.TFRecordCompressionType.{}'.format(tfrecord_compression))
 ) \
@@ -100,6 +105,7 @@ best_tx_rx_shape = (2,)
 #tfrecord_file_name = '/Users/psb/ownCloud/Projects/DNN Wireless/rwi-simulation/rwi.tfrecord'
 #tfrecord_file_name = '/Users/psb/ownCloud/Projects/DNN Wireless/tempmm/rwi-simulation/rwi.tfrecord'
 tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
+n_paths_to_tfrecord = 25
 
 #calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
 calcprop_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wireless/WI32_UFPA1_DEMO_180224.lic ' +

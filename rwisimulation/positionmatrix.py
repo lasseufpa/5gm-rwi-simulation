@@ -1,4 +1,6 @@
 import os
+import datetime
+from operator import itemgetter
 
 import numpy as np
 from shapely import geometry
@@ -33,24 +35,29 @@ def position_matrix_per_object_shape(bounds, resolution):
     return tuple(shape)
 
 
-def calc_position_matrix(bounds, polygon_list, resolution=1):
+def calc_position_matrix(bounds, polygon_list, resolution=1, polygons_of_interest_idx_list=None, report_to=None):
     """Represents the receivers and other objects in a position matrix
 
     :param bounds: (minx, miny, maxx, maxy) of the region to study
     :param polygon_list: a list of polygons
     :param resolution: size of the pixel (same unity as bounds, default meters)
+    :param polygons_of_interest_list: idx of polygon_list which will be "marked as receivers" on return, default: all
     :return: a matrix with shape (len(polygon_list), (maxx - minx) / resolution, (maxy - miny) / resolution)
     each point in the matrix[polygon_i] is a "pixel", the pixel is 1 when inside any polygon;
     2 when inside polygon_i; and 0 otherwise
     """
+    if polygons_of_interest_idx_list is None:
+        polygons_of_interest_idx_list = list(range(len(polygon_list)))
     bounds = np.array(bounds).reshape(2,2)
-    n_polygon = len(polygon_list)
+    n_polygon = len(polygons_of_interest_idx_list)
     all_polygons = geometry.MultiPolygon(polygon_list)
     # shape each "image"
     shape = position_matrix_per_object_shape(bounds, resolution)
     # add n_polygon as first dimension
     shape = np.concatenate((np.array(n_polygon, ndmin=1), shape))
     matrix = np.zeros(shape, dtype=np.uint8)
+    start = datetime.datetime.today()
+    time_p_perc = np.inf
     for i in range(matrix.shape[1]):
         for j in range(matrix.shape[2]):
             # create the point starting in (0, 0) with resolution "1"
@@ -64,8 +71,24 @@ def calc_position_matrix(bounds, polygon_list, resolution=1):
             #if point.within(all_polygons):
             for polygon_i, polygon in enumerate(polygon_list):
                 if point.within(polygon):
-                    matrix[:,i,j] = 1
-                    matrix[polygon_i,i,j] = 2
+                    matrix[:, i, j] = 1
+                    if polygon_i in polygons_of_interest_idx_list:
+                        polygon_idx = polygons_of_interest_idx_list.index(polygon_i)
+                        matrix[polygon_idx, i, j] = 2
+        if report_to is not None:
+            if i != 0:
+                completed_perc = (i / matrix.shape[1]) * 100
+                if np.int(np.round(completed_perc)) % 10 == 0:
+                    now = datetime.datetime.today()
+                    time_p_perc = (datetime.datetime.today() - start) / completed_perc
+                    finish_at = time_p_perc * (100 - completed_perc) + now
+                report_to.write('\rCalculating position matrix: {:.2f}% time/%: {} finish at: {}'.format(
+                    completed_perc,
+                    time_p_perc,
+                    finish_at,
+                ))
+    if report_to is not None:
+        report_to.write('\n')
     return matrix
 
 if __name__ == '__main__':

@@ -114,11 +114,10 @@ def main():
 
         shutil.copytree(c.base_insite_project_path, run_dir)
 
-        with open(os.path.join(run_dir, 'wri-simulation.info'), 'w') as infofile:
+        with open(os.path.join(run_dir, c.simulation_info_file_name), 'w') as infofile:
             info_dict = dict(
                 cars_with_antenna=list(cars_with_antenna),
                 scene_i=scene_i,
-
             )
             json.dump(info_dict, infofile)
 
