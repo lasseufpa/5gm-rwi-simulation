@@ -5,6 +5,7 @@ from shapely import geometry
 from matplotlib import pyplot as plt
 
 from rwisimulation.positionmatrix import position_matrix_per_object_shape, calc_position_matrix
+from rwisimulation.calcrxpower import calc_rx_power
 
 import save5gmdata as fgdb
 
@@ -13,11 +14,14 @@ class c:
     #analysis_area = (648, 348, 850, 685)
     analysis_area = (744, 429, 767, 679)
     analysis_area_resolution = 0.5
+    antenna_number = 4
+    frequency = 6e10
 analysis_polygon = geometry.Polygon([(c.analysis_area[0], c.analysis_area[1]),
                                      (c.analysis_area[2], c.analysis_area[1]),
                                      (c.analysis_area[2], c.analysis_area[3]),
                                      (c.analysis_area[0], c.analysis_area[3])])
 only_los = True
+use_yuyang = True
 
 npz_name = 'episode.npz'
 
@@ -33,7 +37,10 @@ plt.ion()
 for ep in session.query(fgdb.Episode):
     # 50 scenas, 10 receivers per scena
     position_matrix_array = np.zeros((50, 10, *pm_per_object_shape), np.int8)
-    best_ray_array = np.zeros((50, 10, 4), np.float32)
+    if use_yuyang:
+        best_ray_array = np.zeros((50, 10, 2), np.float32)
+    else:
+        best_ray_array = np.zeros((50, 10, 4), np.float32)
     best_ray_array.fill(np.nan)
     rec_name_to_array_idx_map = [obj.name for obj in ep.scenes[0].objects if len(obj.receivers) > 0]
     print(rec_name_to_array_idx_map)
@@ -56,13 +63,35 @@ for ep in session.query(fgdb.Episode):
                             if ray.path_gain > best_path_gain:
                                 best_path_gain = ray.path_gain
                                 best_ray = ray
-                        if not best_ray.is_los and only_los:
-                            best_ray_array[sc_i, rec_array_idx, :] = np.array((
-                                best_ray.departure_elevation,
-                                best_ray.departure_azimuth,
-                                best_ray.arrival_elevation,
-                                best_ray.arrival_azimuth))
-                    if not best_ray.is_los and only_los:
+                        if (best_ray is not None and not best_ray.is_los) or not only_los:
+                            if use_yuyang:
+                                departure_angle_array = np.empty((len(rec.rays), 2), np.float64)
+                                arrival_angle_array = np.empty((len(rec.rays), 2), np.float64)
+                                p_gain_array = np.empty((len(rec.rays)), np.float64)
+                                for ray_i, ray in enumerate(rec.rays):
+                                    departure_angle_array[ray_i, :] = np.array((
+                                        ray.departure_elevation,
+                                        ray.departure_azimuth,
+                                    ))
+                                    arrival_angle_array[ray_i, :] = np.array((
+                                        ray.arrival_elevation,
+                                        ray.arrival_azimuth,
+                                    ))
+                                    p_gain_array[ray_i] = np.array((ray.path_gain))
+                                #from IPython import embed
+                                #embed()
+                                t1 = calc_rx_power(departure_angle_array, arrival_angle_array, p_gain_array,
+                                                   c.antenna_number, c.frequency)
+                                t1_abs = np.abs(t1)
+                                best_ray_array[sc_i, rec_array_idx, :] = \
+                                    np.argwhere(t1_abs == np.max(t1_abs))
+                            else:
+                                best_ray_array[sc_i, rec_array_idx, :] = np.array((
+                                    best_ray.departure_elevation,
+                                    best_ray.departure_azimuth,
+                                    best_ray.arrival_elevation,
+                                    best_ray.arrival_azimuth))
+                    if (best_ray is not None and not best_ray.is_los) or not only_los:
                         # the next polygon added will be the receiver
                         polygons_of_interest_idx_list.append(len(polygon_list))
                         rec_present.append(obj.name)
