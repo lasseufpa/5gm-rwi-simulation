@@ -21,7 +21,7 @@ analysis_polygon = geometry.Polygon([(c.analysis_area[0], c.analysis_area[1]),
                                      (c.analysis_area[2], c.analysis_area[3]),
                                      (c.analysis_area[0], c.analysis_area[3])])
 only_los = True
-use_yuyang = True
+use_yuyang = False
 
 npz_name = 'episode.npz'
 
