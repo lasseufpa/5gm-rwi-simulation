@@ -25,7 +25,7 @@ class Episode(Base):
 
     @property
     def number_of_scenes(self):
-        return 0 if self.scenes is None else len(self.scenes)
+        return len(self.scenes)
 
 
 class InsiteObject(Base):
@@ -98,7 +98,7 @@ class InsiteReceiver(Base):
 
     @property
     def number_of_rays(self):
-        return 0 if self.rays is None else len(self.rays)
+        return len(self.rays)
 
 
 class Ray(Base):
@@ -149,19 +149,17 @@ class Scene(Base):
 
     @property
     def number_of_receivers(self):
-        if self.objects is None:
-            return 0
         n_rec = 0
         for obj in self.objects:
-            if self.objects is not None:
-                n_rec += len(obj.receivers)
+            n_rec += len(obj.receivers)
         return n_rec
 
     @property
     def number_of_mobile_objects(self):
-        return 0 if self.objects is None else len(self.objects)
+        return len(self.objects)
 
-engine = create_engine('sqlite:////tmp/episodedata.db')
+#engine = create_engine('sqlite:////tmp/episodedata.db')
+engine = create_engine('sqlite:///episodedata.db')
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 Session.configure(bind=engine)
