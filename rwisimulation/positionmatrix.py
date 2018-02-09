@@ -37,7 +37,7 @@ def position_matrix_per_object_shape(bounds, resolution):
 
 
 def _calc_position_matrix_row(args):
-    i, matrix, polygon_list, resolution, bounds, polygons_of_interest_idx_list, report_to, start = args
+    i, matrix, polygon_list, resolution, bounds, polygons_of_interest_idx_list, report_to, start, polygon_z = args
     for j in range(matrix.shape[2]):
         # create the point starting in (0, 0) with resolution "1"
         point_np = np.array((i, j))
@@ -50,7 +50,7 @@ def _calc_position_matrix_row(args):
         #if point.within(all_polygons):
         for polygon_i, polygon in enumerate(polygon_list):
             if point.within(polygon):
-                matrix[:, i, j] = 1
+                matrix[:, i, j] = 1 if polygon_z is None else polygon_z[polygon_i]
                 if polygon_i in polygons_of_interest_idx_list:
                     polygon_idx = polygons_of_interest_idx_list.index(polygon_i)
                     matrix[polygon_idx, i, j] = 2
@@ -68,7 +68,7 @@ def _calc_position_matrix_row(args):
             ))
     return matrix
 
-def calc_position_matrix(bounds, polygon_list, resolution=1, polygons_of_interest_idx_list=None, report_to=None):
+def calc_position_matrix(bounds, polygon_list, resolution=1, polygons_of_interest_idx_list=None, report_to=None, polygon_z=None):
     """Represents the receivers and other objects in a position matrix
 
     :param bounds: (minx, miny, maxx, maxy) of the region to study
@@ -94,7 +94,7 @@ def calc_position_matrix(bounds, polygon_list, resolution=1, polygons_of_interes
 
     args = []
     for i in range(matrix.shape[1]):
-        args.append((i, matrix, polygon_list, resolution, bounds, polygons_of_interest_idx_list, report_to, start))
+        args.append((i, matrix, polygon_list, resolution, bounds, polygons_of_interest_idx_list, report_to, start, polygon_z))
 
     with multiprocessing.Pool() as pool:
         matrix_out = pool.map(_calc_position_matrix_row, args)

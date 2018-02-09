@@ -17,6 +17,7 @@ analysis_polygon = geometry.Polygon([(c.analysis_area[0], c.analysis_area[1]),
                                      (c.analysis_area[2], c.analysis_area[1]),
                                      (c.analysis_area[2], c.analysis_area[3]),
                                      (c.analysis_area[0], c.analysis_area[3])])
+only_los = True
 
 npz_name = 'episode.npz'
 
@@ -38,6 +39,7 @@ for ep in session.query(fgdb.Episode):
     print(rec_name_to_array_idx_map)
     for sc_i, sc in enumerate(ep.scenes):
         polygon_list = []
+        polygon_z = []
         polygons_of_interest_idx_list = []
         rec_present = []
         for obj in sc.objects:
@@ -54,21 +56,26 @@ for ep in session.query(fgdb.Episode):
                             if ray.path_gain > best_path_gain:
                                 best_path_gain = ray.path_gain
                                 best_ray = ray
-                        best_ray_array[sc_i, rec_array_idx, :] = np.array((
-                            best_ray.departure_elevation,
-                            best_ray.departure_azimuth,
-                            best_ray.arrival_elevation,
-                            best_ray.arrival_azimuth))
-                    # the next polygon added will be the receiver
-                    polygons_of_interest_idx_list.append(len(polygon_list))
-                    rec_present.append(obj.name)
+                        if not best_ray.is_los and only_los:
+                            best_ray_array[sc_i, rec_array_idx, :] = np.array((
+                                best_ray.departure_elevation,
+                                best_ray.departure_azimuth,
+                                best_ray.arrival_elevation,
+                                best_ray.arrival_azimuth))
+                    if not best_ray.is_los and only_los:
+                        # the next polygon added will be the receiver
+                        polygons_of_interest_idx_list.append(len(polygon_list))
+                        rec_present.append(obj.name)
                 polygon_list.append(obj_polygon)
-        scene_position_matrix = calc_position_matrix(
-            c.analysis_area,
-            polygon_list,
-            c.analysis_area_resolution,
-            polygons_of_interest_idx_list,
-        )
+                polygon_z.append(-obj.dimension[2])
+        if len(polygons_of_interest_idx_list) != 0:
+            scene_position_matrix = calc_position_matrix(
+                c.analysis_area,
+                polygon_list,
+                c.analysis_area_resolution,
+                polygons_of_interest_idx_list,
+                polygon_z=polygon_z,
+            )
         for rec_i, rec_name in enumerate(rec_present):
             rec_array_idx = rec_name_to_array_idx_map.index(rec_name)
             position_matrix_array[sc_i, rec_array_idx, :] = scene_position_matrix[rec_i]
