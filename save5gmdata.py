@@ -16,7 +16,7 @@ class FormatError(Exception):
 class Episode(Base):
     __tablename__ = 'episodes'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
 
     insite_pah = db.Column(db.String)
     sumo_path = db.Column(db.String)
@@ -31,13 +31,13 @@ class Episode(Base):
 class InsiteObject(Base):
     __tablename__ = 'objects'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
     name = db.Column(db.String)
     _dimension = db.Column(db.LargeBinary)
     _vertice_array = db.Column(db.LargeBinary)
     _position = db.Column(db.LargeBinary)
 
-    scene_id = db.Column(db.Integer, db.ForeignKey('scenes.id'))
+    scene_id = db.Column(db.Integer, db.ForeignKey('scenes.id'), index=True)
     scene = relationship("Scene", backref="objects")
 
     @property
@@ -77,12 +77,12 @@ class InsiteObject(Base):
 class InsiteReceiver(Base):
     __tablename__ = 'receivers'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
     total_received_power = db.Column(db.Float)
     mean_time_of_arrival = db.Column(db.Float)
     _position = db.Column(db.LargeBinary)
 
-    object_id = db.Column(db.Integer, db.ForeignKey('objects.id'))
+    object_id = db.Column(db.Integer, db.ForeignKey('objects.id'), index=True)
     episode = relationship("InsiteObject", backref="receivers")
 
     @property
@@ -104,7 +104,7 @@ class InsiteReceiver(Base):
 class Ray(Base):
     __tablename__ = 'rays'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
     departure_elevation = db.Column(db.Float)
     departure_azimuth = db.Column(db.Float)
     arrival_elevation = db.Column(db.Float)
@@ -113,12 +113,14 @@ class Ray(Base):
     time_of_arrival = db.Column(db.Float)
     interactions = db.Column(db.String)
 
-    receiver_id = db.Column(db.Integer, db.ForeignKey('receivers.id'))
+    receiver_id = db.Column(db.Integer, db.ForeignKey('receivers.id'),
+                            index=True)
     episode = relationship("InsiteReceiver", backref="rays")
 
     @property
     def is_los(self):
         return len(self.interactions.split('-')) == 2
+
 
 class Scene(Base):
     __tablename__ = 'scenes'
@@ -126,10 +128,10 @@ class Scene(Base):
     """- map between transmitters and mobile objects
             - map between receivers and mobile objects"""
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, index=True)
     _study_area = db.Column(db.LargeBinary)
 
-    episode_id = db.Column(db.Integer, db.ForeignKey('episodes.id'))
+    episode_id = db.Column(db.Integer, db.ForeignKey('episodes.id'), index=True)
     episode = relationship("Episode", backref="scenes")
 
     @property
