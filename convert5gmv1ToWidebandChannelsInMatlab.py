@@ -5,7 +5,7 @@ import datetime
 #there are Ne x Ns x Nr channel matrices and each must represent L=25 rays.
 #With Ne=119, Ns=50, Nr=10, we have 59500 matrices with 25 rays. It is better to save
 #each episode in one file, with the matrix given by
-#scene 1:Ns x Tx_index x Rx_index x numberRays and the follow for each ray
+#scene 1:Ns x Tx_index x Rx_index x numberRays and 7 numbers, the following for each ray
         # path_gain
         # timeOfArrival
         # departure_elevation
@@ -13,10 +13,12 @@ import datetime
         # arrival_elevation
         # arrival_azimuth
         # isLOS
+#to simplify I will assume that all episodes have 50 scenes and 10 receivers in each
 
 import numpy as np
 from shapely import geometry
 from matplotlib import pyplot as plt
+import h5py
 
 from rwisimulation.positionmatrix import position_matrix_per_object_shape, calc_position_matrix
 from rwisimulation.calcrxpower import calc_rx_power
@@ -34,12 +36,6 @@ analysis_polygon = geometry.Polygon([(c.analysis_area[0], c.analysis_area[1]),
                                      (c.analysis_area[2], c.analysis_area[1]),
                                      (c.analysis_area[2], c.analysis_area[3]),
                                      (c.analysis_area[0], c.analysis_area[3])])
-only_los = True
-
-npz_name = 'episode.npz' #output file name
-
-print('Creating file ', npz_name)
-
 session = fgdb.Session()
 totalNumEpisodes = session.query(fgdb.Episode).count()
 
@@ -50,72 +46,65 @@ print(pm_per_object_shape)
 start = datetime.datetime.today()
 perc_done = None
 
-fileNamePrefix = 'insiteFile'
-extension = '.5gmv1'
+fileNamePrefix = './insitedata/urban_cannyon_v2i_5gmv1' #prefix of output files
+pythonExtension = '.npz'
+matlabExtension = '.hdf5'
 
+# assume 50 scenes per episode, 10 receivers per scene
+numScenesPerEpisode = 50
+numTxRxPairsPerScene = 10
+numRaysPerTxRxPair = 25
+numVariablePerRay = 7
 plt.ion()
-numEpisode = 1
+numEpisode = 0
 for ep in session.query(fgdb.Episode): #go over all episodes
-    # 50 scenes per episode, 10 receivers per scene
-    outputFileName = fileNamePrefix + str(numEpisode) + extension
-    print('Episode: ' + str(numEpisode) + ' out of ' + str(totalNumEpisodes) + '. Output=' + outputFileName)
+
+    print('Episode: ' + str(numEpisode+1) + ' out of ' + str(totalNumEpisodes))
 
     #initialization
-    position_matrix_array = np.zeros((50, 10, *pm_per_object_shape), np.int8)
-    best_ray_array = np.zeros((50, 10, 4), np.float32)
-    best_ray_array.fill(np.nan)
+    #Ns x [Tx_index x Rx_index x numberRays] and 7 numbers, the following for each ray
+    allEpisodeData = np.zeros((numScenesPerEpisode, numTxRxPairsPerScene, numRaysPerTxRxPair,
+                               numVariablePerRay), np.float32)
+    allEpisodeData.fill(np.nan)
     
     #from the first scene, get all receiver names
     rec_name_to_array_idx_map = [obj.name for obj in ep.scenes[0].objects if len(obj.receivers) > 0]
     print(rec_name_to_array_idx_map)
     
     #process each scene in this episode
-
     #count # of ep.scenes
-
     for sc_i, sc in enumerate(ep.scenes):
         #print('Processing scene # ', sc_i)
         polygon_list = []
         polygon_z = []
         polygons_of_interest_idx_list = []
         rec_present = []
+
         for obj in sc.objects:
             obj_polygon = geometry.asMultiPoint(obj.vertice_array[:,(0,1)]).convex_hull
             # check if object is inside the analysis_area
             if obj_polygon.within(analysis_polygon):
-                # if the object is a receiver calc a position_matrix for it
+                # if the object is a receiver and is within the analysis area
                 if len(obj.receivers) > 0:
                     rec_array_idx = rec_name_to_array_idx_map.index(obj.name)
-                    for rec in obj.receivers:
-                        best_ray = None
-                        best_path_gain = - np.inf
-                        for ray in rec.rays:
-                            if ray.path_gain > best_path_gain:
-                                best_path_gain = ray.path_gain
-                                best_ray = ray
-                        if (best_ray is not None and not best_ray.is_los) or not only_los:
-                                best_ray_array[sc_i, rec_array_idx, :] = np.array((
-                                    best_ray.departure_elevation,
-                                    best_ray.departure_azimuth,
-                                    best_ray.arrival_elevation,
-                                    best_ray.arrival_azimuth))
-                    if (best_ray is not None and not best_ray.is_los) or not only_los:
-                        # the next polygon added will be the receiver
-                        polygons_of_interest_idx_list.append(len(polygon_list))
-                        rec_present.append(obj.name)
-                polygon_list.append(obj_polygon)
-                polygon_z.append(-obj.dimension[2])
-        if len(polygons_of_interest_idx_list) != 0:
-            scene_position_matrix = calc_position_matrix(
-                c.analysis_area,
-                polygon_list,
-                c.analysis_area_resolution,
-                polygons_of_interest_idx_list,
-                polygon_z=polygon_z,
-            )
-        for rec_i, rec_name in enumerate(rec_present):
-            rec_array_idx = rec_name_to_array_idx_map.index(rec_name)
-            position_matrix_array[sc_i, rec_array_idx, :] = scene_position_matrix[rec_i]
+                    for rec in obj.receivers: #for all receivers
+                        ray_i = 0;
+                        for ray in rec.rays: #for all rays
+                            #gather all info
+                            thisRayInfo = np.zeros(7)
+                            thisRayInfo[0] = ray.path_gain
+                            thisRayInfo[1] = ray.time_of_arrival
+                            thisRayInfo[2] = ray.departure_elevation
+                            thisRayInfo[3] = ray.departure_azimuth
+                            thisRayInfo[4] = ray.arrival_elevation
+                            thisRayInfo[5] = ray.arrival_azimuth
+                            thisRayInfo[6] = ray.is_los
+                            #allEpisodeData = np.zeros((numScenesPerEpisode, numTxRxPairsPerScene,
+                            # numRaysPerTxRxPair, numVariablePerRay), np.float32)
+                            allEpisodeData[sc_i][rec_array_idx][ray_i]=thisRayInfo
+                            ray_i += 1
+                            #if ray.is_los:
+                            #    print(thisRayInfo)
 
         # do not look, just to reporting spent time
         perc_done = ((sc_i + 1) / ep.number_of_scenes) * 100
@@ -128,8 +117,14 @@ for ep in session.query(fgdb.Episode): #go over all episodes
             time_p_perc * (100 - perc_done)), end='')
 
     print()
-    numEpisode += 1 #increment episode counter
+    outputFileName = fileNamePrefix + '_e' + str(numEpisode+1) + pythonExtension
+    np.savez(outputFileName, allEpisodeData=allEpisodeData)
+    print('==> Wrote file ' + outputFileName)
 
-    #np.savez(npz_name, position_matrix_array=position_matrix_array,
-    #         best_ray_array=best_ray_array)
-    #break
+    outputFileName = fileNamePrefix + '_e' + str(numEpisode+1) + matlabExtension
+    print('==> Wrote file ' + outputFileName)
+    f = h5py.File(outputFileName, 'w')
+    f['allEpisodeData'] = allEpisodeData
+    f.close()
+
+    numEpisode += 1 #increment episode counter
