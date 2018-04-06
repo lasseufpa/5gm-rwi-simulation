@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 01/30/18 18:51:12 by SUMO netconvert Version 0.32.0
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <node-files value="ita.nod.xml"/>
+        <edge-files value="ita.edg.xml"/>
+    </input>
+
+    <output>
+        <output-file value="ita.net.xml"/>
+    </output>
+
+</configuration>
+-->
+
+<net version="0.27" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/net_file.xsd">
+
+    <location netOffset="-744.50,-460.00" convBoundary="0.00,0.00,25.00,200.00" origBoundary="744.50,460.00,769.50,660.00" projParameter="!"/>
+
+    <edge id="laneA" from="2" to="1" priority="-1">
+        <lane id="laneA_0" index="0" speed="13.90" length="200.49" shape="-1.65,199.88 12.35,-0.12"/>
+    </edge>
+    <edge id="laneB" from="4" to="3" priority="-1">
+        <lane id="laneB_0" index="0" speed="13.90" length="200.49" shape="1.35,199.88 15.35,-0.12"/>
+    </edge>
+    <edge id="laneC" from="5" to="6" priority="-1">
+        <lane id="laneC_0" index="0" speed="13.90" length="200.49" shape="23.65,0.12 9.65,200.12"/>
+    </edge>
+    <edge id="laneD" from="7" to="8" priority="-1">
+        <lane id="laneD_0" index="0" speed="13.90" length="200.49" shape="26.65,0.12 12.65,200.12"/>
+    </edge>
+
+    <junction id="1" type="dead_end" x="14.00" y="0.00" incLanes="laneA_0" intLanes="" shape="10.76,-0.23 13.95,-0.00"/>
+    <junction id="2" type="dead_end" x="0.00" y="200.00" incLanes="" intLanes="" shape="-0.05,200.00 -3.24,199.77"/>
+    <junction id="3" type="dead_end" x="17.00" y="0.00" incLanes="laneB_0" intLanes="" shape="13.76,-0.23 16.95,-0.00"/>
+    <junction id="4" type="dead_end" x="3.00" y="200.00" incLanes="" intLanes="" shape="2.95,200.00 -0.24,199.77"/>
+    <junction id="5" type="dead_end" x="22.00" y="0.00" incLanes="" intLanes="" shape="22.05,0.00 25.24,0.23"/>
+    <junction id="6" type="dead_end" x="8.00" y="200.00" incLanes="laneC_0" intLanes="" shape="11.24,200.23 8.05,200.00"/>
+    <junction id="7" type="dead_end" x="25.00" y="0.00" incLanes="" intLanes="" shape="25.05,0.00 28.24,0.23"/>
+    <junction id="8" type="dead_end" x="11.00" y="200.00" incLanes="laneD_0" intLanes="" shape="14.24,200.23 11.05,200.00"/>
+
+</net>
