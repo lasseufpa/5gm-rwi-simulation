@@ -1,0 +1,205 @@
+Format type:keyword version: 1.1.0
+begin_<project> Untitled Project
+project_id 13694
+begin_<globals> 
+longitude -77.0787
+latitude 38.8907
+end_<globals>
+FirstAvailableUnknownLayoutNumber 0
+FirstAvailableStudyAreaNumber 1
+begin_<studyarea> study
+StudyAreaNumber 0
+active
+begin_<partitioning> 
+partitioning_type disabled
+queuing_type disabled
+max_threads 0
+num_partitions 2
+end_<partitioning>
+begin_<apg_acceleration> 
+enabled yes
+workflow_mode full
+binary_output_mode per_path_utm
+binary_rate 0 active
+database_mode write_siso
+path_depth 25
+adjacency_distance 1
+end_<apg_acceleration>
+begin_<diffuse_scattering> 
+enabled yes
+diffuse_reflections 2
+diffuse_diffractions 1
+diffuse_transmissions 0
+final_interaction_only yes
+end_<diffuse_scattering>
+autoboundary 0
+begin_<model> 
+x3d
+num_threads 12
+use_gpu No
+initial_ray_mode uniform_sweep
+foliage_model 0
+foliage_attenuation_vert 1
+foliage_attenuation_hor 1
+ray_spacing 1
+plane_wave_phase_reference automatic
+616.069 542.41 87.6583
+begin_<OutputRequests> 
+CEF no
+ComplexImpulseResponse no
+DelaySpread yes
+DirectionOfArrival yes
+DirectionOfDeparture yes
+ElectroMagneticFields no
+FSPathloss no
+FSPower no
+MeanDirectionOfArrival no
+MeanDirectionOfDeparture no
+MeanTimeOfArrival no
+Pathloss yes
+Paths yes
+Power yes
+TimeOfArrival no
+XPathloss no
+end_<OutputRequests>
+end_<model>
+begin_<boundary> 
+begin_<reference> 
+cartesian
+longitude -77.0787
+latitude 38.8907
+visible no
+terrain
+end_<reference>
+zmin 16.366584777832
+zmax 144.366577148438
+nVertices 4
+664.703853445974 284.64361204032 0
+863.211914065754 287.422760012673 0
+863.211914065754 797.396667483377 0
+653.357844136883 798.23492808216 0
+end_<boundary>
+begin_<MonteCarlo> 
+monte_carlo_updated no
+monte_carlo_active no
+monte_carlo_mean yes
+monte_carlo_min no
+monte_carlo_max no
+monte_carlo_median no
+monte_carlo_sdev no
+monte_carlo_iterations 10
+monte_carlo_seed 1
+end_<MonteCarlo>
+begin_<MPE> 
+mpe_is_active inactive
+mpestandard controlled
+mpe_averaging_time 300
+mpe_averaging_time_short 0.1
+mpe_user_efield_peak 100000
+mpe_user_efield_rms 61.4
+mpe_user_hfield_rms 0.163
+mpe_user_power_short 10
+mpe_user_power 2
+end_<MPE>
+end_<studyarea>
+begin_<feature> 
+feature 0
+city
+active
+filename ./Rosslyn.city
+end_<feature>
+begin_<feature> 
+feature 1
+terrain
+active
+filename ./Rosslyn_DTED.ter
+end_<feature>
+begin_<feature> 
+feature 2
+object
+active
+filename ./random-line.object
+end_<feature>
+begin_<txrx_sets> 
+filename ./model.txrx
+FirstAvailableTxRxNumber 3
+end_<txrx_sets>
+FirstAvailableCommSystemNumber 0
+begin_<antenna> Half-wave dipole
+antenna 0
+type HalfWaveDipole
+waveform 0
+polarization vertical
+power_threshold -250
+cable_loss 0
+VSWR 1
+component TotalGain
+gain_range 40
+show_arrow no
+is_sphere no
+end_<antenna>
+begin_<Waveform> Sinusoid
+Sinusoid
+waveform 0
+frequencyDistribution Uniform 500.000 1500.000 inactive nosampling 10
+CarrierFrequency 60000000000.000
+phase 0.000
+bandwidth 1000000.000
+end_<Waveform>
+FirstAvailableFilterNumber 0
+begin_<requests> 
+cartesian
+sealevel
+local
+CalculationMode New
+MaxRenderedPaths 25
+FieldAnimationIncrement 10
+FieldAnimationTimeAveraged yes
+CEF no
+ComplexImpulseResponse no
+DelaySpread yes
+FieldAnimation no
+DirectionOfArrival yes
+DirectionOfDeparture yes
+ElectricFieldVsFrequency no
+ElectricFieldVsTime no
+EMFields no
+FSPathloss no
+FSPower no
+InputData no
+MeanDirectionOfArrival no
+MeanDirectionOfDeparture no
+MeanTimeOfArrival no
+Pathloss yes
+Paths yes
+Power yes
+PowerDelayProfile no
+TimeOfArrival no
+XPathloss no
+TerrainProfile no
+end_<requests>
+begin_<Scales> 
+begin_<MpeThreshhold> 
+AutoScaling 0
+DrawValues 0
+AutoUpdating 0
+Discrete 1
+UseGlobalOpacity 1
+ManualValuesSet 1
+ClampedHigh 1
+ClampedLow 1
+Alpha 1.000e+000
+ManualMin 0.000e+000
+ManualMax 2.000e+002
+TextColor 1.000 1.000 1.000
+Colors 4
+0.300 0.000 0.500
+0.000 1.000 0.000
+1.000 1.000 0.000
+1.000 0.000 0.000
+PartitionValues 
+3
+0.001 50.000 100.000 
+end_<MpeThreshhold>
+end_<Scales>
+end_<project>
