@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.DEBUG)
 working_directory = os.path.dirname(os.path.realpath(__file__))
 # Directory where the RWI project will run on
 base_insite_project_path = os.path.join(working_directory,
-                                        'InSite1_60GHz_Lambertian_base')
+                                        '2018_02_04_insiteproject_ita')
 # InSite project path
 setup_path = os.path.join(base_insite_project_path, 'model.setup')
 setup_path = setup_path.replace(' ', '\ ')
@@ -65,19 +65,19 @@ def car_distances():
     return np.random.uniform(1.5, 6)
 
 # Where to store the results (will create subfolders for each "run")
-# results_dir = os.path.join(working_directory, 'restuls')
+results_dir = os.path.join(working_directory, 'restuls')
 #On Windows: D:\ak\Works\2018-ita-paper\final\raid\pc128\example_working\restuls
-results_dir = ("/mnt/d/ak/Works/2018-ita-paper/final/raid/pc128/example_working/restuls")
+#results_dir = ("/mnt/d/ak/Works/2018-ita-paper/final/raid/pc128/example/ressuls")
 
 def base_run_dir_fn(i):
     """returns the `run_dir` for run `i`"""
     return "run{:05d}".format(i)
 # iterator for number of times to repeat
-#n_run = range(20)
-n_run = itertools.count() # infinite
-sampling_interval = 0.1
+n_run = range(10)
+#n_run = itertools.count() # infinite
+sampling_interval = 0.1 #in seconds
 time_between_episodes = int(10 / sampling_interval) # in steps
-time_of_episode = int(5 / sampling_interval) # in steps
+time_of_episode = int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
 n_antenna_per_episode = 10
 # Copy of the RWI project used in the simulation
 results_base_model_dir = os.path.join(results_dir, 'base')
@@ -111,11 +111,11 @@ tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
 n_paths_to_tfrecord = 25
 
 #calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
-calcprop_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wireless/WI32_UFPA1_DEMO_180224.lic ' +
+calcprop_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/insite.lic ' +
                 'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
                 '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/ ' +
                 '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/calcprop_3.2.0.3')
-wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/ownCloudMBP/Projects/DNN\ Wireless/WI32_UFPA1_DEMO_180224.lic ' +
+wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/insite.lic ' +
                'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
 
@@ -128,7 +128,7 @@ elif socket.gethostname() == 'LAPTOP-8R7EBD20':
     sumo_cfg = r'D:\linux_gits\rwi-simulation\example\sumo\quickstart.sumocfg'
 else:
     sumo_bin = '/usr/bin/sumo'
-sumo_cfg = os.path.join(working_directory, '..', 'example', 'sumo',
+sumo_cfg = os.path.join(working_directory, 'sumo',
                         'quickstart.sumocfg')
 
 seed = 1517605264
