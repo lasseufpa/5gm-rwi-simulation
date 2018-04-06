@@ -8,7 +8,7 @@ setup(name='rwisimulation',
       author='LASSE',
       author_email='pedosb@gmail.com',
       url='https://gitlab.lasse.ufpa.br/software/python-machine-learning/rwi-simulation',
-      packages=['rwisimulation', 'sumo'],
+      packages=['rwisimulation', 'rwisimulation.datamodel', 'sumo'],
       entry_points={
           'console_scripts': [
               'rwi-simulation = rwisimulation.simulation:main',
@@ -21,6 +21,6 @@ setup(name='rwisimulation',
           'shapely': 'Shapely(>=1.6.3)',
       },
       dependency_links=[
-          'git+https://oauth2:GGh9FfxwbqX4pubGGyLY@gitlab.lasse.ufpa.br/software/python-machine-learning/rwi-parsing@master#egg=rwiparsing',
-          'git+https://oauth2:GGh9FfxwbqX4pubGGyLY@gitlab.lasse.ufpa.br/software/python-machine-learning/rwi-3d-modeling@master#egg=rwimodeling',
+          'git+https://github.com/lasseufpa/5gm-rwi-parsing.git@master#egg=rwiparsing',
+          'git+https://github.com/lasseufpa/5gm-rwi-3d-modeling.git@master#egg=rwimodeling',
       ])

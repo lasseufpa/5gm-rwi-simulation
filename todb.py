@@ -9,7 +9,7 @@ from rwisimulation.tfrecord import UnexpectedCarsWithAntennaChangeError, SceneNo
 from rwimodeling import objects
 from rwiparsing import P2mPaths
 
-import save5gmdata as fgdb
+from rwisimulation.datamodel import save5gmdata as fgdb
 
 last_simulation_info = None
 simulation_info = None
