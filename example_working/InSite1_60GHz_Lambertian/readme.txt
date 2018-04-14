@@ -1,2 +1,0 @@
-60 GHz
-Lambertian
