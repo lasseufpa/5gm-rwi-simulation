@@ -1,0 +1,57 @@
+\documentclass[conference,11pt]{IEEEtran}
+
+\usepackage[sort,nocompress]{cite}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+
+\begin{document}
+
+
+\begin{table}[htb]
+\centering
+\caption{General simulation parameters.}
+\label{tab:simpar}
+\scalebox{1}{
+\begin{tabular}{| c | c | }
+\hline
+Carrier frequency & 28 or 60 GHz  \\ \hline
+RSU transmitted power & 0 dBm \\ \hline
+RSU height & 7 m \\ \hline
+\end{tabular}}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\caption{Ray-tracing (InSite) simulation parameters}
+\label{tab:simpar}
+\scalebox{1}{
+\begin{tabular}{| c | c | }
+\hline
+Propagation model & X3D \\ \hline
+Terrain and city material & ITU concrete 28 or 60 GHz \\ \hline
+Vehicles material & Metal \\ \hline
+Diffuse scattering model & Lambertian  \\ \hline
+Diffuse scattering factors & 0.4 (concrete), 0.2 (metal) \\ \hline
+Antennas & Half-wave dipole \\ \hline
+Number of TX antennas & single antenna \\ \hline
+Number of RX antennas & single antenna \\ \hline
+\end{tabular}}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\caption{Traffic (Sumo) simulation parameters.}
+\label{tab:simpar}
+\scalebox{1}{
+\begin{tabular}{| c | c | }
+\hline
+Number of lanes & 4 \\ \hline
+Vehicles & car, truck, bus \\ \hline
+Lengths, respectively (m) & 3.5, 4.41, 5  \\ \hline
+\end{tabular}}
+\end{table}
+
+
+
+\end{document}
