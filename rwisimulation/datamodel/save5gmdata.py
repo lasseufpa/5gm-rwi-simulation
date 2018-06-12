@@ -1,4 +1,5 @@
 import numpy as np
+import os.path
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -161,7 +162,16 @@ class Scene(Base):
         return len(self.objects)
 
 #engine = create_engine('sqlite:////tmp/episodedata.db')
-engine = create_engine('sqlite:///episodedata.db')
+dataBaseFileName = 'episodedata.db'
+print('########## Important ##########')
+print('Will try to open database in file (should be in your current folder): ', dataBaseFileName)
+if os.path.isfile(dataBaseFileName):
+    print('Successfully opened ', dataBaseFileName)
+else:
+    print('ERROR: Could not find ', dataBaseFileName, ' I then created an empty database!')
+print('##############################')
+engine = create_engine('sqlite:///' + dataBaseFileName)
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 Session.configure(bind=engine)
+
