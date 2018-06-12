@@ -8,7 +8,6 @@ from shapely import geometry
 
 from rwimodeling import objects
 
-
 def plot(polygon):
     from matplotlib import pyplot as plt
     from descartes.patch import PolygonPatch

@@ -54,6 +54,8 @@ def calc_rx_power(departure_angle, arrival_angle, p_gain, antenna_number, freque
     wt = dft_codebook(nt)
     wr = dft_codebook(nr)
     H = np.matrix(np.zeros((nt, nr)))
+
+    #TO DO: need to generate random phase and convert gains in complex-values
     gain_dB = p_gain
     path_gain = np.power(10, gain_dB/10)
     antenna_range = np.arange(antenna_number)
