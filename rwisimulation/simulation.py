@@ -5,7 +5,10 @@ import argparse
 import numpy as np
 import logging
 import json
-import readline
+try: #readline does not run on Windows. Use pyreadline instead
+  import readline
+except ImportError:
+  import pyreadline as readline
 
 import traci
 
