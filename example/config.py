@@ -27,36 +27,53 @@ logging.basicConfig(level=logging.DEBUG)
 ###############################################################
 # Current folder (or directory). Some paths are relative to this folder:
 working_directory = os.path.dirname(os.path.realpath(__file__)) 
-# Directory that InSite uses to obtain the base project and also write the results:
+# Directory in which the script will write the base project (the InSite input files
+#that will be used to generate all other InSite input files)
 base_insite_project_path = os.path.join(working_directory,
                                         '2018_02_04_insiteproject_ita')
-# Ray-tracing output folder (where InSite will store the results (Study Area name))
+# Ray-tracing output folder (where InSite will store the results (Study Area name)).
+#The will be later copied to the corresponding output folder (run0000, run0001, etc.)
 project_output_dir = os.path.join(base_insite_project_path, 'study')
-# Where to store each InSite project and results (will create subfolders for each "run")
+# Where to store each InSite project and results (will create subfolders run0000, 
+#run0001, etc. for each "run")
 results_dir = os.path.join(working_directory, 'results')
-#On Windows: D:\ak\Works\2018-ita-paper\final\raid\pc128\example_working\results
-#results_dir = ("/mnt/d/ak/Works/2018-ita-paper/final/raid/pc128/example/results")
-#Folders and files for InSite and its license. Note 
+#Folders and files for InSite and its license. For Windows you may simply inform
+#the path to the executable files, not minding about the license file location.
 #calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
-calcprop_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/insite.lic ' +
+#Folders for SUMO and InSite. Use executable sumo-gui if want to see the GUI or sumo otherwise
+if socket.gethostname() == 'Pedros-MacBook-Pro.local' or \
+    socket.gethostname() == 'pedro-macbook-wifi.psb-home.psbc.com.br': #Pedro's computers
+    calcprop_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/insite.lic ' +
                 'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
                 '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/ ' +
                 '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/calcprop_3.2.0.3')
-wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/insite.lic ' +
+    wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/insite.lic ' +
                'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
-#Folders for SUMO
-if socket.gethostname() == 'Pedros-MacBook-Pro.local' or \
-   socket.gethostname() == 'pedro-macbook-wifi.psb-home.psbc.com.br':
     sumo_bin = '/Users/psb/ownCloud/Projects/DNNWireless/sumo/bin/sumo-gui'
-elif socket.gethostname() == 'LAPTOP-8R7EBD20':
-    sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe' #'/usr/bin/sumo'
-    sumo_cfg = r'D:\linux_gits\rwi-simulation\example\sumo\quickstart.sumocfg'
-else:
-    sumo_bin = '/usr/bin/sumo'
-#SUMO configuration file:
-sumo_cfg = os.path.join(working_directory, 'sumo',
-                        'quickstart.sumocfg')
+    #sumo_bin = '/usr/bin/sumo' #default if installed on Linux
+    sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
+elif socket.gethostname() == 'LAPTOP-8R7EBD20': #Aldebaro's computer
+    if False: #execute the GUI'
+        sumo_bin = r'c:\Program Files (x86)\DLR\Sumo\bin\sumo-gui.exe' 
+    else: #command line
+        sumo_bin = r'c:\Program Files (x86)\DLR\Sumo\bin\sumo.exe' #on Windows
+    #sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe'
+    sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
+    #Windows version of InSite command line utility softwares:
+    calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
+    wibatch_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\wibatch"'
+else: #general case, assuming Windows    
+    sumo_bin = r'"C:\Program Files (x86)\DLR\Sumo\bin\sumo.exe"'
+    calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
+    wibatch_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\wibatch"'
+    #SUMO configuration file:
+    sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
+print('########## Scripts will assume the following files: ##########')
+print('SUMO executable: ', sumo_bin)
+print('SUMO configuration: ', sumo_cfg)
+print('InSite calcprop executable: ', calcprop_bin)
+print('InSite wibatch executable: ', wibatch_bin)
 n_run = range(10) # iterator that determines maximum number of RT simulations
 #n_run = itertools.count() # infinite
 sampling_interval = 0.1 #time interval between scenes (in seconds)
