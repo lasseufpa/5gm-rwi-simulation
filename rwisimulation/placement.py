@@ -24,22 +24,29 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict, car
             traci.vehicle.getPosition,
             traci.vehicle.getAngle,
             traci.vehicle.getLaneID,
-            traci.vehicle.getWidth,
             traci.vehicle.getLength,
+            traci.vehicle.getWidth,
             traci.vehicle.getHeight
         ]]
 
         x, y = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict, margin_dict=margin_dict)
-        #print((x, y, -angle, veh))
+        #print((x, y, angle, veh)) #AK
 
-        car = objects.RectangularPrism(length, width, height, material=car_material_id)
+        #car = objects.RectangularPrism(length, width, height, material=car_material_id)
+        car = objects.RectangularPrism(width, length, height, material=car_material_id)
 
         # na posição final do carro a coordenada do SUMO vai ficar levemente deslocada, digo, ele passa no x, y o
         # centro da frente do carro, e eu assumo que essa coordenada é o centro do carro, senão eu teria que ver a
         # direção, acha ok se ficar assim?
-        car.translate((-length/2, -width/2, 0))
-        car.rotate(-angle)
-        car.translate((x, y, 0))
+        thisAngleInRad = angle*np.pi/180
+        deltaX = (length/2.0) * np.sin(thisAngleInRad)
+        deltaY = (length/2.0) * np.cos(thisAngleInRad)
+        #car.translate((deltaX, deltaY, 0))
+        #car.translate((-length/2, -width/2, 0))
+        #car.rotate(-angle)
+        #car.rotate(angle)
+        print((angle, length, width, x, y, x-deltaX, y-deltaY)) #AK
+        car.translate((x-deltaX, y-deltaY, 0))
 
         car_structure = objects.Structure(name=veh)
         car_structure.add_sub_structures(car)
@@ -47,8 +54,14 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict, car
 
         #antenna_vertice
         if cars_with_antenna is None or veh in cars_with_antenna:
+            #AK
+            rxIndex = np.where(cars_with_antenna == veh)[0]
+            print('veh_i = ', veh_i, ' rxIndex=', rxIndex, ' veh= ', veh, ' angle = ', angle, ' lane ID=', lane_id)
+            #print(cars_with_antenna)
+            #print(np.where(cars_with_antenna == veh))
+            #print()
             c_present = True
-            antenna.add_vertice((x, y, height))
+            antenna.add_vertice((x-deltaX, y-deltaY, height))
 
     if not c_present:
         return None, None

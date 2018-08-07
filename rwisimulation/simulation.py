@@ -34,9 +34,9 @@ def main():
                                           output_dir=c.project_output_dir, calcprop_bin=c.calcprop_bin,
                                           wibatch_bin=c.wibatch_bin)
 
-    with open(os.path.join(c.base_insite_project_path, "base.object")) as infile:
+    with open(c.base_object_file_name) as infile:
         objFile = objects.ObjectFile.from_file(infile)
-    with open(os.path.join(c.base_insite_project_path, 'base.txrx')) as infile:
+    with open(c.base_txrx_file_name) as infile:
         txrxFile = txrx.TxRxFile.from_file(infile)
     x3d_xml_file = X3dXmlFile(c.base_x3d_xml_path)
 
@@ -60,6 +60,9 @@ def main():
     episode_i = None
     for i in c.n_run:
         run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
+        #Disabled below because the paths will be created later on by shutil.copytree
+        #and shutil.copytree does not support folders that already exist
+        #if not os.path.exists(run_dir):
         #os.makedirs(run_dir)
 
         objFile.clear()

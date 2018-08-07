@@ -1,3 +1,6 @@
+'''
+Several simulation parameters are defined here.
+'''
 import os
 import itertools
 import numpy as np
@@ -27,27 +30,21 @@ logging.basicConfig(level=logging.DEBUG)
 ###############################################################
 # Current folder (or directory). Some paths are relative to this folder:
 working_directory = os.path.dirname(os.path.realpath(__file__)) 
-# Directory in which the script will write the base project (the InSite input files
-#that will be used to generate all other InSite input files)
-base_insite_project_path = os.path.join(working_directory,
-                                        '2018_02_04_insiteproject_ita')
-# Ray-tracing output folder (where InSite will store the results (Study Area name)).
-#The will be later copied to the corresponding output folder (run0000, run0001, etc.)
+# InSite will look for input files in this folder. These files will be used to generate all simulations
+if False:
+    base_insite_project_path = 'D:/insitedata/insite_new_simuls/'
+else:
+    base_insite_project_path = os.path.join(working_directory,'insite_new_simuls')
+#Ray-tracing output folder (where InSite will store the results (Study Area name)).
+#They will be later copied to the corresponding output folder specified by results_dir
 project_output_dir = os.path.join(base_insite_project_path, 'study')
-<<<<<<< HEAD
-# Where to store each InSite project and results (will create subfolders for each "run")
-#results_dir = os.path.join(working_directory, 'results')
-#On Windows: D:\ak\Works\2018-ita-paper\final\raid\pc128\example_working\results
-#results_dir = ("/mnt/d/ak/Works/2018_Mimo_Nuria/lice-master-3eca4cb91b9d83bf50540308b01cf123abe30efd/results150m")
-results_dir = ("/mnt/d/ak/Works/2018-ita-paper/final/raid/pc128/example_working/restuls")
-#Folders and files for InSite and its license. Note 
-=======
-# Where to store each InSite project and results (will create subfolders run0000, 
-#run0001, etc. for each "run")
-results_dir = os.path.join(working_directory, 'results')
+#Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
+results_dir = os.path.join(working_directory, 'results_new_simuls')
+#if not os.path.exists(results_dir):
+#    os.makedirs(results_dir)
+#results_dir = ("/mnt/d/ak/Works/2018-ita-paper/final/raid/pc128/example_working/results")
 #Folders and files for InSite and its license. For Windows you may simply inform
 #the path to the executable files, not minding about the license file location.
->>>>>>> 516f21472d8de3999e156e44bfb1b76bb47da3a9
 #calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
 #Folders for SUMO and InSite. Use executable sumo-gui if want to see the GUI or sumo otherwise
 if socket.gethostname() == 'Pedros-MacBook-Pro.local' or \
@@ -60,34 +57,35 @@ if socket.gethostname() == 'Pedros-MacBook-Pro.local' or \
                'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
     sumo_bin = '/Users/psb/ownCloud/Projects/DNNWireless/sumo/bin/sumo-gui'
-<<<<<<< HEAD
-elif socket.gethostname() == 'LAPTOP-8R7EBD20':
-    sumo_bin = '/usr/bin/sumo'
-    #sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe' #'/usr/bin/sumo'
-    #sumo_cfg = r'D:\linux_gits\rwi-simulation\example\sumo\quickstart.sumocfg'
-else:
-    sumo_bin = '/usr/bin/sumo'
-#SUMO configuration file:
-sumo_cfg = os.path.join(working_directory, 'sumo',
-                        'quickstart.sumocfg')
-                        
-print('AK: ', sumo_bin)
-print('AK: ', sumo_cfg)
-                        
-n_run = range(5000) # iterator that determines maximum number of RT simulations
-=======
     #sumo_bin = '/usr/bin/sumo' #default if installed on Linux
     sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
 elif socket.gethostname() == 'LAPTOP-8R7EBD20': #Aldebaro's computer
-    if False: #execute the GUI'
-        sumo_bin = r'c:\Program Files (x86)\DLR\Sumo\bin\sumo-gui.exe' 
-    else: #command line
-        sumo_bin = r'c:\Program Files (x86)\DLR\Sumo\bin\sumo.exe' #on Windows
-    #sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe'
-    sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
-    #Windows version of InSite command line utility softwares:
-    calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
-    wibatch_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\wibatch"'
+    if os.name == 'nt': #Windows
+        if False: #execute the GUI'
+            sumo_bin = r'c:\Program Files (x86)\DLR\Sumo\bin\sumo-gui.exe' 
+        else: #command line
+            sumo_bin = r'c:\Program Files (x86)\DLR\Sumo\bin\sumo.exe' #on Windows
+        #sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe'
+        sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
+        #Windows version of InSite command line utility softwares:
+        calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
+        wibatch_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\wibatch"'
+    else: #Linux
+        #this may be confusing:
+        #Linux subsystem under Windows will force the executable InSite or Sumo to be found 
+        #with /mnt/d or /mnt/c but then the executables runs on Windows and expects
+        #to have config files informed with c:/ or d:/, not /mnt/d...
+        #Another confusion are the folder names that have spaces.
+        if False: #True to execute the GUI'
+            sumo_bin = r'/mnt/c/Program\ Files\ (x86)/DLR/Sumo/bin/sumo-gui.exe' 
+        else: #command line
+            sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo.exe' #on Windows only
+        #sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe'
+        #Windows version of InSite command line utility softwares:
+        #sumo_cfg = r'd:\github\5gm-rwi-simulation\example\sumo\quickstart.sumocfg'
+        sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
+        calcprop_bin = r'/mnt/c/Program\ Files/Remcom/Wireless\ InSite\ 3.2.0.3/bin/calc/calcprop.exe'
+        wibatch_bin = r'/mnt/c/Program\ Files/Remcom/Wireless\ InSite\ 3.2.0.3/bin/calc/wibatch.exe'
 else: #general case, assuming Windows    
     sumo_bin = r'"C:\Program Files (x86)\DLR\Sumo\bin\sumo.exe"'
     calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
@@ -99,12 +97,18 @@ print('SUMO executable: ', sumo_bin)
 print('SUMO configuration: ', sumo_cfg)
 print('InSite calcprop executable: ', calcprop_bin)
 print('InSite wibatch executable: ', wibatch_bin)
+
+print('Working folder (base for several folders): ', working_directory)
+print('InSite input files folder: ', base_insite_project_path)
+print('InSite temporary output folder: ', project_output_dir)
+print('Final output parent folder: ', results_dir)
+
 n_run = range(10) # iterator that determines maximum number of RT simulations
->>>>>>> 516f21472d8de3999e156e44bfb1b76bb47da3a9
+
 #n_run = itertools.count() # infinite
 sampling_interval = 0.1 #time interval between scenes (in seconds)
-time_of_episode = int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
-time_between_episodes = int(10 / sampling_interval) # time among episodes, in steps
+time_of_episode = 1 #int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
+time_between_episodes = int(60 / sampling_interval) # time among episodes, in steps
 n_antenna_per_episode = 10 #number of receivers per episode
 n_paths_to_tfrecord = 25 #number of rays per Tx / Rx pairs
 # where to map the received to TFRecords (minx, miny, maxx, maxy)
@@ -115,28 +119,49 @@ frequency = 6e10 # frequency in Hz for the RT simulation
 
 ###############################################################
 ## Part II - Extra information that typically does not need to be modified
+## unless you changed the InSite model (using the GUI, for example)
 ###############################################################
 ##### Folders and files for InSite ####
+#Input files, which are read by the Python scripts
 # File that has the base InSite project:
 setup_path = os.path.join(base_insite_project_path, 'model.setup')
 setup_path = setup_path.replace(' ', '\ ') #deal with paths with blank spaces
-# Ray-tracing (InSite) study area path:
-base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.Study.xml')
+# XML that has information about the simulations
+#base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.Study.xml')
+base_x3d_xml_path = os.path.join(base_insite_project_path, 'model.study.xml')
 # Name (basename) of the paths file generated in the simulation
 paths_file_name = 'model.paths.t001_01.r002.p2m'
-# Name (basename) of the simulation info file
-simulation_info_file_name = 'wri-simulation.info'
 # Base object file to generate the `object_dst_file_name`
 base_object_file_name = os.path.join(base_insite_project_path, "base.object")
+# Base txrx file to generate the `txrx_dst_file_name`
+#base_txrx_file_name = os.path.join(base_insite_project_path, "base.object")
+base_txrx_file_name = os.path.join(base_insite_project_path, "base.txrx")
+
+#Output files, which are written by the Python scripts
+# Name (basename) of the JSON output simulation info file
+simulation_info_file_name = 'wri-simulation.info'
 # Object which will be modified in the RWI project
 dst_object_file_name = os.path.join(base_insite_project_path, "random-line.object")
-# Base txrx file to generate the `txrx_dst_file_name`
-base_txrx_file_name = os.path.join(base_insite_project_path, "base.object")
 # txrx which will be modified in the RWI project
 dst_txrx_file_name = os.path.join(base_insite_project_path, 'model.txrx')
+# XML project that will be executed by InSite command line tools:
+dst_x3d_xml_path = os.path.join(base_insite_project_path, 'gen.study.xml')
+
+print('Output JSON file: ', simulation_info_file_name)
+print('Reference InSite model: ', base_x3d_xml_path)
+print('Generated InSite model that will be used: ', dst_x3d_xml_path)
+print('Reference .object file: ', base_object_file_name)
+print('Generated .object file that will be used: ', dst_object_file_name)
+print('Reference .txrx file: ', base_txrx_file_name)
+print('Generated .txrx file that will be used: ', dst_txrx_file_name)
+
+#the information below is added in simulation.py into a XML file
 dst_x3d_txrx_xpath = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSet/OutputID/Integer[@Value='2']" +
                       "/../../ControlPoints/ProjectedPointList")
-dst_x3d_xml_path = os.path.join(base_insite_project_path, 'gen.Study.xml')
+
+# Ray-tracing (InSite) study area path:
+#??
+
 ##### Extra information for InSite ####
 # dimensions of the Mobile Objects (MOBJS) which will be placed on `dst_object_file_name`
 car_dimensions = (1.76, 4.54, 1.47)
@@ -184,7 +209,7 @@ best_tx_rx_shape = (2,)
 #tfrecord_file_name = '/Users/psb/ownCloud/Projects/DNN Wireless/tempmm/rwi-simulation/rwi.tfrecord'
 tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
 
-seed = 1517605264
+seed = 12 #Original's ITA paper seed = 1517605264
 np.random.seed(seed)
 sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', str(sampling_interval), '--seed', '{}'.format(seed)]
 use_sumo = True
