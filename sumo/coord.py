@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def convert_distances(lane, point_sumo, lane_boundary_dict=None, margin_dict=None):
+def convert_distances(lane, point_sumo, lane_boundary_dict=None):
     def get_sumo_net_bounds(lane_boundary_dict):
         boundary_array = None
         for lane, boundary in lane_boundary_dict.items():
