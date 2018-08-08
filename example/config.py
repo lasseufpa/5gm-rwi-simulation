@@ -94,7 +94,8 @@ else: #general case, assuming Windows
     wibatch_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\wibatch"'
     #SUMO configuration file:
     sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
-print('########## Scripts will assume the following files: ##########')
+
+print('########## Scripts will assume the following files:x ##########')
 print('SUMO executable: ', sumo_bin)
 print('SUMO configuration: ', sumo_cfg)
 print('InSite calcprop executable: ', calcprop_bin)
@@ -124,6 +125,9 @@ frequency = 6e10 # frequency in Hz for the RT simulation
 ## unless you changed the InSite model (using the GUI, for example)
 ###############################################################
 ##### Folders and files for InSite ####
+# Copy of the RWI project used in the simulation
+results_base_model_dir = os.path.join(results_dir, 'base')
+
 #Input files, which are read by the Python scripts
 # File that has the base InSite project:
 setup_path = os.path.join(base_insite_project_path, 'model.setup')
@@ -161,70 +165,66 @@ print('Generated .txrx file that will be used: ', dst_txrx_file_name)
 dst_x3d_txrx_xpath = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSet/OutputID/Integer[@Value='2']" +
                       "/../../ControlPoints/ProjectedPointList")
 
-# Ray-tracing (InSite) study area path:
-#??
+use_sumo = True
 
-##### Extra information for InSite ####
 # dimensions of the Mobile Objects (MOBJS) which will be placed on `dst_object_file_name`
 #car_dimensions = (1.76, 4.54, 1.47)
 car_dimensions = (2, 6, 1.47)
+# antenna to be placed above the cars
+antenna_origin = (car_dimensions[0] / 2, car_dimensions[1] / 2, car_dimensions[2])
 # id of the car material (must be defined on `base_object_file_name`)
 car_material_id = 0
 car_structure_name = 'car'
 # name of the antenna points in `base_txrx_file_name`
 antenna_points_name = 'Rx'
-# antenna to be placed above the cars
-antenna_origin = (car_dimensions[0] / 2, car_dimensions[1] / 2, car_dimensions[2])
-# origin and destination of the line to place the cars
-line_origin = ((755.25, 470, 0.2),
-               (755.25 + 5, 470, 0.2),
-               )
-line_destination = 645
-# dimension `line_destination` is indicating to
-line_dimension = 1
-# distance between cars
-def car_distances():
-    return np.random.uniform(1.5, 6)
+
+if use_sumo == True:
+    seed = 12 #Original's ITA paper seed = 1517605264
+    np.random.seed(seed)
+    sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', str(sampling_interval), '--seed', '{}'.format(seed)]
+    #mapping from SUMO to InSite coordinates
+    # (take only min and max for x and y and put there:
+    lane_boundary_dict = {"laneA_0": [[758.5,460], [744.5,660]],
+                          "laneB_0": [[658.82,460], [747.5,358.76]],
+                          "laneC_0": [[658.82,460], [752.5,675.90]],
+                          "laneD_0": [[840.08,460], [755.5,660]]}
+else: #not sure if this is ancient code used for debugging with use_sumo = False:
+    # origin and destination of the line to place the cars
+    line_origin = ((755.25, 470, 0.2),
+                   (755.25 + 5, 470, 0.2),
+                   )
+    line_destination = 645
+    # dimension `line_destination` is indicating to
+    line_dimension = 1
+
+    # distance between cars
+    def car_distances():
+        return np.random.uniform(1.5, 6)
 
 def base_run_dir_fn(i): #the folders will be run00001, run00002, etc.
     """returns the `run_dir` for run `i`"""
     return "run{:05d}".format(i)
-# Copy of the RWI project used in the simulation
-results_base_model_dir = os.path.join(results_dir, 'base')
-# TFRecord compression, can be NONE
-tfrecord_compression = 'GZIP'
-# Generated TFRecord
-tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
 
-# String (len) of then objects file
-dtype_of_obj_path = 'U100'
+use_tfrecord = False
 
-tfrecord_options = tf.python_io.TFRecordOptions(
-    eval('tf.python_io.TFRecordCompressionType.{}'.format(tfrecord_compression))
-) \
-    if tf is not None else None
+if use_tfrecord == True: #enable only if want to generate tfrecord (we have not been using it)
+    # TFRecord compression, can be NONE
+    tfrecord_compression = 'GZIP'
+    # Generated TFRecord
+    tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
 
-position_matrix_shape = position_matrix_per_object_shape(analysis_area, analysis_area_resolution) \
-    if position_matrix_per_object_shape is not None else None
-best_tx_rx_shape = (2,)
+    # String (len) of then objects file
+    dtype_of_obj_path = 'U100'
 
-#tfrecord_file_name = '/Users/psb/ownCloud/Projects/DNN Wireless/rwi-simulation/rwi.tfrecord'
-#tfrecord_file_name = '/Users/psb/ownCloud/Projects/DNN Wireless/tempmm/rwi-simulation/rwi.tfrecord'
-tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
+    tfrecord_options = tf.python_io.TFRecordOptions(
+        eval('tf.python_io.TFRecordCompressionType.{}'.format(tfrecord_compression))
+    ) \
+        if tf is not None else None
 
-seed = 12 #Original's ITA paper seed = 1517605264
-np.random.seed(seed)
-sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', str(sampling_interval), '--seed', '{}'.format(seed)]
-use_sumo = True
+    position_matrix_shape = position_matrix_per_object_shape(analysis_area, analysis_area_resolution) \
+        if position_matrix_per_object_shape is not None else None
+    best_tx_rx_shape = (2,)
 
-#mapping from SUMO to InSite coordinates
-# (take only min and max for x and y and put there:
-lane_boundary_dict = {"laneA_0": [[758.5,460], [744.5,660]],
-                      "laneB_0": [[658.82,460], [747.5,358.76]],
-                      "laneC_0": [[658.82,460], [752.5,675.90]],
-                      "laneD_0": [[840.08,460], [755.5,660]]}
-
-#not used anymore
-margin_dict = {'H1_0': [0, 0],
-               'V1_1': [0, 0],
-               'V2_1': [0, 0],}
+    #tfrecord_file_name = '/Users/psb/ownCloud/Projects/DNN Wireless/rwi-simulation/rwi.tfrecord'
+    #tfrecord_file_name = '/Users/psb/ownCloud/Projects/DNN Wireless/tempmm/rwi-simulation/rwi.tfrecord'
+    tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
