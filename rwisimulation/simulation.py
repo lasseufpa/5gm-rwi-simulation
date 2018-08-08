@@ -16,7 +16,7 @@ from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist
 
 import config as c
 from .placement import place_on_line, place_by_sumo
-
+#from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE
 
 def main():
     parser = argparse.ArgumentParser()
