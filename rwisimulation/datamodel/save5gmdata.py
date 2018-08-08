@@ -113,6 +113,7 @@ class Ray(Base):
     path_gain = db.Column(db.Float)
     time_of_arrival = db.Column(db.Float)
     interactions = db.Column(db.String)
+    phaseInDegrees = db.Column(db.Float)
 
     receiver_id = db.Column(db.Integer, db.ForeignKey('receivers.id'),
                             index=True)
