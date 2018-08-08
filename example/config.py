@@ -66,7 +66,7 @@ elif socket.gethostname() == 'LAPTOP-8R7EBD20': #Aldebaro's computer
         else: #command line
             sumo_bin = r'c:\Program Files (x86)\DLR\Sumo\bin\sumo.exe' #on Windows
         #sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe'
-        #sumo_cfg = os.path.join(working_directory, 'sumo', 'ita.sumocfg')
+        #sumo_cfg = os.path.join(working_directory, 'sumo', 'samelengthvehicles.sumocfg')
         sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
         #Windows version of InSite command line utility softwares:
         calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
@@ -105,12 +105,12 @@ print('InSite input files folder: ', base_insite_project_path)
 print('InSite temporary output folder: ', project_output_dir)
 print('Final output parent folder: ', results_dir)
 
-n_run = range(2) # iterator that determines maximum number of RT simulations
+n_run = range(20000) # iterator that determines maximum number of RT simulations
 
 #n_run = itertools.count() # infinite
 sampling_interval = 0.1 #time interval between scenes (in seconds)
 time_of_episode = 1 #int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
-time_between_episodes = int(460 / sampling_interval) # time among episodes, in steps
+time_between_episodes = int(30 / sampling_interval) # time among episodes, in steps
 n_antenna_per_episode = 10 #number of receivers per episode
 n_paths_to_tfrecord = 25 #number of rays per Tx / Rx pairs
 # where to map the received to TFRecords (minx, miny, maxx, maxy)
@@ -166,7 +166,8 @@ dst_x3d_txrx_xpath = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSe
 
 ##### Extra information for InSite ####
 # dimensions of the Mobile Objects (MOBJS) which will be placed on `dst_object_file_name`
-car_dimensions = (1.76, 4.54, 1.47)
+#car_dimensions = (1.76, 4.54, 1.47)
+car_dimensions = (2, 6, 1.47)
 # id of the car material (must be defined on `base_object_file_name`)
 car_material_id = 0
 car_structure_name = 'car'
