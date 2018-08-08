@@ -10,7 +10,7 @@ from rwimodeling import errors, objects, txrx, X3dXmlFile
 from sumo import coord
 
 
-def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict, cars_with_antenna=None):
+def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenna=None):
     antenna = copy.deepcopy(antenna)
     antenna.clear()
 
@@ -29,24 +29,24 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict, car
             traci.vehicle.getHeight
         ]]
 
-        x, y = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict, margin_dict=margin_dict)
-        #print((x, y, angle, veh)) #AK
+        x, y = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict)
 
+        #the prism is draw using the first coordinate aligned with x, then y and z. Length is initially along x
+        #and later the object will be rotates
         car = objects.RectangularPrism(length, width, height, material=car_material_id)
-        #car = objects.RectangularPrism(width, length, height, material=car_material_id)
 
+        #for proper rotation, first centralize the object on plane xy
         car.translate((-length/2, -width/2, 0))
-        # na posição final do carro a coordenada do SUMO vai ficar levemente deslocada, digo, ele passa no x, y o
-        # centro da frente do carro, e eu assumo que essa coordenada é o centro do carro, senão eu teria que ver a
-        # direção, acha ok se ficar assim?
+        #now can rotate, but note SUMO assumes y-axis as the reference, and angle increases towards x-axis,
+        #while we assume angles start from x-axis in our rotate method (see https://en.wikipedia.org/wiki/Rotation_matrix)
+        car.rotate(90-angle) #use 90 degrees - angle to convert from y to x-axis the reference
+
+        #SUMO reports position of middle of front bumper. We need to reposition to the middle of the vehicle
+        #for that, use the angle to find to where the vehicle is facing and then translate
         thisAngleInRad = np.radians(angle) #*np.pi/180
         deltaX = (length/2.0) * np.sin(thisAngleInRad)
         deltaY = (length/2.0) * np.cos(thisAngleInRad)
-        #car.translate((deltaX, deltaY, 0))
-        car.rotate(90-angle)
-        if False:
-            print((angle, length, width, x, y, x-deltaX, y-deltaY)) #AK
-        car.translate((x-deltaX, y-deltaY, 0))
+        car.translate((x-deltaX, y-deltaY, 0)) #now can translate
 
         car_structure = objects.Structure(name=veh)
         car_structure.add_sub_structures(car)
@@ -54,16 +54,9 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, margin_dict, car
 
         #antenna_vertice
         if cars_with_antenna is None or veh in cars_with_antenna:
-            if False:
-                #AK
-                rxIndex = np.where(cars_with_antenna == veh)[0]
-                print('veh_i = ', veh_i, ' rxIndex=', rxIndex, ' veh= ', veh, ' angle = ', angle, ' lane ID=', lane_id)
-                #print(cars_with_antenna)
-                #print(np.where(cars_with_antenna == veh))
-                #print()
             c_present = True
+            #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
             antenna.add_vertice((x-deltaX, y-deltaY, height))
-            #antenna.add_vertice((x, y, height))
 
     if not c_present:
         return None, None

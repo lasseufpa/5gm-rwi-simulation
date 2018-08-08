@@ -169,7 +169,7 @@ use_sumo = True
 
 # dimensions of the Mobile Objects (MOBJS) which will be placed on `dst_object_file_name`
 #car_dimensions = (1.76, 4.54, 1.47)
-car_dimensions = (2, 6, 1.47)
+car_dimensions = (2, 6, 1.47) #I guess this needs to match the one specified in SUMO's route file
 # antenna to be placed above the cars
 antenna_origin = (car_dimensions[0] / 2, car_dimensions[1] / 2, car_dimensions[2])
 # id of the car material (must be defined on `base_object_file_name`)

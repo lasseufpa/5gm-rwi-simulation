@@ -5,18 +5,63 @@ import argparse
 import numpy as np
 import logging
 import json
+import csv
 try: #readline does not run on Windows. Use pyreadline instead
   import readline
 except ImportError:
   import pyreadline as readline
 
 import traci
+from sumo import coord
 
 from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist
 
 import config as c
 from .placement import place_on_line, place_by_sumo
 #from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE
+
+
+def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna):
+    '''Save as CSV text file some information obtained from SUMO for this specific scene'''
+    veh_i = None
+    receiverIndexCounter = 0 #initialize counter to provide unique index for each receiver
+    with open(sumoOutputInfoFileName, 'a') as csv_file:
+        w = csv.writer(csv_file)
+        w.writerow(['episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime'])
+
+        #from http://sumo.dlr.de/wiki/TraCI/Vehicle_Value_Retrieval
+        for veh_i, veh in enumerate(traci.vehicle.getIDList()):
+            (x, y), angle, lane_id, length, width, height, speed, (x3,y3,z3), typeID, distance, waitTime = [f(veh) for f in [
+                traci.vehicle.getPosition,
+                traci.vehicle.getAngle, #Returns the angle of the named vehicle within the last step [degrees]
+                traci.vehicle.getLaneID,
+                traci.vehicle.getLength,
+                traci.vehicle.getWidth,
+                traci.vehicle.getHeight,
+                traci.vehicle.getSpeed, #Returns the speed of the named vehicle within the last step [m/s]; error value: -1001
+                traci.vehicle.getPosition3D, #Returns the 3D-position(three doubles) of the named vehicle (center of the front bumper) within the last step [m,m,m]
+                traci.vehicle.getTypeID, #Returns the id of the type of the named vehicle
+                traci.vehicle.getDistance, #The distance, the vehicle has already driven [m]); error value: -1001
+                traci.vehicle.getWaitingTime #Returns the waiting time [s]
+            ]]
+
+            #convert position from SUMO to InSite
+            xinsite, yinsite = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict)
+
+            #check if it's a receiver (has antenna) or not. Use -1 to identify it's not a receiver
+            receiverIndex=-1
+            if cars_with_antenna is None:
+                continue
+            if veh in cars_with_antenna:
+                #to find unique index, I was initially doing
+                #receiverIndex = int(np.where(cars_with_antenna == veh)[0])
+                #but this is wrong, in fact later the code associates indices according to the order the vehicle
+                #shows up in cars_with_antenna. Hence, I am using an auxiliary variable
+                receiverIndex = receiverIndexCounter #not -1, but the current Rx counter
+                receiverIndexCounter += 1 #update counter
+
+            w.writerow([episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -88,7 +133,7 @@ def main():
                 traci.simulationStep()
 
             structure_group, location = place_by_sumo(
-                antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict, margin_dict=c.margin_dict,
+                antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict,
                 cars_with_antenna=cars_with_antenna)
             print(traci.simulation.getCurrentTime())
             # no cars in the environment
@@ -96,6 +141,7 @@ def main():
                 logging.error("all antennas are out of the simulation, aborting episode")
                 scene_i = np.inf
                 continue
+
         else:
             structure_group, location = place_on_line(c.line_origin, c.line_destination, c.line_dimension,
                   c.car_distances, car_structure, antenna, c.antenna_origin)
@@ -127,7 +173,11 @@ def main():
             )
             json.dump(info_dict, infofile)
 
-        scene_i += 1
+        #save SUMO information for this scene as text CSV file
+        sumoOutputInfoFileName = os.path.join(run_dir,'sumoOutputInfoFileName.txt')
+        writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, c.lane_boundary_dict, cars_with_antenna)
+
+        scene_i += 1 #update scene counter
 
         if args.pause_each_run:
             input('Enter to step')
