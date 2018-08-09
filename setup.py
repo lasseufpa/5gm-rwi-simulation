@@ -7,7 +7,7 @@ setup(name='rwisimulation',
       description='Run simulations in Remcom Wireless InSite',
       author='LASSE',
       author_email='pedosb@gmail.com',
-      url='https://gitlab.lasse.ufpa.br/software/python-machine-learning/rwi-simulation',
+      url='https://github.com/lasseufpa/5gm-rwi-simulation',
       packages=['rwisimulation', 'rwisimulation.datamodel', 'sumo'],
       entry_points={
           'console_scripts': [
