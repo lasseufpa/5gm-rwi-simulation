@@ -1,0 +1,916 @@
+<InSite date="Fri Nov 3 2017" host="JW7647" location="branches" revision="52342" shared="false" version="3.2.0.3">
+    <Job>
+        <Model>
+            <X3D>
+                <APGAccelerationParameters>
+                    <APGAccelerationParameters>
+                        <APGAccelerationBinaryOutput>
+                            <APGAccelerationBinaryOutputMode Value="PerPathUTM"></APGAccelerationBinaryOutputMode>
+                        </APGAccelerationBinaryOutput>
+                        <APGAccelerationDatabaseMode>
+                            <APGAccelerationDatabaseMode Value="WriteSISO"></APGAccelerationDatabaseMode>
+                        </APGAccelerationDatabaseMode>
+                        <APGAccelerationWorkflow>
+                            <APGAccelerationWorkflowMode Value="Full"></APGAccelerationWorkflowMode>
+                        </APGAccelerationWorkflow>
+                        <AdjacencyDistance>
+                            <Double Value="1"></Double>
+                        </AdjacencyDistance>
+                        <BinaryOutputRate>
+                            <Double Value="0"></Double>
+                        </BinaryOutputRate>
+                        <PathDepth>
+                            <Integer Value="25"></Integer>
+                        </PathDepth>
+                    </APGAccelerationParameters>
+                </APGAccelerationParameters>
+                <CPUThreads>
+                    <Integer Value="12"></Integer>
+                </CPUThreads>
+                <Diffractions>
+                    <Integer Value="1"></Integer>
+                </Diffractions>
+                <DiffuseScatteringParameters>
+                    <DiffuseScatteringParameters>
+                        <DiffuseScatteringDiffractions>
+                            <Integer Value="1"></Integer>
+                        </DiffuseScatteringDiffractions>
+                        <DiffuseScatteringEnabled>
+                            <Boolean Value="false"></Boolean>
+                        </DiffuseScatteringEnabled>
+                        <DiffuseScatteringFinalInteractionOnly>
+                            <Boolean Value="true"></Boolean>
+                        </DiffuseScatteringFinalInteractionOnly>
+                        <DiffuseScatteringReflections>
+                            <Integer Value="2"></Integer>
+                        </DiffuseScatteringReflections>
+                        <DiffuseScatteringTransmissions>
+                            <Integer Value="0"></Integer>
+                        </DiffuseScatteringTransmissions>
+                    </DiffuseScatteringParameters>
+                </DiffuseScatteringParameters>
+                <FoliageModel>
+                    <FoliageModelEnum Value="None"></FoliageModelEnum>
+                </FoliageModel>
+                <Humidity>
+                    <Double Value="50"></Double>
+                </Humidity>
+                <InitialRayMode>
+                    <PhiThetaSweepRayMode>
+                        <StartPhi>
+                            <Double Value="0"></Double>
+                        </StartPhi>
+                        <StartTheta>
+                            <Double Value="0"></Double>
+                        </StartTheta>
+                        <StopPhi>
+                            <Double Value="360"></Double>
+                        </StopPhi>
+                        <StopTheta>
+                            <Double Value="180"></Double>
+                        </StopTheta>
+                    </PhiThetaSweepRayMode>
+                </InitialRayMode>
+                <MaximumStoredPaths>
+                    <Integer Value="250"></Integer>
+                </MaximumStoredPaths>
+                <OutputRequestList>
+                    <OutputRequestList>
+                        <BinaryOutputRequestList>
+                            <BinaryOutputRequestList>
+                                <BinaryOutputRequest>
+                                    <BinaryOutputRequest>
+                                        <BinaryOutputRequestType>
+                                            <BinaryOutputRequestTypeEnum Value="None"></BinaryOutputRequestTypeEnum>
+                                        </BinaryOutputRequestType>
+                                    </BinaryOutputRequest>
+                                </BinaryOutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </BinaryOutputRequestList>
+                        </BinaryOutputRequestList>
+                        <ComplexE_Field>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </ComplexE_Field>
+                        <ComplexImpulseResponse>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="true"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </ComplexImpulseResponse>
+                        <DelaySpread>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </DelaySpread>
+                        <DiffuseScatterReceivedPower>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </DiffuseScatterReceivedPower>
+                        <DirectionOfArrival>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </DirectionOfArrival>
+                        <DirectionOfDeparture>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </DirectionOfDeparture>
+                        <Doppler>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </Doppler>
+                        <E_Field>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </E_Field>
+                        <E_FieldRMS>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </E_FieldRMS>
+                        <E_FieldVsTime>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="false"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </E_FieldVsTime>
+                        <ExcessPathLoss>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </ExcessPathLoss>
+                        <ExcessPathLossWithoutAntennas>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </ExcessPathLossWithoutAntennas>
+                        <ExcessTimeOfArrival>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </ExcessTimeOfArrival>
+                        <FreeSpacePathLoss>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </FreeSpacePathLoss>
+                        <FreeSpacePathLossWithoutAntennas>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </FreeSpacePathLossWithoutAntennas>
+                        <FreeSpaceReceivedPower>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </FreeSpaceReceivedPower>
+                        <FreeSpaceReceivedPowerWithoutAntennas>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </FreeSpaceReceivedPowerWithoutAntennas>
+                        <H_Field>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </H_Field>
+                        <H_FieldRMS>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </H_FieldRMS>
+                        <MeanDirectionOfArrival>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </MeanDirectionOfArrival>
+                        <MeanDirectionOfDeparture>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </MeanDirectionOfDeparture>
+                        <MeanTimeOfArrival>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </MeanTimeOfArrival>
+                        <PathGain>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </PathGain>
+                        <PathLoss>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </PathLoss>
+                        <PoyntingVector>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </PoyntingVector>
+                        <PoyntingVectorRMS>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </PoyntingVectorRMS>
+                        <PropagationPaths>
+                            <PropagationPathRequest>
+                                <MaximumPathsPerReceiverPoint>
+                                    <Integer Value="25"></Integer>
+                                </MaximumPathsPerReceiverPoint>
+                                <Requested>
+                                    <Boolean Value="true"></Boolean>
+                                </Requested>
+                                <SumEFields>
+                                    <EFieldSumEnum Value="AllPaths"></EFieldSumEnum>
+                                </SumEFields>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </PropagationPathRequest>
+                        </PropagationPaths>
+                        <ReceivedPower>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </ReceivedPower>
+                        <TimeOfArrival>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </TimeOfArrival>
+                        <TransmissionLoss>
+                            <OutputRequest>
+                                <Requested>
+                                    <Boolean Value="false"></Boolean>
+                                </Requested>
+                                <ValidForModel>
+                                    <Boolean Value="true"></Boolean>
+                                </ValidForModel>
+                            </OutputRequest>
+                        </TransmissionLoss>
+                    </OutputRequestList>
+                </OutputRequestList>
+                <PhaseReferencePoint>
+                    <CartesianPoint>
+                        <X>
+                            <Double Value="616.06871032714844"></Double>
+                        </X>
+                        <Y>
+                            <Double Value="542.40971374511719"></Double>
+                        </Y>
+                        <Z>
+                            <Double Value="87.658290863037109"></Double>
+                        </Z>
+                    </CartesianPoint>
+                </PhaseReferencePoint>
+                <Pressure>
+                    <Double Value="1013.25"></Double>
+                </Pressure>
+                <RaySpacing>
+                    <Double Value="1"></Double>
+                </RaySpacing>
+                <Reflections>
+                    <Integer Value="6"></Integer>
+                </Reflections>
+                <StudyArea>
+                    <StudyArea>
+                        <Footprint>
+                            <Tuples2>
+                                <X>
+                                    <DoubleArray Value="664.704 863.212 863.212 653.358"></DoubleArray>
+                                </X>
+                                <Y>
+                                    <DoubleArray Value="284.644 287.423 797.397 798.235"></DoubleArray>
+                                </Y>
+                            </Tuples2>
+                        </Footprint>
+                        <MaxZ>
+                            <Double Value="144.3665771484375"></Double>
+                        </MaxZ>
+                        <MinZ>
+                            <Double Value="16.366584777832031"></Double>
+                        </MinZ>
+                    </StudyArea>
+                </StudyArea>
+                <Temperature>
+                    <Double Value="22.199999999999999"></Double>
+                </Temperature>
+                <TerminalRefraction>
+                    <Boolean Value="false"></Boolean>
+                </TerminalRefraction>
+                <TerrainDiffractions>
+                    <Boolean Value="false"></Boolean>
+                </TerrainDiffractions>
+                <Transmissions>
+                    <Integer Value="0"></Integer>
+                </Transmissions>
+                <UseGPU>
+                    <Boolean Value="false"></Boolean>
+                </UseGPU>
+            </X3D>
+        </Model>
+        <OutputLocation>
+            <String Value="study"></String>
+        </OutputLocation>
+        <OutputPrefix>
+            <String Value="model"></String>
+        </OutputPrefix>
+        <PathResultsDatabase>
+            <PathResultsDatabase>
+                <Filename>
+                    <FileDescription>
+                        <Filename>
+                            <String Value="./study/model.study.sqlite"></String>
+                        </Filename>
+                        <FilenameChecksum>
+                            <String></String>
+                        </FilenameChecksum>
+                    </FileDescription>
+                </Filename>
+            </PathResultsDatabase>
+        </PathResultsDatabase>
+        <ProjectID>
+            <String Value="13694"></String>
+        </ProjectID>
+        <Scene>
+            <Scene>
+                <AntennaList>
+                    <AntennaList>
+                        <Antenna>
+                            <Isotropic>
+                                <CableLoss>
+                                    <Double Value="0"></Double>
+                                </CableLoss>
+                                <Polarization>
+                                    <PolarizationEnum Value="Vertical"></PolarizationEnum>
+                                </Polarization>
+                                <PowerThreshold>
+                                    <Double Value="-250"></Double>
+                                </PowerThreshold>
+                                <Temperature>
+                                    <Double Value="293"></Double>
+                                </Temperature>
+                                <VSWR>
+                                    <Double Value="1"></Double>
+                                </VSWR>
+                                <Waveform>
+                                    <Sinusoid>
+                                        <Amplitude>
+                                            <Double Value="1"></Double>
+                                        </Amplitude>
+                                        <Bandwidth>
+                                            <Double Value="1"></Double>
+                                        </Bandwidth>
+                                        <CarrierFrequency>
+                                            <Double Value="60000000000"></Double>
+                                        </CarrierFrequency>
+                                        <Dispersive>
+                                            <Boolean Value="false"></Boolean>
+                                        </Dispersive>
+                                        <Phase>
+                                            <Double Value="0"></Double>
+                                        </Phase>
+                                    </Sinusoid>
+                                </Waveform>
+                            </Isotropic>
+                        </Antenna>
+                    </AntennaList>
+                </AntennaList>
+                <GeometryList>
+                    <GeometryList>
+                        <Geometry>
+                            <City>
+                                <GeometrySource>
+                                    <WirelessInSiteGeometry>
+                                        <Filename>
+                                            <FileDescription>
+                                                <Filename>
+                                                    <String Value="./Rosslyn.city"></String>
+                                                </Filename>
+                                                <FilenameChecksum>
+                                                    <String></String>
+                                                </FilenameChecksum>
+                                            </FileDescription>
+                                        </Filename>
+                                    </WirelessInSiteGeometry>
+                                </GeometrySource>
+                            </City>
+                        </Geometry>
+                        <Geometry>
+                            <Terrain>
+                                <GeometrySource>
+                                    <WirelessInSiteGeometry>
+                                        <Filename>
+                                            <FileDescription>
+                                                <Filename>
+                                                    <String Value="./Rosslyn_DTED.ter"></String>
+                                                </Filename>
+                                                <FilenameChecksum>
+                                                    <String></String>
+                                                </FilenameChecksum>
+                                            </FileDescription>
+                                        </Filename>
+                                        <MaterialList>
+                                            <MaterialList>
+                                                <Material>
+                                                    <LayeredDielectric>
+                                                        <DielectricLayer>
+                                                            <DielectricLayer>
+                                                                <Conductivity>
+                                                                    <Double Value="0.48380000000000001"></Double>
+                                                                </Conductivity>
+                                                                <Description>
+                                                                    <String></String>
+                                                                </Description>
+                                                                <Permittivity>
+                                                                    <Double Value="5.3099999999999996"></Double>
+                                                                </Permittivity>
+                                                                <Roughness>
+                                                                    <Double Value="0"></Double>
+                                                                </Roughness>
+                                                                <Thickness>
+                                                                    <Double Value="0.29999999999999999"></Double>
+                                                                </Thickness>
+                                                            </DielectricLayer>
+                                                        </DielectricLayer>
+                                                        <DiffuseScattering>
+                                                            <DiffuseScatteringMaterialProperties>
+                                                                <Alpha>
+                                                                    <Integer Value="4"></Integer>
+                                                                </Alpha>
+                                                                <Beta>
+                                                                    <Integer Value="4"></Integer>
+                                                                </Beta>
+                                                                <CrossPolFraction>
+                                                                    <Double Value="0.40000000000000002"></Double>
+                                                                </CrossPolFraction>
+                                                                <Lambda>
+                                                                    <Double Value="0.75"></Double>
+                                                                </Lambda>
+                                                                <ScatteringFactor>
+                                                                    <Double Value="0.20000000000000001"></Double>
+                                                                </ScatteringFactor>
+                                                                <ScatteringModel>
+                                                                    <DiffuseScatteringModelEnum Value="None"></DiffuseScatteringModelEnum>
+                                                                </ScatteringModel>
+                                                                <SubdivideFacets>
+                                                                    <Boolean Value="true"></Boolean>
+                                                                </SubdivideFacets>
+                                                                <UseReflectionCoefficient>
+                                                                    <UseReflectionCoefficientEnum Value="DoNotUse"></UseReflectionCoefficientEnum>
+                                                                </UseReflectionCoefficient>
+                                                            </DiffuseScatteringMaterialProperties>
+                                                        </DiffuseScattering>
+                                                        <Index>
+                                                            <Integer Value="1"></Integer>
+                                                        </Index>
+                                                        <Thickness>
+                                                            <Double Value="0"></Double>
+                                                        </Thickness>
+                                                    </LayeredDielectric>
+                                                </Material>
+                                                <Material>
+                                                    <LayeredDielectric>
+                                                        <DielectricLayer>
+                                                            <DielectricLayer>
+                                                                <Conductivity>
+                                                                    <Double Value="0.89670000000000005"></Double>
+                                                                </Conductivity>
+                                                                <Description>
+                                                                    <String></String>
+                                                                </Description>
+                                                                <Permittivity>
+                                                                    <Double Value="5.3099999999999996"></Double>
+                                                                </Permittivity>
+                                                                <Roughness>
+                                                                    <Double Value="0"></Double>
+                                                                </Roughness>
+                                                                <Thickness>
+                                                                    <Double Value="0.29999999999999999"></Double>
+                                                                </Thickness>
+                                                            </DielectricLayer>
+                                                        </DielectricLayer>
+                                                        <DiffuseScattering>
+                                                            <DiffuseScatteringMaterialProperties>
+                                                                <Alpha>
+                                                                    <Integer Value="4"></Integer>
+                                                                </Alpha>
+                                                                <Beta>
+                                                                    <Integer Value="4"></Integer>
+                                                                </Beta>
+                                                                <CrossPolFraction>
+                                                                    <Double Value="0.40000000000000002"></Double>
+                                                                </CrossPolFraction>
+                                                                <Lambda>
+                                                                    <Double Value="0.75"></Double>
+                                                                </Lambda>
+                                                                <ScatteringFactor>
+                                                                    <Double Value="0.40000000000000002"></Double>
+                                                                </ScatteringFactor>
+                                                                <ScatteringModel>
+                                                                    <DiffuseScatteringModelEnum Value="None"></DiffuseScatteringModelEnum>
+                                                                </ScatteringModel>
+                                                                <SubdivideFacets>
+                                                                    <Boolean Value="true"></Boolean>
+                                                                </SubdivideFacets>
+                                                                <UseReflectionCoefficient>
+                                                                    <UseReflectionCoefficientEnum Value="DoNotUse"></UseReflectionCoefficientEnum>
+                                                                </UseReflectionCoefficient>
+                                                            </DiffuseScatteringMaterialProperties>
+                                                        </DiffuseScattering>
+                                                        <Index>
+                                                            <Integer Value="2"></Integer>
+                                                        </Index>
+                                                        <Thickness>
+                                                            <Double Value="0"></Double>
+                                                        </Thickness>
+                                                    </LayeredDielectric>
+                                                </Material>
+                                            </MaterialList>
+                                        </MaterialList>
+                                    </WirelessInSiteGeometry>
+                                </GeometrySource>
+                            </Terrain>
+                        </Geometry>
+                        <Geometry>
+                            <Object>
+                                <GeometrySource>
+                                    <WirelessInSiteGeometry>
+                                        <Filename>
+                                            <FileDescription>
+                                                <Filename>
+                                                    <String Value="./random-line.object"></String>
+                                                </Filename>
+                                                <FilenameChecksum>
+                                                    <String></String>
+                                                </FilenameChecksum>
+                                            </FileDescription>
+                                        </Filename>
+                                    </WirelessInSiteGeometry>
+                                </GeometrySource>
+                            </Object>
+                        </Geometry>
+                    </GeometryList>
+                </GeometryList>
+                <Origin>
+                    <GeographicPoint>
+                        <Altitude>
+                            <Double Value="0"></Double>
+                        </Altitude>
+                        <Latitude>
+                            <Double Value="38.890700000000002"></Double>
+                        </Latitude>
+                        <Longitude>
+                            <Double Value="-77.078700000000012"></Double>
+                        </Longitude>
+                    </GeographicPoint>
+                </Origin>
+                <TxRxSetList>
+                    <TxRxSetList>
+                        <TxRxSet>
+                            <PointSet>
+                                <AdjacencyDistance>
+                                    <Double Value="1"></Double>
+                                </AdjacencyDistance>
+                                <ConformToTerrain>
+                                    <Boolean Value="true"></Boolean>
+                                </ConformToTerrain>
+                                <ControlPoints>
+                                    <ProjectedPointList>
+                                        <ProjectedPoint>
+                                            <CartesianPoint>
+                                                <X>
+                                                    <Double Value="746"></Double>
+                                                </X>
+                                                <Y>
+                                                    <Double Value="560"></Double>
+                                                </Y>
+                                                <Z>
+                                                    <Double Value="5"></Double>
+                                                </Z>
+                                            </CartesianPoint>
+                                        </ProjectedPoint>
+                                    </ProjectedPointList>
+                                </ControlPoints>
+                                <OutputID>
+                                    <Integer Value="1"></Integer>
+                                </OutputID>
+                                <Transmitter>
+                                    <Transmitter>
+                                        <Antenna>
+                                            <Isotropic>
+                                                <CableLoss>
+                                                    <Double Value="0"></Double>
+                                                </CableLoss>
+                                                <Polarization>
+                                                    <PolarizationEnum Value="Vertical"></PolarizationEnum>
+                                                </Polarization>
+                                                <PowerThreshold>
+                                                    <Double Value="-250"></Double>
+                                                </PowerThreshold>
+                                                <Temperature>
+                                                    <Double Value="293"></Double>
+                                                </Temperature>
+                                                <VSWR>
+                                                    <Double Value="1"></Double>
+                                                </VSWR>
+                                                <Waveform>
+                                                    <Sinusoid>
+                                                        <Amplitude>
+                                                            <Double Value="1"></Double>
+                                                        </Amplitude>
+                                                        <Bandwidth>
+                                                            <Double Value="1"></Double>
+                                                        </Bandwidth>
+                                                        <CarrierFrequency>
+                                                            <Double Value="60000000000"></Double>
+                                                        </CarrierFrequency>
+                                                        <Dispersive>
+                                                            <Boolean Value="false"></Boolean>
+                                                        </Dispersive>
+                                                        <Phase>
+                                                            <Double Value="0"></Double>
+                                                        </Phase>
+                                                    </Sinusoid>
+                                                </Waveform>
+                                            </Isotropic>
+                                        </Antenna>
+                                        <AntennaRotations>
+                                            <Rotations>
+                                                <Bearing>
+                                                    <Double Value="0"></Double>
+                                                </Bearing>
+                                                <Pitch>
+                                                    <Double Value="0"></Double>
+                                                </Pitch>
+                                                <Roll>
+                                                    <Double Value="0"></Double>
+                                                </Roll>
+                                            </Rotations>
+                                        </AntennaRotations>
+                                        <InputPower>
+                                            <Double Value="0"></Double>
+                                        </InputPower>
+                                    </Transmitter>
+                                </Transmitter>
+                                <UseAPGAcceleration>
+                                    <Boolean Value="false"></Boolean>
+                                </UseAPGAcceleration>
+                            </PointSet>
+                        </TxRxSet>
+                        <TxRxSet>
+                            <PointSet>
+                                <AdjacencyDistance>
+                                    <Double Value="1"></Double>
+                                </AdjacencyDistance>
+                                <ConformToTerrain>
+                                    <Boolean Value="true"></Boolean>
+                                </ConformToTerrain>
+                                <ControlPoints>
+                                    <ProjectedPointList><ProjectedPoint><CartesianPoint><X><Double Value="801.804195574227492"></Double></X><Y><Double Value="673.757728883707045"></Double></Y><Z><Double Value="1.590000000000000"></Double></Z></CartesianPoint></ProjectedPoint><ProjectedPoint><CartesianPoint><X><Double Value="758.416585146815805"></Double></X><Y><Double Value="441.660405356932642"></Double></Y><Z><Double Value="1.590000000000000"></Double></Z></CartesianPoint></ProjectedPoint><ProjectedPoint><CartesianPoint><X><Double Value="745.557003718442274"></Double></X><Y><Double Value="625.529859113501857"></Double></Y><Z><Double Value="1.590000000000000"></Double></Z></CartesianPoint></ProjectedPoint><ProjectedPoint><CartesianPoint><X><Double Value="744.933522718223116"></Double></X><Y><Double Value="634.444543590318517"></Double></Y><Z><Double Value="3.200000000000000"></Double></Z></CartesianPoint></ProjectedPoint><ProjectedPoint><CartesianPoint><X><Double Value="671.243649411564434"></Double></X><Y><Double Value="670.851106674641642"></Double></Y><Z><Double Value="3.200000000000000"></Double></Z></CartesianPoint></ProjectedPoint><ProjectedPoint><CartesianPoint><X><Double Value="753.752901071262158"></Double></X><Y><Double Value="555.681241342635531"></Double></Y><Z><Double Value="1.590000000000000"></Double></Z></CartesianPoint></ProjectedPoint><ProjectedPoint><CartesianPoint><X><Double Value="804.194486285112362"></Double></X><Y><Double Value="677.066977485357256"></Double></Y><Z><Double Value="1.590000000000000"></Double></Z></CartesianPoint></ProjectedPoint><ProjectedPoint><CartesianPoint><X><Double Value="809.140486354421000"></Double></X><Y><Double Value="677.085980884470928"></Double></Y><Z><Double Value="1.590000000000000"></Double></Z></CartesianPoint></ProjectedPoint><ProjectedPoint><CartesianPoint><X><Double Value="758.301910209534753"></Double></X><Y><Double Value="490.677715959883301"></Double></Y><Z><Double Value="1.590000000000000"></Double></Z></CartesianPoint></ProjectedPoint><ProjectedPoint><CartesianPoint><X><Double Value="761.860954697987609"></Double></X><Y><Double Value="676.904324637527338"></Double></Y><Z><Double Value="4.300000000000000"></Double></Z></CartesianPoint></ProjectedPoint></ProjectedPointList></ControlPoints>
+                                <OutputID>
+                                    <Integer Value="2"></Integer>
+                                </OutputID>
+                                <Receiver>
+                                    <Receiver>
+                                        <Antenna>
+                                            <Isotropic>
+                                                <CableLoss>
+                                                    <Double Value="0"></Double>
+                                                </CableLoss>
+                                                <Polarization>
+                                                    <PolarizationEnum Value="Vertical"></PolarizationEnum>
+                                                </Polarization>
+                                                <PowerThreshold>
+                                                    <Double Value="-250"></Double>
+                                                </PowerThreshold>
+                                                <Temperature>
+                                                    <Double Value="293"></Double>
+                                                </Temperature>
+                                                <VSWR>
+                                                    <Double Value="1"></Double>
+                                                </VSWR>
+                                                <Waveform>
+                                                    <Sinusoid>
+                                                        <Amplitude>
+                                                            <Double Value="1"></Double>
+                                                        </Amplitude>
+                                                        <Bandwidth>
+                                                            <Double Value="1"></Double>
+                                                        </Bandwidth>
+                                                        <CarrierFrequency>
+                                                            <Double Value="60000000000"></Double>
+                                                        </CarrierFrequency>
+                                                        <Dispersive>
+                                                            <Boolean Value="false"></Boolean>
+                                                        </Dispersive>
+                                                        <Phase>
+                                                            <Double Value="0"></Double>
+                                                        </Phase>
+                                                    </Sinusoid>
+                                                </Waveform>
+                                            </Isotropic>
+                                        </Antenna>
+                                        <AntennaRotations>
+                                            <Rotations>
+                                                <Bearing>
+                                                    <Double Value="0"></Double>
+                                                </Bearing>
+                                                <Pitch>
+                                                    <Double Value="0"></Double>
+                                                </Pitch>
+                                                <Roll>
+                                                    <Double Value="0"></Double>
+                                                </Roll>
+                                            </Rotations>
+                                        </AntennaRotations>
+                                        <CollectionRadius>
+                                            <Double Value="0"></Double>
+                                        </CollectionRadius>
+                                    </Receiver>
+                                </Receiver>
+                                <UseAPGAcceleration>
+                                    <Boolean Value="false"></Boolean>
+                                </UseAPGAcceleration>
+                            </PointSet>
+                        </TxRxSet>
+                    </TxRxSetList>
+                </TxRxSetList>
+                <WaveformList>
+                    <WaveformList>
+                        <Waveform>
+                            <Sinusoid>
+                                <Amplitude>
+                                    <Double Value="1"></Double>
+                                </Amplitude>
+                                <Bandwidth>
+                                    <Double Value="1"></Double>
+                                </Bandwidth>
+                                <CarrierFrequency>
+                                    <Double Value="60000000000"></Double>
+                                </CarrierFrequency>
+                                <Dispersive>
+                                    <Boolean Value="false"></Boolean>
+                                </Dispersive>
+                                <Phase>
+                                    <Double Value="0"></Double>
+                                </Phase>
+                            </Sinusoid>
+                        </Waveform>
+                    </WaveformList>
+                </WaveformList>
+            </Scene>
+        </Scene>
+    </Job>
+</InSite>

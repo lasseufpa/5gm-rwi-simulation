@@ -1,0 +1,154 @@
+2018.08.08 15:34:05.111 
+
+wibatch version 3.2.0.3 - r52342
+  Built with Microsoft Visual Studio 1600
+  Built with Qt 4.8.4
+  Using Qt 4.8.4
+
+2018.08.08 15:34:05.111 qua 8. ago 15:34:05 2018
+2018.08.08 15:34:05.161 Detecting X3D CUDA Information..
+2018.08.08 15:34:05.161 CUDA Runtime version = 4.2
+2018.08.08 15:34:05.161 CUDA Driver version  = 9.0
+2018.08.08 15:34:05.161 CUDA device #0: [GeForce GTX 960M], 5.0 capability, 5 total cores, 2048 threads per core
+2018.08.08 15:34:05.193 Initializing Wireless InSite X3D model
+2018.08.08 15:34:05.202 Monte Carlo parameters not detected.
+2018.08.08 15:34:05.202 ============ GEOMETRY ============
+2018.08.08 15:34:05.202 Building geometry
+2018.08.08 15:34:06.520  ============ TRANSMITTER/RECEIVER SETS ============
+2018.08.08 15:34:06.520 Generating transmitter and receiver sets
+2018.08.08 15:34:06.555 Antenna: Isotropic
+Cable loss (dB): 0
+Polarization: Vertical
+Power threshold (dBm): -250
+Temperature (K): 293
+VSWR: 1
+
+2018.08.08 15:34:06.555 Waveform: Sinusoid
+Amplitude: 1
+Carrier frequency (MHz): 60000
+Phase (degrees): 0
+
+2018.08.08 15:34:06.555 Bandwidth (MHz): 1
+Dispersive: no
+
+2018.08.08 15:34:06.555 Set number: 1
+Type: PointSet
+Number of points: 1
+APG Accelerated: no
+Fit to terrain: yes
+
+2018.08.08 15:34:06.555 Antenna: Isotropic
+Cable loss (dB): 0
+Polarization: Vertical
+Power threshold (dBm): -250
+Temperature (K): 293
+VSWR: 1
+
+2018.08.08 15:34:06.555 Waveform: Sinusoid
+Amplitude: 1
+Carrier frequency (MHz): 60000
+Phase (degrees): 0
+
+2018.08.08 15:34:06.555 Bandwidth (MHz): 1
+Dispersive: no
+
+2018.08.08 15:34:06.555 Set number: 2
+Type: PointSet
+Number of points: 10
+APG Accelerated: no
+Fit to terrain: yes
+
+2018.08.08 15:34:06.555 Receiver collection radius (m): auto
+
+2018.08.08 15:34:06.555 Auto Collection Radius = 9.95068
+2018.08.08 15:34:06.555 Scene information: 
+    Number of facets: 40168
+    Number of spheres: 10
+
+BSPTree information: 
+    Number of superfacets: 2355
+    Number of subfacets: 40168
+    Maximum depth: 32
+    Bounding box: 
+      Minimum: (369.176, 284.644, 16.3666)
+      Maximum: (863.212, 798.235, 144.367)
+
+CompleteEdgeSet information: 
+    Number of superedges: 1570
+    Number of subedges: 3111
+Maximum Scene Distance: 1140.26
+
+2018.08.08 15:34:06.555 ============ MATERIALS ============
+2018.08.08 15:34:06.555 Diffuse Scattering: Disabled
+2018.08.08 15:34:06.561 Material number: 5
+Type: LayeredDielectric
+Thickness (m): 0
+
+2018.08.08 15:34:06.561 Layer 0: 
+2018.08.08 15:34:06.561     Relative permittivity: 5.31
+    Conductivity (S/m): 0.4838
+    Thickness (m): 0.3
+    Roughness (m): 0
+
+2018.08.08 15:34:06.561 Material number: 6
+Type: LayeredDielectric
+Thickness (m): 0
+
+2018.08.08 15:34:06.561 Layer 0: 
+2018.08.08 15:34:06.561     Relative permittivity: 5.31
+    Conductivity (S/m): 0.8967
+    Thickness (m): 0.3
+    Roughness (m): 0
+
+2018.08.08 15:34:06.561 Material number: 1
+Type: LayeredDielectric
+Thickness (m): 0
+
+2018.08.08 15:34:06.561 Layer 0: 
+2018.08.08 15:34:06.561     Relative permittivity: 5.31
+    Conductivity (S/m): 0.4838
+    Thickness (m): 0.3
+    Roughness (m): 0
+
+2018.08.08 15:34:06.561 Material number: 2
+Type: LayeredDielectric
+Thickness (m): 0
+
+2018.08.08 15:34:06.561 Layer 0: 
+2018.08.08 15:34:06.561     Relative permittivity: 5.31
+    Conductivity (S/m): 0.8967
+    Thickness (m): 0.3
+    Roughness (m): 0
+
+2018.08.08 15:34:06.561 Material number: 0
+Type: PEC
+Thickness (m): 0
+
+2018.08.08 15:34:06.561 Roughness (m): 0
+
+2018.08.08 15:34:06.561 ============ ATMOSPHERE ============
+2018.08.08 15:34:06.561 Pressure = 1013.25
+2018.08.08 15:34:06.561 Temperature = 22.2
+2018.08.08 15:34:06.561 Humidity = 50
+2018.08.08 15:34:15.144 ============ MODEL ============
+2018.08.08 15:34:15.410 Starting X3D ray tracing for Tx set 1, point 1 (point 1 of 1 total)
+2018.08.08 15:34:15.421   Initializing 12 threads
+2018.08.08 15:34:15.421   Diffraction cone ray angle=0.25
+2018.08.08 15:34:15.421   Using CPU ray tracer
+2018.08.08 15:34:15.644   Ray tracing ranges: 
+2018.08.08 15:34:15.644     Minimum phi: 0
+2018.08.08 15:34:15.644     Maximum phi: 360
+2018.08.08 15:34:15.644     Minimum theta: 0
+2018.08.08 15:34:15.644     Maximum theta: 180
+2018.08.08 15:34:15.644   Model parameters: 
+2018.08.08 15:34:15.654     Reflections:         6
+2018.08.08 15:34:15.654     Transmissions:       0
+2018.08.08 15:34:15.667     Diffractions:        1
+2018.08.08 15:34:15.669     Ray spacing (degrees): 1
+2018.08.08 15:34:15.669   Advanced model parameters:
+2018.08.08 15:34:15.669     Maximum reflections before first diffraction: 3
+2018.08.08 15:34:15.669     Maximum reflections between two diffractions: 0
+2018.08.08 15:34:15.669     Maximum reflections after last diffraction: 3
+2018.08.08 15:34:17.688 
+2018.08.08 15:34:17.688   Beginning next round of queued diffractions
+2018.08.08 15:34:17.697 
