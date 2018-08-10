@@ -8,14 +8,14 @@ setup(name='rwisimulation',
       author='LASSE',
       author_email='pedosb@gmail.com',
       url='https://github.com/lasseufpa/5gm-rwi-simulation',
-      packages=['rwisimulation', 'rwisimulation.datamodel', 'sumo'],
+      packages=['rwisimulation', 'rwisimulation.datamodel', 'sumo', 'pyreadline'],
       entry_points={
           'console_scripts': [
               'rwi-simulation = rwisimulation.simulation:main',
               'rwi-save-tfrecord = rwisimulation.tfrecord:main [tf,shapely]'
           ]
       },
-      install_requires=['numpy(>=1.14)', 'rwiparsing', 'rwimodeling'],
+      install_requires=['numpy(>=1.14)', 'rwiparsing', 'rwimodeling', 'pyreadline'],
       extras_require={
           'tf': 'tensorflow(>=1.4)',
           'shapely': 'Shapely(>=1.6.3)',
