@@ -8,7 +8,7 @@ setup(name='rwisimulation',
       author='LASSE',
       author_email='pedosb@gmail.com',
       url='https://github.com/lasseufpa/5gm-rwi-simulation',
-      packages=['rwisimulation', 'rwisimulation.datamodel', 'sumo', 'pyreadline'],
+      packages=['rwisimulation', 'rwisimulation.datamodel', 'sumo'],
       entry_points={
           'console_scripts': [
               'rwi-simulation = rwisimulation.simulation:main',

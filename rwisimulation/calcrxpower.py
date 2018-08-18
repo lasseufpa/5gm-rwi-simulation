@@ -3,7 +3,6 @@ import os
 import datetime
 
 import rwiparsing
-print('AAA: ', rwiparsing.__path__)
 
 import numpy as np
 from rwiparsing import P2mPaths, P2mCir
@@ -36,6 +35,15 @@ def arrayFactorGivenAngleForULA(numAntennaElements, theta, normalizedAntDistance
         arrayFactor = np.exp(-1j * 2 * np.pi * normalizedAntDistance * indices * np.cos(theta))
     return arrayFactor / np.sqrt(numAntennaElements)  # normalize to have unitary norm
 
+def calc_omega(angle):
+    sin = np.sin(angle)
+    omegay = 2 * np.pi * normalizedAntDistance * sin[:, 1] * sin[:, 0]
+    omegax = 2 * np.pi * normalizedAntDistance * sin[:, 0] * np.cos(angle[:, 1])
+    return np.matrix((omegax, omegay))
+
+def calc_vec_i(i, omega, antenna_range):
+    vec = np.exp(1j * omega[:, i] * antenna_range)
+    return np.matrix(np.kron(vec[1], vec[0]))
 
 def calc_rx_power(departure_angle, arrival_angle, p_gain, antenna_number, frequency=6e10):
     """This .m file uses a m*m SQUARE UPA, so the antenna number at TX, RX will be antenna_number^2.
@@ -98,9 +106,8 @@ def calc_rx_power(departure_angle, arrival_angle, p_gain, antenna_number, freque
     t1 = wt.conj().T * H * wr
     return t1
 
-
 def getNarrowBandUPAMIMOChannel(departure_angles, arrival_angles, p_gains, number_Tx_antennas, number_Rx_antennas,
-                                normalizedAntDistance=0.5):
+                                normalizedAntDistance=0.5, pathPhases=None):
     """This .m file uses UPAs at both TX and RX.
 
     - assumes one beam per antenna element
@@ -119,7 +126,7 @@ def getNarrowBandUPAMIMOChannel(departure_angles, arrival_angles, p_gains, numbe
     :param arrival_angles: ((elevation angle, azimuth angle),) (L, 2) where L is the number of paths
     :param p_gain: path gain (L, 1) where L is the number of paths
     :param antenna_number: antenna number at TX, RX is antenna_number**2
-    :param frequency: default
+    :param pathPhases: in degrees, same dimension as p_gaindB
     :return:
     """
     departure_angles = np.deg2rad(departure_angles)
@@ -130,23 +137,24 @@ def getNarrowBandUPAMIMOChannel(departure_angles, arrival_angles, p_gains, numbe
     wr = dft_codebook(number_Rx_antennas)
     H = np.matrix(np.zeros((number_Tx_antennas, number_Rx_antennas)))
 
-    # TO DO: need to generate random phase and convert gains in complex-values
     gain_dB = p_gains
     path_gain = np.power(10, gain_dB / 10)
     antenna_range = np.arange(antenna_number)
 
-    def calc_omega(angle):
-        sin = np.sin(angle)
-        omegay = 2 * np.pi * normalizedAntDistance * sin[:, 1] * sin[:, 0]
-        omegax = 2 * np.pi * normalizedAntDistance * sin[:, 0] * np.cos(angle[:, 1])
-        return np.matrix((omegax, omegay))
+    #generate uniformly distributed random phase in radians
+    if pathPhases is None:
+        pathPhases = 2*np.pi * np.random.rand(len(path_gain))
+    else:
+        #convert from degrees to radians
+        pathPhases = np.deg2rad(pathPhases)
 
+    #include phase information, converting gains in complex-values
+    path_complexGains = path_gain * np.exp(1j * pathPhases)
+
+    # recall that in the narrowband case, the time-domain H is the same as the
+    # frequency-domain H
     departure_omega = calc_omega(departure_angles)
     arrival_omega = calc_omega(arrival_angles)
-
-    def calc_vec_i(i, omega, antenna_range):
-        vec = np.exp(1j * omega[:, i] * antenna_range)
-        return np.matrix(np.kron(vec[1], vec[0]))
 
     for i in range(m):
         departure_vec = calc_vec_i(i, departure_omega, antenna_range)
@@ -270,7 +278,7 @@ if __name__ == '__main__':
                                      normalizedAntDistance=0.5, angleWithArrayNormal=1, pathPhases=pathPhasesInDegrees)
     print('MSE 1 = ', np.mean(np.power(np.abs(t1 - t1_py), 2)))
     print('MSE 2 = ', np.mean(np.power(np.abs(t1 - t2), 2)))
-    # print(t2)
+
     t2 = np.abs(t2)
     (bestRxIndex, bestTxIndex) = np.unravel_index(np.argmax(t2, axis=None), t2.shape)
     print('bestRxIndex: ', bestRxIndex, ' and bestTxIndex: ', bestTxIndex)

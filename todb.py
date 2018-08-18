@@ -19,11 +19,15 @@ session = fgdb.Session()
 sc_i = 0
 ep_i = 0
 episode = None
-#for run_i in c.n_run: # use the number of examples in config.py
-for run_i in range(50): # enable in case you have less examples than indicated in c.n_run
+for run_i in c.n_run: # use the number of examples in config.py
     run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(run_i))
     object_file_name = os.path.join(run_dir, os.path.basename(c.dst_object_file_name))
+    #rays information but phase
     abs_paths_file_name = os.path.join(run_dir, os.path.basename(c.project_output_dir), c.paths_file_name)
+    if os.path.exists(abs_paths_file_name) == False:
+        print('Warning: could not find file ', abs_paths_file_name, ' Stopping...')
+        break
+    #now we get the phase info from CIR file
     abs_cir_file_name = abs_paths_file_name.replace("paths","cir") #name for the impulse response (cir) file
     if os.path.exists(abs_cir_file_name) == False:
         print('ERROR: could not find file ', abs_cir_file_name)
@@ -37,6 +41,7 @@ for run_i in range(50): # enable in case you have less examples than indicated i
     # start of episode
     if simulation_info['scene_i'] == 0:
         ep_i += 1
+        this_scene_i = 0 #reset counter
         if episode is not None:
             session.add(episode)
             session.commit()
@@ -112,8 +117,10 @@ for run_i in range(50): # enable in case you have less examples than indicated i
 
     episode.scenes.append(scene)
     sc_i += 1
-    print('\rProcessed episode: {} scene: {} '.format(ep_i, sc_i), end='')
+    this_scene_i += 1
+    print('\rProcessed episode: {} scene: {} out of {} '.format(ep_i, this_scene_i, sc_i), end='')
 print()
 session.add(episode)
 session.commit()
 session.close()
+print('Processed ', run_i, ' runs')

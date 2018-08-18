@@ -39,7 +39,8 @@ else:
 #They will be later copied to the corresponding output folder specified by results_dir
 project_output_dir = os.path.join(base_insite_project_path, 'study')
 #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-results_dir = os.path.join(working_directory, 'results_new_simuls')
+results_dir = 'D:/insitedata/noOverlappingTx4m/'
+#results_dir = os.path.join(working_directory, 'results_new_simuls')
 #if not os.path.exists(results_dir):
 #    os.makedirs(results_dir)
 #results_dir = ("/mnt/d/ak/Works/2018-ita-paper/final/raid/pc128/example_working/results")
