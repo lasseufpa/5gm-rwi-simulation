@@ -1,3 +1,6 @@
+'''
+This code executes Sumo and InSite repeatedly.
+'''
 import sys
 import os
 import shutil
@@ -27,8 +30,10 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
     receiverIndexCounter = 0 #initialize counter to provide unique index for each receiver
     with open(sumoOutputInfoFileName, 'a') as csv_file:
         w = csv.writer(csv_file)
-        w.writerow(['episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime'])
-
+        header = 'episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,' + \
+                    'lane_id,angle,speed,length, width, height,distance,waitTime,currentTime(ms)=' + \
+                    str(traci.simulation.getCurrentTime()) + ',Ts(s)=' + str(c.sampling_interval)
+        w.writerow([header]) #make the string a list otherwise the function will print each character between commas
         #from http://sumo.dlr.de/wiki/TraCI/Vehicle_Value_Retrieval
         for veh_i, veh in enumerate(traci.vehicle.getIDList()):
             (x, y), angle, lane_id, length, width, height, speed, (x3,y3,z3), typeID, distance, waitTime = [f(veh) for f in [
