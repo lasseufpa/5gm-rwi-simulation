@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/connections_file.xsd">
+
+    <connection from="H4" to="H3" fromLane="0" toLane="0"/>
+    <connection from="H4" to="H3" fromLane="1" toLane="1"/>
+    <connection from="H4" to="V1" fromLane="1" toLane="1"/>
+
+    <connection from="H1" to="H2" fromLane="0" toLane="0"/>
+    <connection from="H1" to="H2" fromLane="1" toLane="1"/>
+    <connection from="H1" to="V1" fromLane="0" toLane="0"/>
+
+    <connection from="V2" to="H3" fromLane="1" toLane="1"/> 
+    <connection from="V2" to="H2" fromLane="0" toLane="0"/>
+
+    <connection from="H10" to="H9" fromLane="0" toLane="0"/>
+    <connection from="H10" to="H9" fromLane="1" toLane="1"/>
+    <connection from="H10" to="V2" fromLane="0" toLane="0"/>
+
+    <connection from="H6" to="H7" fromLane="0" toLane="0"/>
+    <connection from="H6" to="H7" fromLane="1" toLane="1"/>
+    <connection from="H6" to="V2" fromLane="1" toLane="1"/>
+
+    <connection from="V1" to="H9" fromLane="0" toLane="0"/> 
+    <connection from="V1" to="H7" fromLane="1" toLane="1"/>
+
+ </connections>
