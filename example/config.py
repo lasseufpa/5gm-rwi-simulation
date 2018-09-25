@@ -39,7 +39,7 @@ else:
 #They will be later copied to the corresponding output folder specified by results_dir
 project_output_dir = os.path.join(base_insite_project_path, 'study')
 #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-results_dir = 'D:/insitedata/noOverlappingTx4m/'
+results_dir = 'D:/insitedata/javi_1000/'
 #results_dir = os.path.join(working_directory, 'results_new_simuls')
 #if not os.path.exists(results_dir):
 #    os.makedirs(results_dir)
@@ -110,8 +110,8 @@ print('Final output parent folder: ', results_dir)
 n_run = range(20000) # iterator that determines maximum number of RT simulations
 
 #n_run = itertools.count() # infinite
-sampling_interval = 0.1 #time interval between scenes (in seconds)
-time_of_episode = 1 #int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
+sampling_interval = 0.005 #time interval between scenes (in seconds)
+time_of_episode = 100 #int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
 time_between_episodes = int(30 / sampling_interval) # time among episodes, in steps
 n_antenna_per_episode = 10 #number of receivers per episode
 n_paths_to_tfrecord = 25 #number of rays per Tx / Rx pairs
@@ -215,7 +215,8 @@ if use_tfrecord == True: #enable only if want to generate tfrecord (we have not 
     tfrecord_file_name = os.path.join(results_dir, 'rwi.tfrecord')
 
     # String (len) of then objects file
-    dtype_of_obj_path = 'U100'
+    #AK: I will move this defition to tfrecord
+    #dtype_of_obj_path = 'U100'
 
     tfrecord_options = tf.python_io.TFRecordOptions(
         eval('tf.python_io.TFRecordCompressionType.{}'.format(tfrecord_compression))
