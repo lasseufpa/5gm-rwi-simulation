@@ -8,7 +8,6 @@ import numpy as np
 from rwimodeling import objects
 from rwiparsing import P2mPaths
 
-import config as c
 from .positionmatrix import calc_position_matrix, matrix_plot
 from .calcrxpower import calc_rx_power
 
@@ -45,6 +44,10 @@ class Episode:
         self.p_gain = None
         self.t1 = None
         self.from_obj = None
+
+        # String (len) of then objects file
+        #AK: I moved this defition from config.py
+        self.dtype_of_obj_path = 'U100'
 
     def to_example(self):
         example_dict = dict()
@@ -91,7 +94,9 @@ class Episode:
         matrix_scene, best_tx_rx_scene, departure_angle_scene, arrival_angle_scene, p_gain_scene, t1_scene = \
             [add_dim(i) for i in self.calc_scene(object_file_name, paths_file_name)]
 
-        from_obj = np.array(object_file_name, dtype=c.dtype_of_obj_path, ndmin=2)
+        #I moved from config.py to this class:
+        #from_obj = np.array(object_file_name, dtype=c.dtype_of_obj_path, ndmin=2)
+        from_obj = np.array(object_file_name, dtype=self.dtype_of_obj_path, ndmin=2)
 
         def join_or_a(a, b):
             return a if b is None else np.concatenate((a, b), 0)
@@ -183,6 +188,7 @@ class Episode:
 
 
 def main():
+    import config as c
     with tf.python_io.TFRecordWriter(c.tfrecord_file_name, c.tfrecord_options) as tfr_writer:
         ex_c = 0
         episode = None
