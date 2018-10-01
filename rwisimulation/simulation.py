@@ -20,8 +20,8 @@ from sumo import coord
 from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist
 
 import config as c
-#from .placement import place_on_line, place_by_sumo #use this option to run from command line
-from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE
+from .placement import place_on_line, place_by_sumo #use this option to run from command line
+#from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
 
 
 def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna):
@@ -194,7 +194,8 @@ def main():
                 for count in range(c.time_between_episodes): #AK-TODO should rename it and avoid calling "time"
                     traci.simulationStep()
                 #if not c.use_fixed_receivers:
-                # ensure that there enough cars to place antennas
+                # ensure that there enough cars to place antennas. If use_fixed_receivers, then wait to have at least
+                # one vehicle
                 while len(traci.vehicle.getIDList()) < c.n_antenna_per_episode:
                     logging.warning('not enough cars at time ' + str(traci.simulation.getCurrentTime()))
                     traci.simulationStep()
@@ -206,9 +207,12 @@ def main():
             structure_group, location = place_by_sumo(
                 antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict,
                 cars_with_antenna=cars_with_antenna)
-            print(traci.simulation.getCurrentTime())
-            # no cars in the environment
-            if location is None:
+            #print(traci.simulation.getCurrentTime())
+
+            #if location is None:  #there are not cars with antennas in this episode (all have left)
+            #    print('BBBBBBBBBUg')
+            # no vehicles in the environment (not only the ones without antennas, but no vehicles at all)
+            if traci.vehicle.getIDList() is None:
                 logging.warning("No vehicles in scene " + str(scene_i) + " time " + str(traci.simulation.getCurrentTime()))
                 os.makedirs(run_dir + '_novehicles') #create an empty folder to "indicate" the situation
                 #save SUMO information for this scene as text CSV file
@@ -217,11 +221,24 @@ def main():
                 scene_i += 1 #update scene counter
                 continue
 
+            if location is None:  #there are not cars with antennas in this episode (all have left)
+                if c.use_fixed_receivers:
+                    #trick the code assuming the first car has an antenna
+                    structure_group = objects.StructureGroup()
+
+                    #allCars = traci.vehicle.getIDList()
+                    #structure_group = allCars[0]
+                    print('DO SOMETHING')
+                else:
+                    #abort, there is not reason to continue given that there will be no receivers along the whole episode
+                    logging.warning("No vehicles with antennnas in scene " + str(scene_i) + " time " + str(traci.simulation.getCurrentTime()))
+                    scene_i = np.Infinity #update scene counter
+                    continue
         else: #in case we should not use SUMO to position vehicles, then get a fixed position
             structure_group, location = place_on_line(c.line_origin, c.line_destination, c.line_dimension,
                   c.car_distances, car_structure, antenna, c.antenna_origin)
 
-        #AK-TODO: seems odd: we write the 3 files to the source folder, not the destination (base)
+        #AK-TODO: we should make sure we write the 3 files to the source folder, not the destination (base)
         #I think we should consider writing to the destination base
         objFile.add_structure_groups(structure_group)
         objFile.write(c.dst_object_file_name)
