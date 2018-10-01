@@ -28,6 +28,7 @@ logging.basicConfig(level=logging.DEBUG)
 ###############################################################
 ## Part I - Basic information that typically needs to be modified / checked
 ###############################################################
+use_fixed_receivers = True #set to False if only vehicles are receivers
 # Current folder (or directory). Some paths are relative to this folder:
 working_directory = os.path.dirname(os.path.realpath(__file__)) 
 # InSite will look for input files in this folder. These files will be used to generate all simulations
@@ -35,11 +36,11 @@ if False:
     base_insite_project_path = 'D:/insitedata/insite_new_simuls/'
 else:
     base_insite_project_path = os.path.join(working_directory,'insite_new_simuls')
+#Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
+results_dir = 'D:/insitedata/ak_todelete/'
 #Ray-tracing output folder (where InSite will store the results (Study Area name)).
 #They will be later copied to the corresponding output folder specified by results_dir
-project_output_dir = os.path.join(base_insite_project_path, 'study')
-#Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-results_dir = 'D:/insitedata/javi_1000/'
+project_output_dir = os.path.join(results_dir, 'study')
 #results_dir = os.path.join(working_directory, 'results_new_simuls')
 #if not os.path.exists(results_dir):
 #    os.makedirs(results_dir)
@@ -67,8 +68,8 @@ elif socket.gethostname() == 'LAPTOP-8R7EBD20': #Aldebaro's computer
         else: #command line
             sumo_bin = r'c:\Program Files (x86)\DLR\Sumo\bin\sumo.exe' #on Windows
         #sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe'
-        #sumo_cfg = os.path.join(working_directory, 'sumo', 'samelengthvehicles.sumocfg')
-        sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
+        sumo_cfg = os.path.join(working_directory, 'sumo', 'seasonal.sumocfg')
+        #sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
         #Windows version of InSite command line utility softwares:
         calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
         wibatch_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\wibatch"'
@@ -96,7 +97,7 @@ else: #general case, assuming Windows
     #SUMO configuration file:
     sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
 
-print('########## Scripts will assume the following files:x ##########')
+print('########## Scripts will assume the following files: ##########')
 print('SUMO executable: ', sumo_bin)
 print('SUMO configuration: ', sumo_cfg)
 print('InSite calcprop executable: ', calcprop_bin)
@@ -107,14 +108,13 @@ print('InSite input files folder: ', base_insite_project_path)
 print('InSite temporary output folder: ', project_output_dir)
 print('Final output parent folder: ', results_dir)
 
-n_run = range(20000) # iterator that determines maximum number of RT simulations
+n_run = range(0,20000,1) # iterator that determines maximum number of RT simulations
 
 #n_run = itertools.count() # infinite
-sampling_interval = 0.005 #time interval between scenes (in seconds)
-time_of_episode = 100 #int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
-time_between_episodes = int(30 / sampling_interval) # time among episodes, in steps
-n_antenna_per_episode = 10 #number of receivers per episode
-n_paths_to_tfrecord = 25 #number of rays per Tx / Rx pairs
+sampling_interval = 1 #time interval between scenes (in seconds)
+time_of_episode = 300 #int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
+time_between_episodes = int(5 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
+n_antenna_per_episode = 1 #number of receivers per episode
 # where to map the received to TFRecords (minx, miny, maxx, maxy)
 analysis_area = (729, 453, 666, 666)
 analysis_area_resolution = 0.5
@@ -127,8 +127,9 @@ frequency = 6e10 # frequency in Hz for the RT simulation
 ###############################################################
 ##### Folders and files for InSite ####
 # Copy of the RWI project used in the simulation
+#AK-TODO instead of "base" it should match the name InSite gives, to facilitate porting
 results_base_model_dir = os.path.join(results_dir, 'base')
-
+results_base_model_dir.replace('\\', '/')
 #Input files, which are read by the Python scripts
 # File that has the base InSite project:
 setup_path = os.path.join(base_insite_project_path, 'model.setup')
@@ -148,11 +149,11 @@ base_txrx_file_name = os.path.join(base_insite_project_path, "base.txrx")
 # Name (basename) of the JSON output simulation info file
 simulation_info_file_name = 'wri-simulation.info'
 # Object which will be modified in the RWI project
-dst_object_file_name = os.path.join(base_insite_project_path, "random-line.object")
+dst_object_file_name = os.path.join(results_base_model_dir, "random-line.object")
 # txrx which will be modified in the RWI project
-dst_txrx_file_name = os.path.join(base_insite_project_path, 'model.txrx')
+dst_txrx_file_name = os.path.join(results_base_model_dir, 'model.txrx')
 # XML project that will be executed by InSite command line tools:
-dst_x3d_xml_path = os.path.join(base_insite_project_path, 'gen.study.xml')
+dst_x3d_xml_path = os.path.join(results_base_model_dir, 'gen.study.xml')
 
 print('Output JSON file: ', simulation_info_file_name)
 print('Reference InSite model: ', base_x3d_xml_path)
@@ -173,7 +174,7 @@ use_sumo = True
 car_dimensions = (2, 6, 1.47) #I guess this needs to match the one specified in SUMO's route file
 # antenna to be placed above the cars
 antenna_origin = (car_dimensions[0] / 2, car_dimensions[1] / 2, car_dimensions[2])
-# id of the car material (must be defined on `base_object_file_name`)
+# id of the car material (must be defined on `base_object_file_name`) and it is processed by simulation.py
 car_material_id = 0
 car_structure_name = 'car'
 # name of the antenna points in `base_txrx_file_name`
@@ -209,6 +210,7 @@ def base_run_dir_fn(i): #the folders will be run00001, run00002, etc.
 use_tfrecord = False
 
 if use_tfrecord == True: #enable only if want to generate tfrecord (we have not been using it)
+    n_paths_to_tfrecord = 25 #number of rays per Tx / Rx pairs
     # TFRecord compression, can be NONE
     tfrecord_compression = 'GZIP'
     # Generated TFRecord
