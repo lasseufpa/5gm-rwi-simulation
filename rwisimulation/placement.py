@@ -10,7 +10,8 @@ from rwimodeling import errors, objects, txrx, X3dXmlFile
 from sumo import coord
 
 
-def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenna=None):
+#def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenna=None):
+def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenna, use_fixed_receivers=False):
     antenna = copy.deepcopy(antenna)
     antenna.clear()
 
@@ -53,16 +54,23 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
         structure_group.add_structures(car_structure)
 
         #antenna_vertice
+        #if cars_with_antenna is None or veh in cars_with_antenna:
+            #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
+            #antenna.add_vertice((x-deltaX, y-deltaY, height))
         #AK-TODO: not sure why Pedro checks cars_with_antenna is None. It seems it will add arbitrary cars
-        if cars_with_antenna is None or veh in cars_with_antenna:
+        #if cars_with_antenna is None or veh in cars_with_antenna:
+        if veh in cars_with_antenna:
             c_present = True
             #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
             antenna.add_vertice((x-deltaX, y-deltaY, height))
 
-    if not c_present:
+    if use_fixed_receivers:
+        return structure_group, None
+
+    if not c_present: #there are no vehicles with antennas
         return None, None
 
-    if veh_i is None:
+    if veh_i is None: #there are no vehicles in the scene according to SUMO (traci)
         return None, None
 
     return structure_group, antenna

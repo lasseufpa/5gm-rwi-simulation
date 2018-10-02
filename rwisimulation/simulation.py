@@ -20,8 +20,8 @@ from sumo import coord
 from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist
 
 import config as c
-#from .placement import place_on_line, place_by_sumo #use this option to run from command line
-from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
+from .placement import place_on_line, place_by_sumo #use this option to run from command line
+#from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
 
 
 def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna):
@@ -120,7 +120,7 @@ def main():
 
     #check consistency of user input
     if c.use_fixed_receivers:
-        if c.n_antenna_per_episode != 1:
+        if c.n_antenna_per_episode != 0:
             print('ERROR: if use_fixed_receivers=True, n_antenna_per_episode must be 1 but it is', c.n_antenna_per_episode)
             raise Exception()
 
@@ -223,7 +223,8 @@ def main():
 
             structure_group, location = place_by_sumo(
                 antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict,
-                cars_with_antenna=cars_with_antenna)
+                cars_with_antenna=cars_with_antenna,
+                use_fixed_receivers = c.use_fixed_receivers)
             print(traci.simulation.getCurrentTime())
 
             #if location is None:  #there are not cars with antennas in this episode (all have left)
@@ -239,14 +240,7 @@ def main():
                 continue
 
             if location is None:  #there are not cars with antennas in this episode (all have left)
-                if c.use_fixed_receivers:
-                    #trick the code assuming the first car has an antenna
-                    structure_group = objects.StructureGroup()
-
-                    #allCars = traci.vehicle.getIDList()
-                    #structure_group = allCars[0]
-                    print('No cars with antennas (but ok: we are using fixed receivers')
-                else:
+                if not c.use_fixed_receivers:
                     #abort, there is not reason to continue given that there will be no receivers along the whole episode
                     logging.warning("No vehicles with antennnas in scene " + str(scene_i) + " time " + str(traci.simulation.getCurrentTime()))
                     scene_i = np.Infinity #update scene counter
