@@ -25,8 +25,12 @@ from .placement import place_on_line, place_by_sumo #use this option to run from
 
 
 def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna):
-    '''Save as CSV text file some information obtained from SUMO for this specific scene'''
-    veh_i = None
+    '''Save as CSV text file some information obtained from SUMO for this specific scene.
+    Note that all vehicles on the streets are retrieved from SUMO via traci, and the structure
+    cars_with_antenna only helps to identify which are receivers (have antennas). If the simulation
+    has fixed receivers, then cars_with_antenna will have at most 1 car.
+    '''
+    #veh_i = None
     receiverIndexCounter = 0 #initialize counter to provide unique index for each receiver
     with open(sumoOutputInfoFileName, 'a') as csv_file:
         w = csv.writer(csv_file)
@@ -94,7 +98,8 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
                     receiverIndexCounter += 1 #update counter
 
             if fixedReceivers: # FixedReceiver  AK-TODO Take out the magic number 10 below
-                w.writerow([episode_i,scene_i,receiverIndex,veh,veh_i+10,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
+                numOfFixedReceivers = 10
+                w.writerow([episode_i,scene_i,receiverIndex,veh,veh_i+numOfFixedReceivers,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
             else:
                 w.writerow([episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
 
@@ -193,13 +198,13 @@ def main():
                 # step time_between_episodes from the last one
                 for count in range(c.time_between_episodes): #AK-TODO should rename it and avoid calling "time"
                     traci.simulationStep()
-                #if not c.use_fixed_receivers:
-                # ensure that there enough cars to place antennas. If use_fixed_receivers, then wait to have at least
-                # one vehicle
-                while len(traci.vehicle.getIDList()) < c.n_antenna_per_episode:
-                    logging.warning('not enough cars at time ' + str(traci.simulation.getCurrentTime()))
-                    traci.simulationStep()
-                #AK-TODO here we should choose to use fixed antennas or not
+                if not c.use_fixed_receivers:
+                    # ensure that there enough cars to place antennas. If use_fixed_receivers, then wait to have at least
+                    # one vehicle
+                    while len(traci.vehicle.getIDList()) < c.n_antenna_per_episode:
+                        logging.warning('not enough cars at time ' + str(traci.simulation.getCurrentTime()))
+                        traci.simulationStep()
+                    #AK-TODO here we should choose to use fixed antennas or not
                 cars_with_antenna = np.random.choice(traci.vehicle.getIDList(), c.n_antenna_per_episode, replace=False)
             else:
                 traci.simulationStep()
@@ -207,7 +212,7 @@ def main():
             structure_group, location = place_by_sumo(
                 antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict,
                 cars_with_antenna=cars_with_antenna)
-            #print(traci.simulation.getCurrentTime())
+            print(traci.simulation.getCurrentTime())
 
             #if location is None:  #there are not cars with antennas in this episode (all have left)
             #    print('BBBBBBBBBUg')
@@ -228,7 +233,7 @@ def main():
 
                     #allCars = traci.vehicle.getIDList()
                     #structure_group = allCars[0]
-                    print('DO SOMETHING')
+                    print('No cars with antennas (but ok: we are using fixed receivers')
                 else:
                     #abort, there is not reason to continue given that there will be no receivers along the whole episode
                     logging.warning("No vehicles with antennnas in scene " + str(scene_i) + " time " + str(traci.simulation.getCurrentTime()))

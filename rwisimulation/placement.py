@@ -53,6 +53,7 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
         structure_group.add_structures(car_structure)
 
         #antenna_vertice
+        #AK-TODO: not sure why Pedro checks cars_with_antenna is None. It seems it will add arbitrary cars
         if cars_with_antenna is None or veh in cars_with_antenna:
             c_present = True
             #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
