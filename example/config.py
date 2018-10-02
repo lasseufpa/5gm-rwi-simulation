@@ -37,10 +37,7 @@ if False:
 else:
     base_insite_project_path = os.path.join(working_directory,'insite_new_simuls')
 #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-results_dir = 'D:/insitedata/ak_todelete/'
-#Ray-tracing output folder (where InSite will store the results (Study Area name)).
-#They will be later copied to the corresponding output folder specified by results_dir
-project_output_dir = os.path.join(results_dir, 'study')
+results_dir = 'D:/insitedata/ak_todelete2/'
 #results_dir = os.path.join(working_directory, 'results_new_simuls')
 #if not os.path.exists(results_dir):
 #    os.makedirs(results_dir)
@@ -105,15 +102,15 @@ print('InSite wibatch executable: ', wibatch_bin)
 
 print('Working folder (base for several folders): ', working_directory)
 print('InSite input files folder: ', base_insite_project_path)
-print('InSite temporary output folder: ', project_output_dir)
+#print('InSite temporary output folder: ', project_output_dir)
 print('Final output parent folder: ', results_dir)
 
 n_run = range(0,20000,1) # iterator that determines maximum number of RT simulations
 
 #n_run = itertools.count() # infinite
-sampling_interval = 1 #time interval between scenes (in seconds)
+sampling_interval = 10 #time interval between scenes (in seconds)
 time_of_episode = 300 #int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
-time_between_episodes = int(5 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
+time_between_episodes = int(50 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
 n_antenna_per_episode = 1 #number of receivers per episode
 # where to map the received to TFRecords (minx, miny, maxx, maxy)
 analysis_area = (729, 453, 666, 666)
@@ -146,24 +143,25 @@ base_object_file_name = os.path.join(base_insite_project_path, "base.object")
 base_txrx_file_name = os.path.join(base_insite_project_path, "base.txrx")
 
 #Output files, which are written by the Python scripts
+#Provide here only the names. The full paths will be created by simulation.py (using the run folder)
 # Name (basename) of the JSON output simulation info file
 simulation_info_file_name = 'wri-simulation.info'
 # Object which will be modified in the RWI project
-dst_object_file_name = os.path.join(results_base_model_dir, "random-line.object")
+dst_object_file_name = 'random-line.object' #file with vehicles provided by SUMO
 # txrx which will be modified in the RWI project
-dst_txrx_file_name = os.path.join(results_base_model_dir, 'model.txrx')
-# XML project that will be executed by InSite command line tools:
-dst_x3d_xml_path = os.path.join(results_base_model_dir, 'gen.study.xml')
+dst_txrx_file_name = 'model.txrx' #file with Tx and Rx's
+# XML project that will be executed by InSite command line tools (its path will be the run folder):
+dst_x3d_xml_file_name = 'gen.study.xml' #configuration file for wibatch
 
 print('Output JSON file: ', simulation_info_file_name)
 print('Reference InSite model: ', base_x3d_xml_path)
-print('Generated InSite model that will be used: ', dst_x3d_xml_path)
+print('Generated InSite model that will be used (in run folder): ', dst_x3d_xml_file_name)
 print('Reference .object file: ', base_object_file_name)
 print('Generated .object file that will be used: ', dst_object_file_name)
 print('Reference .txrx file: ', base_txrx_file_name)
 print('Generated .txrx file that will be used: ', dst_txrx_file_name)
 
-#the information below is added in simulation.py into a XML file
+#the (misterious) information below is added in simulation.py into a XML file
 dst_x3d_txrx_xpath = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSet/OutputID/Integer[@Value='2']" +
                       "/../../ControlPoints/ProjectedPointList")
 
