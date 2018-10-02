@@ -20,8 +20,8 @@ from sumo import coord
 from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist
 
 import config as c
-from .placement import place_on_line, place_by_sumo #use this option to run from command line
-#from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
+#from .placement import place_on_line, place_by_sumo #use this option to run from command line
+from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
 
 
 def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna):
@@ -124,8 +124,9 @@ def main():
             print('ERROR: if use_fixed_receivers=True, n_antenna_per_episode must be 1 but it is', c.n_antenna_per_episode)
             raise Exception()
 
-    insite_project = insite.InSiteProject(setup_path=c.setup_path, xml_path=c.dst_x3d_xml_path.replace(' ', '\ '),
-                                          output_dir=c.project_output_dir, calcprop_bin=c.calcprop_bin,
+    #setup_path=c.setup_path, xml_path=c.dst_x3d_xml_path.replace(' ', '\ ')
+    #AK: now the constructor has fewer parameters
+    insite_project = insite.InSiteProject(project_name='model', calcprop_bin=c.calcprop_bin,
                                           wibatch_bin=c.wibatch_bin)
 
     print('########## Start simulation #############################')
@@ -134,7 +135,13 @@ def main():
             print('Option -r is not compatible with -c')
             exit(-1)
         for i in c.n_run:
-            insite_project.run_x3d(output_dir=c.project_output_dir)
+            run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
+            #Ray-tracing output folder (where InSite will store the results (Study Area name)).
+            #They will be later copied to the corresponding output folder specified by results_dir
+            project_output_dir = os.path.join(run_dir, 'study') #output InSite folder
+            xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
+            xml_full_path=xml_full_path.replace(' ', '\ ')
+            insite_project.run_x3d(xml_full_path, project_output_dir)
         print('Finished running ray-tracing')
         exit(1)
 
@@ -177,6 +184,10 @@ def main():
     episode_i = None
     for i in c.n_run:
         run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
+        #Ray-tracing output folder (where InSite will store the results (Study Area name)).
+        #They will be later copied to the corresponding output folder specified by results_dir
+        project_output_dir = os.path.join(run_dir, 'study') #output InSite folder
+
         #Disabled below because the paths will be created later on by shutil.copytree
         #and shutil.copytree does not support folders that already exist
         #if not os.path.exists(run_dir):
@@ -243,36 +254,37 @@ def main():
             structure_group, location = place_on_line(c.line_origin, c.line_destination, c.line_dimension,
                   c.car_distances, car_structure, antenna, c.antenna_origin)
 
-        #AK-TODO: we should make sure we write the 3 files to the source folder, not the destination (base)
-        #I think we should consider writing to the destination base
+        #Prepare the files for the input folder, where InSite will find them to execute the simulation
+        #(obs: now InSite is writing directly to the output folder)
+        shutil.copytree(c.base_insite_project_path, run_dir)
+        print('Copied',c.base_insite_project_path,'into',run_dir)
+
+        #Writing to the final run folder
         objFile.add_structure_groups(structure_group)
-        objFile.write(c.dst_object_file_name)
-        #print('Wrote file', c.dst_object_file_name)
-        #shutil.copy(c.dst_object_file_name, run_dir)
+        dst_object_full_path = os.path.join(run_dir, c.dst_object_file_name)
+        objFile.write(dst_object_full_path)
+
+        #get name of XML
+        xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
+        xml_full_path=xml_full_path.replace(' ', '\ ')
 
         if not c.use_fixed_receivers: #Marcus' workaround
             x3d_xml_file.add_vertice_list(location, c.dst_x3d_txrx_xpath)
-            x3d_xml_file.write(c.dst_x3d_xml_path)
-            #print('Wrote file', c.dst_x3d_xml_path)
-            #shutil.copy(c.dst_x3d_xml_path, run_dir)
+            x3d_xml_file.write(xml_full_path)
 
             txrxFile[c.antenna_points_name].location_list[0] = location
-            txrxFile.write(c.dst_txrx_file_name)
-            #print('Wrote file', c.dst_txrx_file_name)
-            #shutil.copy(c.dst_txrx_file_name, run_dir)
+            # txrx modified in the RWI project
+            dst_txrx_full_path = os.path.join(run_dir, c.dst_txrx_file_name)
+            txrxFile.write(dst_txrx_full_path)
 
         #check if we should run ray-tracing
-
-        #the ray-tracing will be executed in base_insite_project_path and we then later copy the output
-        #files to the destination folder run_dir
         if not args.place_only:
+            insite_project.run_x3d(xml_full_path, project_output_dir)
             if args.run_calcprop:
-                insite_project.run_calcprop(output_dir=run_dir, delete_temp=True)
+                #AK-TODO: Need to fix run_calcprop in insite.py: should not copy unless necessary (need to check)
+                insite_project.run_calcprop(output_dir=project_output_dir, delete_temp=True)
             else:
-                insite_project.run_x3d(output_dir=c.project_output_dir)
-
-        shutil.copytree(c.base_insite_project_path, run_dir)
-        print('Copied',c.base_insite_project_path,'into',run_dir)
+                insite_project.run_x3d(xml_full_path, project_output_dir)
 
         with open(os.path.join(run_dir, c.simulation_info_file_name), 'w') as infofile:
             #if c.use_fixed_receivers:  #AK-TODO take in account fixed receivers
