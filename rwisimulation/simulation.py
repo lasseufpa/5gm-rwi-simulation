@@ -134,6 +134,7 @@ def main():
         if args.run_calcprop:
             print('Option -r is not compatible with -c')
             exit(-1)
+        print('Will run only ray-tracing. I am assuming all files have been placed.')
         for i in c.n_run:
             run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
             #Ray-tracing output folder (where InSite will store the results (Study Area name)).
@@ -279,7 +280,6 @@ def main():
 
         #check if we should run ray-tracing
         if not args.place_only:
-            insite_project.run_x3d(xml_full_path, project_output_dir)
             if args.run_calcprop:
                 #AK-TODO: Need to fix run_calcprop in insite.py: should not copy unless necessary (need to check)
                 insite_project.run_calcprop(output_dir=project_output_dir, delete_temp=True)
