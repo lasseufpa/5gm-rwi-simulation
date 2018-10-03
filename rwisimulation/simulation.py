@@ -210,14 +210,17 @@ def main():
                 # step time_between_episodes from the last one
                 for count in range(c.time_between_episodes): #AK-TODO should rename it and avoid calling "time"
                     traci.simulationStep()
-                if not c.use_fixed_receivers:
+                if c.use_fixed_receivers:
+                    cars_with_antenna = []
+                else:
                     # ensure that there enough cars to place antennas. If use_fixed_receivers, then wait to have at least
                     # one vehicle
                     while len(traci.vehicle.getIDList()) < c.n_antenna_per_episode:
                         logging.warning('not enough cars at time ' + str(traci.simulation.getCurrentTime()))
                         traci.simulationStep()
                     #AK-TODO here we should choose to use fixed antennas or not
-                cars_with_antenna = np.random.choice(traci.vehicle.getIDList(), c.n_antenna_per_episode, replace=False)
+                    cars_with_antenna = np.random.choice(traci.vehicle.getIDList(), c.n_antenna_per_episode, replace=False)
+
             else:
                 traci.simulationStep()
 
