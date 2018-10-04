@@ -125,7 +125,7 @@ while True:
 
     with open(object_file_name) as infile:
         obj_file = objects.ObjectFile.from_file(infile)
-    print(abs_paths_file_name) #AK TODO
+    print(abs_paths_file_name) #AK TODO take out this comment and use logging
     paths = P2mPaths(abs_paths_file_name)
     cir = P2mCir(abs_cir_file_name)
 
