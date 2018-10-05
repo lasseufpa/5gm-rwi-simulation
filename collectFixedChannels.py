@@ -9,6 +9,21 @@ import json
 import numpy as np
 import csv
 from sys import argv
+import h5py
+
+#From https://coderwall.com/p/x6xtxq/convert-bytes-to-int-or-int-to-bytes-in-python
+def bytes_to_int(bytes):
+    result = 0
+    for b in bytes:
+        result = result * 256 + int(b)
+    return result
+
+def int_to_bytes(value, length):
+    result = []
+    for i in range(0, length):
+        result.append(value >> (i * 8) & 0xff)
+    result.reverse()
+    return result
 
 # now we don't need to recall config.py. We can simply specify folders below
 # import config as c
@@ -28,6 +43,12 @@ numScenesPerEpisode = 80 #50
 numTxRxPairsPerScene = 10
 numRaysPerTxRxPair = 100
 numParametersPerRay = 7 + 1 #has the ray angle now
+max_num_interactions = 26 #this will be checked in this script, so you can start by guessing and then re-run the script
+
+#if needed, manually create the output folder
+fileNamePrefix = './insitedataFixed2.8/urban_canyon_v2i_5gmv1_rays' #prefix of output files
+pythonExtension = '.npz'
+matlabExtension = '.hdf5'
 
 # from rwisimulation.datamodel import save5gmdata as fgdb
 
@@ -56,19 +77,33 @@ paths_file_name = 'model.paths.t001_01.r002.p2m'
 # Name (basename) of the JSON output simulation info file
 simulation_info_file_name = 'wri-simulation.info'
 
-sc_i = 0
+this_scene_i = 0  #indicates scene number within episode
+total_num_scenes = 0 #all processed scenes
 ep_i = -1  # it's summed to 1 and we need to start by 0
+actual_max_num_interactions = -np.Infinity #get the max number of interactions
 #episode = None
 # n_run = 100000
-run_i = 0
 should_stop = False
 while not should_stop:
+    at_least_one_valid_scene_in_this_episode = False
+    #gains, phases, etc. for gains
     allEpisodeData = np.zeros((numScenesPerEpisode, numTxRxPairsPerScene, numRaysPerTxRxPair,
                                numParametersPerRay), np.float32)
     allEpisodeData.fill(np.nan)
+    #positions (x,y,z) of interactions (see Table 20.1: Propagation Path Interactions) of InSite Reference Manual
+    allInteractionsPositions = np.zeros((numScenesPerEpisode, numTxRxPairsPerScene, numRaysPerTxRxPair,
+                               max_num_interactions, 3), np.float32) #3 because (x,y,z)
+    allInteractionsPositions.fill(np.nan)
+    # Strings
+    allInteractionsDescriptions = np.zeros((numScenesPerEpisode, numTxRxPairsPerScene, numRaysPerTxRxPair,
+                                            max_num_interactions, 2), dtype=int) #2 because there are at most 2 letters
+    #number of interactions per ray
+    allInteractionsNumbers = np.zeros((numScenesPerEpisode, numTxRxPairsPerScene, numRaysPerTxRxPair), dtype=np.int64)
+    allInteractionsNumbers.fill(-1)
+
     for s in range(numScenesPerEpisode):
         # for run_i in range(100): # use the number of examples in config.py
-        run_dir = os.path.join(results_dir, base_run_dir_fn(run_i))
+        run_dir = os.path.join(results_dir, base_run_dir_fn(total_num_scenes))
         # object_file_name = os.path.join(run_dir, dst_object_file_nameBaseName)
         # rays information but phase
         abs_paths_file_name = os.path.join(run_dir, project_output_dirBaseName, paths_file_name)
@@ -143,30 +178,66 @@ while not should_stop:
 
         # scene = fgdb.Scene()
         # scene.study_area = ((0, 0, 0), (0, 0, 0))
+        for txrx_pair_i in range(numTxRxPairsPerScene): #if num Tx = 1, then txrx_pair_i is the receiver index
+            if paths.get_total_received_power(txrx_pair_i + 1) is not None:
+                total_received_power = paths.get_total_received_power(txrx_pair_i + 1)
+                mean_time_of_arrival = paths.get_mean_time_of_arrival(txrx_pair_i + 1)
+                #receiver.position = object.position
 
-        rec_i = 0
-        if paths.get_total_received_power(rec_i + 1) is not None:
-            total_received_power = paths.get_total_received_power(rec_i + 1)
-            mean_time_of_arrival = paths.get_mean_time_of_arrival(rec_i + 1)
-            #receiver.position = object.position
+                sixParameters=paths.get_6_parameters_for_all_rays(txrx_pair_i + 1)
+                numRays = sixParameters.shape[0]
+                areLOSChannels = paths.is_los(txrx_pair_i + 1)
+                phases = cir.get_phase_ndarray(txrx_pair_i + 1)  # get phases for all rays in degrees
+                #go from 0:numRays to support a number of valid rays smaller than the maximum
+                allEpisodeData[this_scene_i, txrx_pair_i, 0:numRays, 0:6] = sixParameters
+                #allEpisodeData[this_scene_i][rec_i] = sixParameters
+                allEpisodeData[this_scene_i, txrx_pair_i, 0:numRays, 6] = areLOSChannels
+                if numParametersPerRay == 8:
+                    allEpisodeData[this_scene_i, txrx_pair_i, 0:numRays, 7] = phases
 
-            sixParameters=paths.get_6_parameters_for_all_rays(rec_i + 1)
-            numRays = sixParameters.shape[0]
-            areLOSChannels = paths.is_los(rec_i + 1)
-            phases = cir.get_phase_ndarray(rec_i + 1)  # get phases for all rays in degrees
-            #go from 0:numRays to support a number of valid rays smaller than the maximum
-            allEpisodeData[this_scene_i,rec_i,0:numRays,0:6] = sixParameters
-            #allEpisodeData[this_scene_i][rec_i] = sixParameters
-            allEpisodeData[this_scene_i,rec_i,0:numRays,6] = areLOSChannels
-            allEpisodeData[this_scene_i,rec_i,0:numRays,7] = phases
+                interactions_strings = paths.get_interactions_list(txrx_pair_i + 1)
+                for ray_i in range(numRays):
+                    #interactions positions
+                    interactions_positions=paths.get_interactions_positions(txrx_pair_i + 1, ray_i + 1)
+                    theseInteractions = interactions_strings[ray_i].split('-')
+                    num_interactions = len(interactions_positions)
+                    allInteractionsNumbers[this_scene_i, txrx_pair_i, ray_i] = num_interactions #keep the number of interactions
+                    if num_interactions > actual_max_num_interactions:
+                        actual_max_num_interactions = num_interactions #update
+                    if num_interactions > max_num_interactions:
+                        print('ERROR: Found num of interactions = ', num_interactions, 'while you specified the maximum is', max_num_interactions)
+                        exit(-1)
+                    for interaction_i in range(num_interactions):
+                        allInteractionsPositions[this_scene_i, txrx_pair_i, ray_i, interaction_i] = interactions_positions[interaction_i]
+                        stringAsBytes = theseInteractions[interaction_i].encode() #https://www.mkyong.com/python/python-3-convert-string-to-bytes/
+                        allInteractionsDescriptions[this_scene_i, txrx_pair_i, ray_i, interaction_i, 0] = int(stringAsBytes[0])
+                        if len(stringAsBytes) > 1:
+                            allInteractionsDescriptions[this_scene_i, txrx_pair_i, ray_i, interaction_i, 1] = int(stringAsBytes[1])
 
-        rec_i += 1
+                        # episode.scenes.append(scene)
+                at_least_one_valid_scene_in_this_episode = True #indicate this episode has at least one valid scene
 
-        # episode.scenes.append(scene)
-        print('\rProcessed episode: {} scene: {}, total {} '.format(ep_i, this_scene_i, sc_i + 1), end='')
-        sc_i += 1
+        print('\rProcessed episode: {} scene: {}, total {} '.format(ep_i, this_scene_i, total_num_scenes), end='')
         this_scene_i += 1
-        run_i += 1  # increment loop counter
+        total_num_scenes += 1  # increment loop counter
+
+    if at_least_one_valid_scene_in_this_episode:
+        outputFileName = fileNamePrefix + '_e' + str(ep_i) + pythonExtension
+        np.savez(outputFileName, allEpisodeData=allEpisodeData, allInteractionsPositions=allInteractionsPositions, \
+                 allInteractionsDescriptions = allInteractionsDescriptions, allInteractionsNumbers=allInteractionsNumbers)
+        print('==> Wrote file ' + outputFileName)
+
+        outputFileName = fileNamePrefix + '_e' + str(ep_i) + matlabExtension
+        print('==> Wrote file ' + outputFileName)
+        f = h5py.File(outputFileName, 'w')
+        f['allEpisodeData'] = allEpisodeData
+        f['allInteractionsPositions'] = allInteractionsPositions
+        f['allInteractionsDescriptions'] = allInteractionsDescriptions
+        f['allInteractionsNumbers'] = allInteractionsNumbers
+        f.close()
 
 print()
-print('Processed ', run_i, ' scenes (RT simulations)')
+print('Processed ', total_num_scenes, ' scenes (RT simulations)')
+if max_num_interactions != actual_max_num_interactions:
+    print('Found a max num of interactions = ', actual_max_num_interactions, 'while you specified = ', max_num_interactions)
+    print('Maybe you can consider re-running in case you do not want to waste some space in the array that stores interaction strings')
