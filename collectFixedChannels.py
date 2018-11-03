@@ -34,23 +34,31 @@ from rwisimulation.tfrecord import SceneNotInEpisodeSequenceError
 from rwiparsing import P2mPaths
 from rwiparsing import P2mCir
 
-if len(argv) != 2:
+if len(argv) != 3:
     print('You need to specify the folder that has the output files written by the simulator!')
-    print('Usage: python', argv[0], 'input_folder')
+    print('Usage: python', argv[0], 'input_folder output_folder')
     exit(-1)
 
-numScenesPerEpisode = 80 #50
+numScenesPerEpisode = 1 #50, 1000, etc
 numTxRxPairsPerScene = 10
 numRaysPerTxRxPair = 100
 numParametersPerRay = 7 + 1 #has the ray angle now
-max_num_interactions = 26 #this will be checked in this script, so you can start by guessing and then re-run the script
+max_num_interactions = 28 #this will be checked in this script, so you can start by guessing and then re-run the script
+should_write_interactions = False
 
 #if needed, manually create the output folder
-fileNamePrefix = './insitedataFixed2.8/urban_canyon_v2i_5gmv1_rays' #prefix of output files
+output_folder = argv[2]
+
+os.makedirs(output_folder, exist_ok=True)
+
+fileNamePrefix = os.path.join(output_folder, 'urban_canyon_v2i_5gmv1_rays') #prefix of output files
 pythonExtension = '.npz'
 matlabExtension = '.hdf5'
 
 # from rwisimulation.datamodel import save5gmdata as fgdb
+
+if not os.path.exists(output_folder):
+    os.mkdir(output_folder)
 
 def base_run_dir_fn(i):  # the folders will be run00001, run00002, etc.
     """returns the `run_dir` for run `i`"""
@@ -133,8 +141,11 @@ while not should_stop:
             # read SUMO information for this scene from text CSV file
             sumoOutputInfoFileName = os.path.join(run_dir, 'sumoOutputInfoFileName.txt')
             with open(sumoOutputInfoFileName, 'r') as f:
-                sumoReader = csv.reader(
-                    f)  # AK-TODO ended up not using the CSV because the string is protected by " " I guess
+                #read head, which is surrounded by quotes:
+                #"episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime,currentTime(ms)=70050,Ts(s)=0.05"
+                #Hence, the CSV does not split them because the row is protected by " " and is interpreted as 1 string
+                #print(sumoAllLines[0][-1],'ss')
+                sumoReader = csv.reader(f)
                 for row in sumoReader:
                     headerItems = row[0].split(',')
                     TsString = headerItems[-1]
@@ -223,18 +234,30 @@ while not should_stop:
 
     if at_least_one_valid_scene_in_this_episode:
         outputFileName = fileNamePrefix + '_e' + str(ep_i) + pythonExtension
-        np.savez(outputFileName, allEpisodeData=allEpisodeData, allInteractionsPositions=allInteractionsPositions, \
-                 allInteractionsDescriptions = allInteractionsDescriptions, allInteractionsNumbers=allInteractionsNumbers)
+        np.savez(outputFileName, allEpisodeData=allEpisodeData)
         print('==> Wrote file ' + outputFileName)
+
+        if should_write_interactions:
+            outputFileName = fileNamePrefix + '_e' + str(ep_i) + '_interactions' + pythonExtension
+            np.savez(outputFileName, allInteractionsPositions=allInteractionsPositions, \
+                     allInteractionsDescriptions = allInteractionsDescriptions, allInteractionsNumbers=allInteractionsNumbers)
+            print('==> Wrote file ' + outputFileName)
 
         outputFileName = fileNamePrefix + '_e' + str(ep_i) + matlabExtension
         print('==> Wrote file ' + outputFileName)
         f = h5py.File(outputFileName, 'w')
         f['allEpisodeData'] = allEpisodeData
-        f['allInteractionsPositions'] = allInteractionsPositions
-        f['allInteractionsDescriptions'] = allInteractionsDescriptions
-        f['allInteractionsNumbers'] = allInteractionsNumbers
         f.close()
+
+        if should_write_interactions:
+            #because they are large arrays, store interactions in another file
+            outputFileName = fileNamePrefix + '_e' + str(ep_i) + '_interactions' + matlabExtension
+            print('==> Wrote file ' + outputFileName)
+            f = h5py.File(outputFileName, 'w')
+            f['allInteractionsPositions'] = allInteractionsPositions
+            f['allInteractionsDescriptions'] = allInteractionsDescriptions
+            f['allInteractionsNumbers'] = allInteractionsNumbers
+            f.close()
 
 print()
 print('Processed ', total_num_scenes, ' scenes (RT simulations)')
