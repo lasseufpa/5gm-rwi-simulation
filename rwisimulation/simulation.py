@@ -22,9 +22,10 @@ from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist
 import config as c
 from .placement import place_on_line, place_by_sumo #use this option to run from command line
 #from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
+if c.insite_version == '3.3':
+    from rwimodeling import  X3dXmlFile3_3
 
-
-def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna):
+def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna, fixedReceivers, use_pedestrians):
     '''Save as CSV text file some information obtained from SUMO for this specific scene.
     Note that all vehicles on the streets are retrieved from SUMO via traci, and the structure
     cars_with_antenna only helps to identify which are receivers (have antennas). If the simulation
@@ -32,15 +33,37 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
     '''
     #veh_i = None
     receiverIndexCounter = 0 #initialize counter to provide unique index for each receiver
-    with open(sumoOutputInfoFileName, 'a') as csv_file:
+    if use_pedestrians:
+        with open(sumoOutputInfoFileName[:-4] + 'Ped.txt', 'w') as csv_file:
+            w = csv.writer(csv_file)
+            # from http://sumo.dlr.de/wiki/TraCI/Person_Value_Retrieval
+            header2 = 'episode_i,scene_i,receiverIndex,ped,ped_i,typeID,xinsite,yinsite,x3,y3,' + \
+                        'angle,speed,length, width,waitTime,currentTime(ms)=' + \
+                        str(traci.simulation.getCurrentTime()) + ',Ts(s)=' + str(c.sampling_interval)
+            w.writerow([header2]) #make the string a list otherwise the function will print each character between commas
+            for ped_i, ped in enumerate(traci.person.getIDList()):
+                (x, y), angle, length, width, speed, typeID, waitTime = [f(ped) for f in [
+                    traci.person.getPosition,
+                    traci.person.getAngle, #Returns the angle of the named vehicle within the last step [degrees]
+                    traci.person.getLength,
+                    traci.person.getWidth,
+                    traci.person.getSpeed, #Returns the speed of the named person within the last step [m/s]; error value: -1001
+                    traci.person.getTypeID, #Returns the id of the type of the named vehicle
+                    traci.person.getWaitingTime #Returns the waiting time [s]
+                ]]
+                xinsite, yinsite = traci.simulation.convertGeo(x, y)
+                w.writerow([episode_i,scene_i,'-1',ped,ped_i,typeID,xinsite,yinsite,x,y,angle,speed,length, width ,waitTime])
+
+    with open(sumoOutputInfoFileName, 'w') as csv_file:
         w = csv.writer(csv_file)
+
         header = 'episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,' + \
                     'lane_id,angle,speed,length, width, height,distance,waitTime,currentTime(ms)=' + \
                     str(traci.simulation.getCurrentTime()) + ',Ts(s)=' + str(c.sampling_interval)
+
         w.writerow([header]) #make the string a list otherwise the function will print each character between commas
 
         # 10 fixed receivers - Marcus' workaround
-        fixedReceivers = True
         if fixedReceivers:
             lane_id = 0
             angle = 0
@@ -82,7 +105,8 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
             ]]
 
             #convert position from SUMO to InSite
-            xinsite, yinsite = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict)
+            #xinsite, yinsite = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict)
+            xinsite, yinsite = traci.simulation.convertGeo(x, y)
 
             #check if it's a receiver (has antenna) or not. Use -1 to identify it's not a receiver
             receiverIndex=-1
@@ -121,7 +145,7 @@ def main():
     #check consistency of user input
     if c.use_fixed_receivers:
         if c.n_antenna_per_episode != 0:
-            print('ERROR: if use_fixed_receivers=True, n_antenna_per_episode must be 1 but it is', c.n_antenna_per_episode)
+            print('ERROR: if use_fixed_receivers=True, n_antenna_per_episode must be 0 but it is', c.n_antenna_per_episode)
             raise Exception()
 
     #setup_path=c.setup_path, xml_path=c.dst_x3d_xml_path.replace(' ', '\ ')
@@ -140,9 +164,15 @@ def main():
             #Ray-tracing output folder (where InSite will store the results (Study Area name)).
             #They will be later copied to the corresponding output folder specified by results_dir
             project_output_dir = os.path.join(run_dir, 'study') #output InSite folder
-            xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
-            xml_full_path=xml_full_path.replace(' ', '\ ')
-            insite_project.run_x3d(xml_full_path, project_output_dir)
+            p2mpaths_file = os.path.join(project_output_dir, 'model.paths.t001_01.r002.p2m')
+            if not os.path.exists(p2mpaths_file) or args.remove_results_dir:
+                xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
+                xml_full_path=xml_full_path.replace(' ', '\ ')
+                insite_project.run_x3d(xml_full_path, project_output_dir)
+            else: 
+                print("ERROR: " + p2mpaths_file + " already exists, aborting simulation!") 
+                raise Exception()
+
         print('Finished running ray-tracing')
         exit(1)
 
@@ -166,7 +196,10 @@ def main():
     with open(c.base_txrx_file_name) as infile:
         txrxFile = txrx.TxRxFile.from_file(infile)
     print('Opened file with transmitters and receivers:', c.base_txrx_file_name)
-    x3d_xml_file = X3dXmlFile(c.base_x3d_xml_path)
+    if c.insite_version == '3.3':
+        x3d_xml_file = X3dXmlFile3_3(c.base_x3d_xml_path)
+    else:
+        x3d_xml_file = X3dXmlFile(c.base_x3d_xml_path)
     print('Opened file with InSite XML:', c.base_x3d_xml_path)
 
     #AK-TODO document and comment the methods below.
@@ -224,10 +257,11 @@ def main():
             else:
                 traci.simulationStep()
 
-            structure_group, location = place_by_sumo(
+            structure_group, location, str_vehicles = place_by_sumo(
                 antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict,
                 cars_with_antenna=cars_with_antenna,
-                use_fixed_receivers = c.use_fixed_receivers)
+                use_fixed_receivers = c.use_fixed_receivers,
+                use_pedestrians = c.use_pedestrians)
             print(traci.simulation.getCurrentTime())
 
             #if location is None:  #there are not cars with antennas in this episode (all have left)
@@ -261,6 +295,13 @@ def main():
         objFile.add_structure_groups(structure_group)
         dst_object_full_path = os.path.join(run_dir, c.dst_object_file_name)
         objFile.write(dst_object_full_path)
+
+        #write new model of vehicles to the final folder
+        if c.use_vehicles_template:
+            dst_new_object_full_path = os.path.join(run_dir, 'random-newline.object')
+            f_dst_new_object = open(dst_new_object_full_path,'w')
+            f_dst_new_object.write(str_vehicles)
+            f_dst_new_object.close()
 
         #get name of XML
         xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
@@ -296,7 +337,7 @@ def main():
 
         #save SUMO information for this scene as text CSV file
         sumoOutputInfoFileName = os.path.join(run_dir,'sumoOutputInfoFileName.txt')
-        writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, c.lane_boundary_dict, cars_with_antenna)
+        writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, c.lane_boundary_dict, cars_with_antenna, c.use_fixed_receivers, c.use_pedestrians)
 
         scene_i += 1 #update scene counter
 
