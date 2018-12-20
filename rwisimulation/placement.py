@@ -49,11 +49,14 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
             pedestrian_structure.add_sub_structures(pedestrian)
             structure_group.add_structures(pedestrian_structure)
 
-            str_vehicles = model_vehicles(str_vehicles,ped,xinsite-deltaX,yinsite-deltaY,1.72,90-angle) 
+            # 1.72 size of a perdestrian
+            if c.use_vehicles_template:
+                str_vehicles = model_vehicles(str_vehicles,ped,xinsite-deltaX,yinsite-deltaY,90-angle,1.72) 
 
     for veh_i, veh in enumerate(traci.vehicle.getIDList()):
-        (x, y), angle, lane_id, length, width, height = [f(veh) for f in [
+        (x, y), (x3,y3,z3), angle, lane_id, length, width, height = [f(veh) for f in [
             traci.vehicle.getPosition,
+            traci.vehicle.getPosition3D, #Returns the 3D-position(three doubles) of the named vehicle (center of the front bumper) within the last step [m,m,m]
             traci.vehicle.getAngle,
             traci.vehicle.getLaneID,
             traci.vehicle.getLength,
@@ -80,26 +83,20 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
         thisAngleInRad = np.radians(angle) #*np.pi/180
         deltaX = (length/2.0) * np.sin(thisAngleInRad)
         deltaY = (length/2.0) * np.cos(thisAngleInRad)
-        car.translate((x-deltaX, y-deltaY, 0)) #now can translate
+        car.translate((x-deltaX, y-deltaY, z3)) #now can translate
 
         car_structure = objects.Structure(name=veh)
         car_structure.add_sub_structures(car)
         structure_group.add_structures(car_structure)
 
         if c.use_vehicles_template:
-            str_vehicles = model_vehicles(str_vehicles,veh,x-deltaX,y-deltaY,height,90-angle) 
+            str_vehicles = model_vehicles(str_vehicles,veh,x-deltaX,y-deltaY,90-angle,height,length,width) 
 
         #antenna_vertice
-        #if cars_with_antenna is None or veh in cars_with_antenna:
-            #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
-            #antenna.add_vertice((x-deltaX, y-deltaY, height))
-        #AK-TODO: not sure why Pedro checks cars_with_antenna is None. It seems it will add arbitrary cars
-        #if cars_with_antenna is None or veh in cars_with_antenna:
         if veh in cars_with_antenna:
             c_present = True
             #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
-            #adding Rx 0.1 above car's height
-            #antenna.add_vertice((x-deltaX, y-deltaY, height))
+            #adding Rx 0.1 above car's height, to ensure that it will not be blocked by the vehicle itself
             antenna.add_vertice((x-deltaX, y-deltaY, height+0.1))
 
 
@@ -203,7 +200,7 @@ def rotate(vertice, angle):
 
     return vertice_array
 
-def model_vehicles(str_vehicles,name,x,y,height,angle):
+def model_vehicles(str_vehicles,name,x,y,angle,height,length=1,width=1):
 
     if (height == 4.3): # truck height
         dados1 = open('./objects/truck.object', 'r')
@@ -213,6 +210,9 @@ def model_vehicles(str_vehicles,name,x,y,height,angle):
         dados1 = open('./objects/car.object', 'r')
     elif (height == 1.72): # pedestrian height
         dados1 = open('./objects/pedestrian.object', 'r')
+    else:
+        print('There is no model object ready for this object')
+        exit(1)
 
     npontos = False
     

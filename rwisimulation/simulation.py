@@ -132,6 +132,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--place-only', action='store_true',
                         help='Run only the objects placement and save files for ray-tracing')
+    parser.add_argument('-j', '--jump', action='store_true',
+                        help='Run only ray-tracing with previoulsy generated files, jumping runs with results')
     parser.add_argument('-r', '--ray-tracing-only', action='store_true',
                         help='Run only ray-tracing with previoulsy generated files')
     parser.add_argument('-c', '--run-calcprop', action='store_true',
@@ -169,6 +171,8 @@ def main():
                 xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
                 xml_full_path=xml_full_path.replace(' ', '\ ')
                 insite_project.run_x3d(xml_full_path, project_output_dir)
+            elif os.path.exists(p2mpaths_file) and args.jump:
+                continue
             else: 
                 print("ERROR: " + p2mpaths_file + " already exists, aborting simulation!") 
                 raise Exception()
@@ -216,7 +220,35 @@ def main():
 
     scene_i = None
     episode_i = None
+
+    # Trick to start simulations from a given run as it was started from 0
+    if c.n_run[0] != 0:
+        tmp_var = 0
+        while (tmp_var < int(c.n_run[0])):
+            if c.use_sumo:
+                # when to start a new episode
+                if scene_i is None or scene_i >= c.time_of_episode:
+                    #first scene of an episode
+                    if episode_i is None:
+                        episode_i = 0
+                    else:
+                        episode_i += 1
+                    scene_i = 0
+                    # step time_between_episodes from the last one
+                    for count in range(c.time_between_episodes):
+                        traci.simulationStep()
+                    while len(traci.vehicle.getIDList()) < c.n_antenna_per_episode:
+                        traci.simulationStep()
+                    # This choices has to be done to make the seed of RNG work properly
+                    cars_with_antenna = np.random.choice(traci.vehicle.getIDList(), c.n_antenna_per_episode, replace=False)
+                else:
+                    traci.simulationStep()
+                scene_i += 1 #update scene counter
+            tmp_var += 1
+            print('Jump until the step '+ str(c.n_run[0]) + ': '+ str(int((tmp_var/c.n_run[0])* 100))+ '%')
+
     for i in c.n_run:
+
         run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
         #Ray-tracing output folder (where InSite will store the results (Study Area name)).
         #They will be later copied to the corresponding output folder specified by results_dir
