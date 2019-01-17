@@ -41,9 +41,6 @@ def get_lat_long(base_insite_project_path):
 ###############################################################
 ## Part I - Basic information that typically needs to be modified / checked
 ###############################################################
-use_fixed_receivers = True #set to False if only vehicles are receivers
-use_pedestrians = True
-use_vehicles_template = True # set True to use pre-made vehicle ( not boxes )
 # Current folder (or directory). Some paths are relative to this folder:
 working_directory = os.path.dirname(os.path.realpath(__file__)) 
 # InSite will look for input files in this folder. These files will be used to generate all simulations
@@ -77,13 +74,14 @@ elif insite_version == '3.2': #general case, assuming Windows
     wibatch_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
                'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
-    #SUMO configuration file:
 
-#sumo_cfg = os.path.join(working_directory, 'sumo', 'seasonal.sumocfg')
-#sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
-#sumo_cfg = os.path.join(working_directory, 'sumo', 'San.sumocfg')
-#sumo_cfg = os.path.join(working_directory, 'sumo_drone', 'drone.sumocfg')
+### HERE STARTS CONFIGURATION ### NOTE: ONLY CHANGE IF YOU KNOW WHAT ARE YOU DOING
+#SUMO configuration file:
 sumo_cfg = os.path.join(working_directory, 'longtan_sumo', 'longtan.sumocfg')
+
+use_fixed_receivers = True #set to False if only vehicles are receivers
+use_pedestrians = False # only set True if your sumo is ready for pedestrians
+use_vehicles_template = True # set True to use pre-made vehicle ( not boxes ), NOTE: only set True if you have the folder objects with the models.
 
 print('########## Scripts will assume the following files: ##########')
 print('SUMO executable: ', sumo_bin)
@@ -115,6 +113,16 @@ frequency = 60e9 # frequency in Hz for the RT simulation
 ## Part II - Extra information that typically does not need to be modified
 ## unless you changed the InSite model (using the GUI, for example)
 ###############################################################
+# Fullfill this parameters with insite's information
+insite_study_area_name = 'study'
+insite_tx_name = 'Tx'
+insite_rx_name = 'Rx'
+insite_setup_name = 'model'
+insite_vehicles_name = 'random-line'
+
+if use_vehicles_template:
+    insite_vehicles_name_model = insite_vehicles_name
+    insite_vehicles_name = insite_vehicles_name + '_'
 ##### Folders and files for InSite ####
 # Copy of the RWI project used in the simulation
 #AK-TODO instead of "base" it should match the name InSite gives, to facilitate porting
@@ -122,17 +130,15 @@ results_base_model_dir = os.path.join(results_dir, 'base')
 results_base_model_dir.replace('\\', '/')
 #Input files, which are read by the Python scripts
 # File that has the base InSite project:
-setup_path = os.path.join(base_insite_project_path, 'model.setup')
+setup_path = os.path.join(base_insite_project_path, insite_setup_name + '.setup')
 setup_path = setup_path.replace(' ', '\ ') #deal with paths with blank spaces
 # XML that has information about the simulations
-#base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.Study.xml')
-base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.study.xml')
+base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.' + insite_study_area_name+'.xml')
 # Name (basename) of the paths file generated in the simulation
-paths_file_name = 'model.paths.t001_01.r002.p2m'
+paths_file_name = insite_setup_name+'.paths.t001_01.r002.p2m'
 # Base object file to generate the `object_dst_file_name`
 base_object_file_name = os.path.join(base_insite_project_path, "base.object")
 # Base txrx file to generate the `txrx_dst_file_name`
-#base_txrx_file_name = os.path.join(base_insite_project_path, "base.object")
 base_txrx_file_name = os.path.join(base_insite_project_path, "base.txrx")
 
 #Output files, which are written by the Python scripts
@@ -140,11 +146,11 @@ base_txrx_file_name = os.path.join(base_insite_project_path, "base.txrx")
 # Name (basename) of the JSON output simulation info file
 simulation_info_file_name = 'wri-simulation.info'
 # Object which will be modified in the RWI project
-dst_object_file_name = 'random-line.object' #file with vehicles provided by SUMO
+dst_object_file_name = insite_vehicles_name + '.object' #file with vehicles provided by SUMO
 # txrx which will be modified in the RWI project
-dst_txrx_file_name = 'model.txrx' #file with Tx and Rx's
+dst_txrx_file_name = insite_setup_name + '.txrx' #file with Tx and Rx's
 # XML project that will be executed by InSite command line tools (its path will be the run folder):
-dst_x3d_xml_file_name = 'model.study.xml' #configuration file for wibatch
+dst_x3d_xml_file_name = insite_setup_name + '.' + insite_study_area_name + '.xml' #configuration file for wibatch
 
 print('Output JSON file: ', simulation_info_file_name)
 print('Reference InSite model: ', base_x3d_xml_path)

@@ -170,8 +170,9 @@ def main():
             run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
             #Ray-tracing output folder (where InSite will store the results (Study Area name)).
             #They will be later copied to the corresponding output folder specified by results_dir
-            project_output_dir = os.path.join(run_dir, 'study') #output InSite folder
-            p2mpaths_file = os.path.join(project_output_dir, 'model.paths.t001_01.r002.p2m')
+            project_output_dir = os.path.join(run_dir, c.insite_study_area_name) #output InSite folder
+
+            p2mpaths_file = os.path.join(project_output_dir, c.insite_setup_name + '.paths.t001_01.r002.p2m')
             if not os.path.exists(p2mpaths_file) or args.remove_results_dir:
                 xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
                 xml_full_path=xml_full_path.replace(' ', '\ ')
@@ -258,7 +259,7 @@ def main():
         run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i - count_nar))
         #Ray-tracing output folder (where InSite will store the results (Study Area name)).
         #They will be later copied to the corresponding output folder specified by results_dir
-        project_output_dir = os.path.join(run_dir, 'study') #output InSite folder
+        project_output_dir = os.path.join(run_dir, c.insite_study_area_name) #output InSite folder
 
         #Disabled below because the paths will be created later on by shutil.copytree
         #and shutil.copytree does not support folders that already exist
@@ -338,7 +339,7 @@ def main():
 
         #write new model of vehicles to the final folder
         if c.use_vehicles_template:
-            dst_new_object_full_path = os.path.join(run_dir, 'random-newline.object')
+            dst_new_object_full_path = os.path.join(run_dir, c.insite_vehicles_name_model + '.object')
             f_dst_new_object = open(dst_new_object_full_path,'w')
             f_dst_new_object.write(str_vehicles)
             f_dst_new_object.close()
