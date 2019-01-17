@@ -51,7 +51,7 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
 
             # 1.72 size of a perdestrian
             if c.use_vehicles_template:
-                str_vehicles = model_vehicles(str_vehicles,ped,xinsite-deltaX,yinsite-deltaY,90-angle,1.72) 
+                str_vehicles = get_model(str_vehicles,ped,xinsite-deltaX,yinsite-deltaY,0,90-angle,1.72) 
 
     for veh_i, veh in enumerate(traci.vehicle.getIDList()):
         (x, y), (x3,y3,z3), angle, lane_id, length, width, height = [f(veh) for f in [
@@ -90,7 +90,7 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
         structure_group.add_structures(car_structure)
 
         if c.use_vehicles_template:
-            str_vehicles = model_vehicles(str_vehicles,veh,x-deltaX,y-deltaY,90-angle,height,length,width) 
+            str_vehicles = get_model(str_vehicles,veh,x-deltaX,y-deltaY,z3,90-angle,height,length,width) 
 
         #antenna_vertice
         if veh in cars_with_antenna:
@@ -200,35 +200,39 @@ def rotate(vertice, angle):
 
     return vertice_array
 
-def model_vehicles(str_vehicles,name,x,y,angle,height,length=1,width=1):
+def get_model(str_vehicles,name,x,y,z,angle,height,length=1,width=1):
 
-    if (height == 4.3): # truck height
-        dados1 = open('./objects/truck.object', 'r')
-    elif (height == 3.2): # bus height
-        dados1 = open('./objects/bus.object', 'r')
-    elif (height == 1.59): # car height
-        dados1 = open('./objects/car.object', 'r')
-    elif (height == 1.72): # pedestrian height
-        dados1 = open('./objects/pedestrian.object', 'r')
+    # The height here is utilized as trick to choose which model will be utilized .
+    # TODO: Find a new way to classify the models, instead of height.
+    if (height == 4.3):
+        model_object = open(os.path.join(c.working_directory,'objects/truck.object'), 'r')
+    elif (height == 3.2):               
+        model_object = open(os.path.join(c.working_directory,'./objects/bus.object'), 'r')
+    elif (height == 1.59):              
+        model_object = open(os.path.join(c.working_directory,'./objects/car.object'), 'r')
+    elif (height == 1.72):              
+        model_object = open(os.path.join(c.working_directory,'./objects/pedestrian.object'), 'r')
+    elif (height == 0.295): 
+        model_object = open(os.path.join(c.working_directory,'./objects/drone.object'), 'r')
     else:
         print('There is no model object ready for this object')
         exit(1)
 
-    npontos = False
+    cn_points = False
     
-    for linha in dados1:
-        if 'begin_<structure_group>' in linha:
-            tmp = linha.split(' ')
+    for line in model_object:
+        if 'begin_<structure_group>' in line:
+            tmp = line.split(' ')
             tmp[1] = str(name+ ' ')
-            linha = ' '.join(tmp)
-            str_vehicles += linha + "\n"
+            line = ' '.join(tmp)
+            str_vehicles += line + "\n"
             continue
-        if 'nVertices' in linha:
-            npontos = int(linha.split(' ')[1]) 
-            str_vehicles += linha
+        if 'nVertices' in line:
+            cn_points = int(line.split(' ')[1]) 
+            str_vehicles += line
             continue
-        if npontos:
-            tmp = linha.split(' ')
+        if cn_points:
+            tmp = line.split(' ')
             tmp[0] = float(tmp[0])
             tmp[1] = float(tmp[1])
             tmp[2] = float(tmp[2])
@@ -236,10 +240,10 @@ def model_vehicles(str_vehicles,name,x,y,angle,height,length=1,width=1):
             rotated_v = list(rotate(myarray,angle))
             rotated_v[0] = str(rotated_v[0] + x)
             rotated_v[1] = str(rotated_v[1] + y)
-            rotated_v[2] = str(rotated_v[2]) + "\n"
-            linha = ' '.join(rotated_v)
-            npontos -= 1
-        str_vehicles += linha
+            rotated_v[2] = str(rotated_v[2] + z) + "\n"
+            line = ' '.join(rotated_v)
+            cn_points -= 1
+        str_vehicles += line
 
     return str_vehicles
 

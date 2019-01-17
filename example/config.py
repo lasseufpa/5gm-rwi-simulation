@@ -16,6 +16,19 @@ except ImportError:
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
+def get_lat_long(base_insite_project_path):
+    txrx_file = open(os.path.join(base_insite_project_path, 'base.txrx'), 'r')
+    latitude = False
+    longitude = False
+    for line in txrx_file:
+        if 'latitude' in line:
+            latitude = line.split(' ')[1].replace('\n','') 
+        if 'longitude' in line:
+            longitude = line.split(' ')[1].replace('\n','') 
+        if latitude and longitude:
+            return latitude,longitude
+
+
 ###############################################################
 ## Most information in this configuration file is used in the Stage 1 of 
 ## the three stages below. But some are also used in the other stages.
@@ -28,32 +41,24 @@ logging.basicConfig(level=logging.DEBUG)
 ###############################################################
 ## Part I - Basic information that typically needs to be modified / checked
 ###############################################################
-use_fixed_receivers = False #set to False if only vehicles are receivers
-use_pedestrians = False
-use_vehicles_template = False
-#longitude = -77.078699999999998 #Rosslyn
-#latitude = 38.890700000000002 # Rosslyn
-#longitude = -122.438185214995997 #SF
-#latitude =  37.776566239924001 #SF
+use_fixed_receivers = True #set to False if only vehicles are receivers
+use_pedestrians = True
+use_vehicles_template = True # set True to use pre-made vehicle ( not boxes )
 # Current folder (or directory). Some paths are relative to this folder:
 working_directory = os.path.dirname(os.path.realpath(__file__)) 
 # InSite will look for input files in this folder. These files will be used to generate all simulations
-insite_version = '3.3'
 if False:
     base_insite_project_path = 'D:/insitedata/insite_new_simuls/'
 else:
-    base_insite_project_path = os.path.join(working_directory,'bases_insite_3_3_0/sanfrancisco/60GHz')
+    base_insite_project_path = os.path.join(working_directory,'bases_insite_3_2_0/longtan/2.8GHz')
 #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-#results_dir = 'D:/insitedata/ak_todelete2/'
-#results_dir = os.path.join(working_directory, 'simulations/rosslyn_3_2_60GHz_n')
-results_dir = os.path.join(working_directory, 'simulations/tst')
-#if not os.path.exists(results_dir):
-#    os.makedirs(results_dir)
-#results_dir = ("/mnt/d/ak/Works/2018-ita-paper/final/raid/pc128/example_working/results")
+results_dir = os.path.join(working_directory, 'simulations/longtan2')
 #Folders and files for InSite and its license. For Windows you may simply inform
 #the path to the executable files, not minding about the license file location.
-#calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
 #Folders for SUMO and InSite. Use executable sumo-gui if want to see the GUI or sumo otherwise
+
+
+insite_version = '3.2'
 if insite_version == '3.3':
     sumo_bin = '/usr/bin/sumo'
     calcprop_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
@@ -76,25 +81,25 @@ elif insite_version == '3.2': #general case, assuming Windows
 
 #sumo_cfg = os.path.join(working_directory, 'sumo', 'seasonal.sumocfg')
 #sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
-sumo_cfg = os.path.join(working_directory, 'sumo', 'San.sumocfg')
+#sumo_cfg = os.path.join(working_directory, 'sumo', 'San.sumocfg')
+#sumo_cfg = os.path.join(working_directory, 'sumo_drone', 'drone.sumocfg')
+sumo_cfg = os.path.join(working_directory, 'longtan_sumo', 'longtan.sumocfg')
 
 print('########## Scripts will assume the following files: ##########')
 print('SUMO executable: ', sumo_bin)
 print('SUMO configuration: ', sumo_cfg)
 print('InSite calcprop executable: ', calcprop_bin)
 print('InSite wibatch executable: ', wibatch_bin)
-
 print('Working folder (base for several folders): ', working_directory)
 print('InSite input files folder: ', base_insite_project_path)
 #print('InSite temporary output folder: ', project_output_dir)
 print('Final output parent folder: ', results_dir)
 
-#n_run = range(531,2000,1) # with leaf.. iterator that determines maximum number of RT simulations
-n_run = range(0,100,1) # iterator that determines maximum number of RT simulations
+latitude, longitude = get_lat_long((base_insite_project_path))
+n_run = range(0,300,1) # iterator that determines maximum number of RT simulations
 
-#n_run = itertools.count() # infinite
-sampling_interval = 0.1 #time interval between scenes (in seconds)
-time_of_episode = 10 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
+sampling_interval = 0.5 #time interval between scenes (in seconds)
+time_of_episode = 30 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
 time_between_episodes = int(1 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
 if use_fixed_receivers: #set to False if only vehicles are receivers
     n_antenna_per_episode = 0 #number of receivers per episode

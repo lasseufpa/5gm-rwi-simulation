@@ -63,7 +63,7 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
 
         w.writerow([header]) #make the string a list otherwise the function will print each character between commas
 
-        # 10 fixed receivers - Marcus' workaround
+        # Fixed receivers - Marcus' workaround
         if fixedReceivers:
             lane_id = 0
             angle = 0
@@ -73,20 +73,26 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
             height = 0
             distance = 0
             waitTime = 0
-            x3 = 0
-            y3 = 0
-            z3 = 0
 
-            w.writerow([episode_i,scene_i,'0','house0','0','House','777.000000000000000','455.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'1','house1','1','House','776.000000000000000','463.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'2','house2','2','House','768.000000000000000','637.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'3','house3','3','House','768.000000000000000','637.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'4','house4','4','House','702.000000000000000','435.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'5','house5','5','House','716.000000000000000','467.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'6','house6','6','House','658.000000000000000','534.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'7','house7','7','House','658.000000000000000','534.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'8','house8','8','House','711.000000000000000','659.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'9','house9','9','House','702.000000000000000','658.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
+            txrx_file = open(os.path.join(c.base_insite_project_path, 'base.txrx'), 'r')
+            counter = 0
+            cnt_rx = False
+            Rx_info = False
+            for line in txrx_file:
+                if 'begin_<points> Rx' in line:
+                    Rx_info = True
+                    continue
+                if 'nVertices' in line and Rx_info:
+                    cnt_rx = int(line.split(' ')[1]) 
+                    numOfFixedReceivers = cnt_rx
+                    continue
+                if cnt_rx:
+                    x = line.split(' ')[0]
+                    y = line.split(' ')[1]
+                    z = line.split(' ')[2].replace('\n', '')
+                    w.writerow([episode_i,scene_i,counter,'house'+str(counter), counter,'House',x,y,x,y,z,lane_id,angle,speed,length, width, height,distance,waitTime])
+                    counter += 1
+                    cnt_rx -= 1
 
         #from http://sumo.dlr.de/wiki/TraCI/Vehicle_Value_Retrieval
         for veh_i, veh in enumerate(traci.vehicle.getIDList()):
@@ -121,8 +127,7 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
                     receiverIndex = receiverIndexCounter #not -1, but the current Rx counter
                     receiverIndexCounter += 1 #update counter
 
-            if fixedReceivers: # FixedReceiver  AK-TODO Take out the magic number 10 below
-                numOfFixedReceivers = 10
+            if fixedReceivers:
                 w.writerow([episode_i,scene_i,receiverIndex,veh,veh_i+numOfFixedReceivers,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
             else:
                 w.writerow([episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
@@ -133,7 +138,7 @@ def main():
     parser.add_argument('-p', '--place-only', action='store_true',
                         help='Run only the objects placement and save files for ray-tracing')
     parser.add_argument('-j', '--jump', action='store_true',
-                        help='Run only ray-tracing with previoulsy generated files, jumping runs with results')
+                        help='Jumping runs that already have results (works only if utilized with the option \'-r\' )')
     parser.add_argument('-r', '--ray-tracing-only', action='store_true',
                         help='Run only ray-tracing with previoulsy generated files')
     parser.add_argument('-c', '--run-calcprop', action='store_true',
@@ -247,9 +252,10 @@ def main():
             tmp_var += 1
             print('Jump until the step '+ str(c.n_run[0]) + ': '+ str(int((tmp_var/c.n_run[0])* 100))+ '%')
 
+    count_nar = 0 # Number of Runs without cars with antenna while mobile
     for i in c.n_run:
 
-        run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
+        run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i - count_nar))
         #Ray-tracing output folder (where InSite will store the results (Study Area name)).
         #They will be later copied to the corresponding output folder specified by results_dir
         project_output_dir = os.path.join(run_dir, 'study') #output InSite folder
@@ -310,8 +316,10 @@ def main():
 
             if location is None:  #there are not cars with antennas in this episode (all have left)
                 if not c.use_fixed_receivers:
+                    count_nar = count_nar + 1
                     #abort, there is not reason to continue given that there will be no receivers along the whole episode
-                    logging.warning("No vehicles with antennnas in scene " + str(scene_i) + " time " + str(traci.simulation.getCurrentTime()))
+                    logging.warning("No vehicles with antennas in scene " + str(scene_i) + " time " + str(traci.simulation.getCurrentTime()))
+                    os.makedirs(run_dir + '_noAntennaVehicles') #create an empty folder to "indicate" the situation
                     scene_i = np.Infinity #update scene counter
                     continue
         else: #in case we should not use SUMO to position vehicles, then get a fixed position
