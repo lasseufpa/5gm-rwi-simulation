@@ -79,7 +79,7 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
             cnt_rx = False
             Rx_info = False
             for line in txrx_file:
-                if 'begin_<points> Rx' in line:
+                if 'begin_<points> ' + c.insite_rx_name in line:
                     Rx_info = True
                     continue
                 if 'nVertices' in line and Rx_info:
