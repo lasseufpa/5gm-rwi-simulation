@@ -97,7 +97,12 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
             c_present = True
             #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
             #adding Rx 0.1 above car's height, to ensure that it will not be blocked by the vehicle itself
-            antenna.add_vertice((x-deltaX, y-deltaY, z3+height+0.1))
+            # if drone
+            if ( veh.startswith('dflow') ):
+                antenna.add_vertice((x-deltaX, y-deltaY, z3 - 0.1))
+            else:
+                antenna.add_vertice((x-deltaX, y-deltaY, z3 + height + 0.1))
+
 
 
     if c.use_vehicles_template:
