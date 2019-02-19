@@ -27,6 +27,7 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
     str_vehicles = ''
     veh_i = None
     c_present = False
+
     if use_pedestrians:
         for ped_i, ped in enumerate(traci.person.getIDList()):
             (x, y), angle, length, width = [f(ped) for f in [

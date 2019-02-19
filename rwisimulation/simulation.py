@@ -25,6 +25,7 @@ from .placement import place_on_line, place_by_sumo #use this option to run from
 if c.insite_version == '3.3':
     from rwimodeling import  X3dXmlFile3_3
 
+
 def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna, fixedReceivers, use_pedestrians):
     '''Save as CSV text file some information obtained from SUMO for this specific scene.
     Note that all vehicles on the streets are retrieved from SUMO via traci, and the structure
@@ -132,6 +133,12 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
             else:
                 w.writerow([episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
 
+
+def onlyDronesList(idList):
+    for v_id, veh in enumerate(idList[:]):
+        if not veh.startswith('dflow'):
+            idList.remove(veh)
+    return idList
 
 def main():
     parser = argparse.ArgumentParser()
@@ -243,15 +250,16 @@ def main():
                     # step time_between_episodes from the last one
                     for count in range(c.time_between_episodes):
                         traci.simulationStep()
-                    # Filter list to have only drones
+
                     traci_vehicle_IDList = traci.vehicle.getIDList()
-                    while len(traci_vehicle_IDList) < c.n_antenna_per_episode:
                     # Filter list to have only drones
+                    if c.drone_simulation: 
+                        traci_vehicle_IDList = onlyDronesList(traci.vehicle.getIDList())
+                    while len(traci_vehicle_IDList) < c.n_antenna_per_episode:
                         traci_vehicle_IDList = traci.vehicle.getIDList()
                         if c.drone_simulation: 
-                            for v_id, veh in enumerate(traci.vehicle.getIDList()):
-                                    if not veh.startswith('dflow'):
-                                        traci_vehicle_IDList.remove(veh)
+                            traci_vehicle_IDList = onlyDronesList(traci.vehicle.getIDList())
+
                         logging.warning('not enough vehicles at time ' + str(traci.simulation.getCurrentTime()) )
                         traci.simulationStep()
                     cars_with_antenna = np.random.choice(traci_vehicle_IDList, c.n_antenna_per_episode, replace=False)
@@ -297,13 +305,13 @@ def main():
                     # one vehicle
 
                     traci_vehicle_IDList = traci.vehicle.getIDList()
-                    while len(traci_vehicle_IDList) < c.n_antenna_per_episode:
                     # Filter list to have only drones
+                    if c.drone_simulation: 
+                        traci_vehicle_IDList = onlyDronesList(traci.vehicle.getIDList())
+                    while len(traci_vehicle_IDList) < c.n_antenna_per_episode:
                         traci_vehicle_IDList = traci.vehicle.getIDList()
                         if c.drone_simulation: 
-                            for v_id, veh in enumerate(traci.vehicle.getIDList()):
-                                    if not veh.startswith('dflow'):
-                                        traci_vehicle_IDList.remove(veh)
+                            traci_vehicle_IDList = onlyDronesList(traci.vehicle.getIDList())
                         logging.warning('not enough vehicles at time ' + str(traci.simulation.getCurrentTime()) )
                         traci.simulationStep()
                     cars_with_antenna = np.random.choice(traci_vehicle_IDList, c.n_antenna_per_episode, replace=False)
