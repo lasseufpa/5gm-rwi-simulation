@@ -39,7 +39,7 @@ if len(argv) != 3:
     print('Usage: python', argv[0], 'input_folder output_folder')
     exit(-1)
 
-numScenesPerEpisode = 1 #50, 1000, etc
+numScenesPerEpisode = 10 #50, 1000, etc
 numTxRxPairsPerScene = 10
 numRaysPerTxRxPair = 100
 numParametersPerRay = 7 + 1 #has the ray angle now
