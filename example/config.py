@@ -16,6 +16,19 @@ except ImportError:
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
+def get_lat_long(base_insite_project_path):
+    txrx_file = open(os.path.join(base_insite_project_path, 'base.txrx'), 'r')
+    latitude = False
+    longitude = False
+    for line in txrx_file:
+        if 'latitude' in line:
+            latitude = line.split(' ')[1].replace('\n','') 
+        if 'longitude' in line:
+            longitude = line.split(' ')[1].replace('\n','') 
+        if latitude and longitude:
+            return latitude,longitude
+
+
 ###############################################################
 ## Most information in this configuration file is used in the Stage 1 of 
 ## the three stages below. But some are also used in the other stages.
@@ -28,100 +41,89 @@ logging.basicConfig(level=logging.DEBUG)
 ###############################################################
 ## Part I - Basic information that typically needs to be modified / checked
 ###############################################################
-use_fixed_receivers = True #set to False if only vehicles are receivers
 # Current folder (or directory). Some paths are relative to this folder:
 working_directory = os.path.dirname(os.path.realpath(__file__)) 
 # InSite will look for input files in this folder. These files will be used to generate all simulations
 if False:
     base_insite_project_path = 'D:/insitedata/insite_new_simuls/'
 else:
-    base_insite_project_path = os.path.join(working_directory,'insite_new_simuls')
+    base_insite_project_path = os.path.join(working_directory,'bases_insite_3_2_0/rosslyn/boxes/base60_nofoliage')
 #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-results_dir = 'D:/insitedata/ak_todelete2/'
-#results_dir = os.path.join(working_directory, 'results_new_simuls')
-#if not os.path.exists(results_dir):
-#    os.makedirs(results_dir)
-#results_dir = ("/mnt/d/ak/Works/2018-ita-paper/final/raid/pc128/example_working/results")
+results_dir = os.path.join(working_directory, 'simulations/tst')
 #Folders and files for InSite and its license. For Windows you may simply inform
 #the path to the executable files, not minding about the license file location.
-#calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
 #Folders for SUMO and InSite. Use executable sumo-gui if want to see the GUI or sumo otherwise
-if socket.gethostname() == 'Pedros-MacBook-Pro.local' or \
-    socket.gethostname() == 'pedro-macbook-wifi.psb-home.psbc.com.br': #Pedro's computers
-    calcprop_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/insite.lic ' +
-                'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
-                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/ ' +
-                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/calcprop_3.2.0.3')
-    wibatch_bin = ('REMCOMINC_LICENSE_FILE=/home/psb/insite.lic ' +
+
+
+insite_version = '3.2'
+if insite_version == '3.3':
+    sumo_bin = '/usr/bin/sumo'
+    calcprop_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
+                    'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
+                    '/home/psb/insite/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/ ' +
+                    '/home/psb/insite/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/calcprop_3.3.0.4')
+    wibatch_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
+               'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
+               '/home/psb/insite/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/wibatch')
+elif insite_version == '3.2': #general case, assuming Windows    
+    sumo_bin = '/usr/bin/sumo'
+    calcprop_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
+                    'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
+                    '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/ ' +
+                    '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/calcprop_3.2.0.3')
+    wibatch_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
                'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
-    sumo_bin = '/Users/psb/ownCloud/Projects/DNNWireless/sumo/bin/sumo-gui'
-    #sumo_bin = '/usr/bin/sumo' #default if installed on Linux
-    sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
-elif socket.gethostname() == 'LAPTOP-8R7EBD20': #Aldebaro's computer
-    if os.name == 'nt': #Windows
-        if False: #execute the GUI'
-            sumo_bin = r'c:\Program Files (x86)\DLR\Sumo\bin\sumo-gui.exe' 
-        else: #command line
-            sumo_bin = r'c:\Program Files (x86)\DLR\Sumo\bin\sumo.exe' #on Windows
-        #sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe'
-        sumo_cfg = os.path.join(working_directory, 'sumo', 'seasonal.sumocfg')
-        #sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
-        #Windows version of InSite command line utility softwares:
-        calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
-        wibatch_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\wibatch"'
-    else: #Linux
-        #this may be confusing:
-        #Linux subsystem under Windows will force the executable InSite or Sumo to be found 
-        #with /mnt/d or /mnt/c but then the executables runs on Windows and expects
-        #to have config files informed with c:/ or d:/, not /mnt/d...
-        #Another confusion are the folder names that have spaces.
-        if False: #True to execute the GUI'
-            sumo_bin = r'/mnt/c/Program\ Files\ (x86)/DLR/Sumo/bin/sumo-gui.exe' 
-        else: #command line
-            sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo.exe' #on Windows only
-        #sumo_bin = r'/mnt/c/Program Files (x86)/DLR/Sumo/bin/sumo-gui.exe'
-        #Windows version of InSite command line utility softwares:
-        #sumo_cfg = r'd:\github\5gm-rwi-simulation\example\sumo\quickstart.sumocfg'
-        sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
-        #sumo_cfg = os.path.join(working_directory, 'sumo', 'ita.sumocfg')
-        calcprop_bin = r'/mnt/c/Program\ Files/Remcom/Wireless\ InSite\ 3.2.0.3/bin/calc/calcprop.exe'
-        wibatch_bin = r'/mnt/c/Program\ Files/Remcom/Wireless\ InSite\ 3.2.0.3/bin/calc/wibatch.exe'
-else: #general case, assuming Windows    
-    sumo_bin = r'"C:\Program Files (x86)\DLR\Sumo\bin\sumo.exe"'
-    calcprop_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\calcprop"'
-    wibatch_bin = r'"C:\Program Files\Remcom\Wireless InSite 3.2.0.3\bin\calc\wibatch"'
-    #SUMO configuration file:
-    sumo_cfg = os.path.join(working_directory, 'sumo', 'quickstart.sumocfg')
+
+### HERE STARTS CONFIGURATION ### NOTE: ONLY CHANGE IF YOU KNOW WHAT ARE YOU DOING
+#SUMO configuration file:
+sumo_cfg = os.path.join(working_directory, 'sumo_drone', 'drone.sumocfg')
+
+use_fixed_receivers = False #set to False if only vehicles are receivers
+use_pedestrians = False # only set True if your sumo is ready for pedestrians
+use_vehicles_template = False # set True to use pre-made vehicle ( not boxes ), NOTE: only set True if you have the folder objects with the models.
+drone_simulation = True # Only drones will be chosen to be receivers
 
 print('########## Scripts will assume the following files: ##########')
 print('SUMO executable: ', sumo_bin)
 print('SUMO configuration: ', sumo_cfg)
 print('InSite calcprop executable: ', calcprop_bin)
 print('InSite wibatch executable: ', wibatch_bin)
-
 print('Working folder (base for several folders): ', working_directory)
 print('InSite input files folder: ', base_insite_project_path)
 #print('InSite temporary output folder: ', project_output_dir)
 print('Final output parent folder: ', results_dir)
 
-n_run = range(0,20000,1) # iterator that determines maximum number of RT simulations
+n_run = range(0,100,1) # iterator that determines maximum number of RT simulations
 
-#n_run = itertools.count() # infinite
-sampling_interval = 10 #time interval between scenes (in seconds)
-time_of_episode = 300 #int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
-time_between_episodes = int(50 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
-n_antenna_per_episode = 1 #number of receivers per episode
+sampling_interval = 0.01 #time interval between scenes (in seconds)
+time_of_episode = 10 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
+time_between_episodes = int(1 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
+if use_fixed_receivers: #set to False if only vehicles are receivers
+    n_antenna_per_episode = 0 #number of receivers per episode
+else:
+    n_antenna_per_episode = 10 #number of receivers per episode
 # where to map the received to TFRecords (minx, miny, maxx, maxy)
 analysis_area = (729, 453, 666, 666)
 analysis_area_resolution = 0.5
 antenna_number = 4
-frequency = 6e10 # frequency in Hz for the RT simulation
+frequency = 60e9 # frequency in Hz for the RT simulation
 
 ###############################################################
 ## Part II - Extra information that typically does not need to be modified
 ## unless you changed the InSite model (using the GUI, for example)
 ###############################################################
+# Fullfill this parameters with insite's information
+insite_study_area_name = 'study'
+insite_tx_name = 'Tx'
+insite_rx_name = 'Rx'
+insite_setup_name = 'model'
+insite_vehicles_name = 'random-line'
+
+if use_vehicles_template:
+    latitude, longitude = get_lat_long((base_insite_project_path))
+    insite_vehicles_name_model = insite_vehicles_name
+    insite_vehicles_name = insite_vehicles_name + '_'
 ##### Folders and files for InSite ####
 # Copy of the RWI project used in the simulation
 #AK-TODO instead of "base" it should match the name InSite gives, to facilitate porting
@@ -129,17 +131,15 @@ results_base_model_dir = os.path.join(results_dir, 'base')
 results_base_model_dir.replace('\\', '/')
 #Input files, which are read by the Python scripts
 # File that has the base InSite project:
-setup_path = os.path.join(base_insite_project_path, 'model.setup')
+setup_path = os.path.join(base_insite_project_path, insite_setup_name + '.setup')
 setup_path = setup_path.replace(' ', '\ ') #deal with paths with blank spaces
 # XML that has information about the simulations
-#base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.Study.xml')
-base_x3d_xml_path = os.path.join(base_insite_project_path, 'model.study.xml')
+base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.' + insite_study_area_name+'.xml')
 # Name (basename) of the paths file generated in the simulation
-paths_file_name = 'model.paths.t001_01.r002.p2m'
+paths_file_name = insite_setup_name+'.paths.t001_01.r002.p2m'
 # Base object file to generate the `object_dst_file_name`
 base_object_file_name = os.path.join(base_insite_project_path, "base.object")
 # Base txrx file to generate the `txrx_dst_file_name`
-#base_txrx_file_name = os.path.join(base_insite_project_path, "base.object")
 base_txrx_file_name = os.path.join(base_insite_project_path, "base.txrx")
 
 #Output files, which are written by the Python scripts
@@ -147,11 +147,11 @@ base_txrx_file_name = os.path.join(base_insite_project_path, "base.txrx")
 # Name (basename) of the JSON output simulation info file
 simulation_info_file_name = 'wri-simulation.info'
 # Object which will be modified in the RWI project
-dst_object_file_name = 'random-line.object' #file with vehicles provided by SUMO
+dst_object_file_name = insite_vehicles_name + '.object' #file with vehicles provided by SUMO
 # txrx which will be modified in the RWI project
-dst_txrx_file_name = 'model.txrx' #file with Tx and Rx's
+dst_txrx_file_name = insite_setup_name + '.txrx' #file with Tx and Rx's
 # XML project that will be executed by InSite command line tools (its path will be the run folder):
-dst_x3d_xml_file_name = 'gen.study.xml' #configuration file for wibatch
+dst_x3d_xml_file_name = insite_setup_name + '.' + insite_study_area_name + '.xml' #configuration file for wibatch
 
 print('Output JSON file: ', simulation_info_file_name)
 print('Reference InSite model: ', base_x3d_xml_path)
@@ -162,7 +162,11 @@ print('Reference .txrx file: ', base_txrx_file_name)
 print('Generated .txrx file that will be used: ', dst_txrx_file_name)
 
 #the (misterious) information below is added in simulation.py into a XML file
-dst_x3d_txrx_xpath = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSet/OutputID/Integer[@Value='2']" +
+if insite_version == '3.3':
+    dst_x3d_txrx_xpath = ("./remcom__rxapi__Job/Scene/remcom__rxapi__Scene/TxRxSetList/remcom__rxapi__TxRxSetList/TxRxSet/remcom__rxapi__PointSet/OutputID/remcom__rxapi__Integer[@Value='2']" +
+                      "/../../ControlPoints/remcom__rxapi__ProjectedPointList")
+else:
+    dst_x3d_txrx_xpath = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSet/OutputID/Integer[@Value='2']" +
                       "/../../ControlPoints/ProjectedPointList")
 
 use_sumo = True
@@ -176,10 +180,10 @@ antenna_origin = (car_dimensions[0] / 2, car_dimensions[1] / 2, car_dimensions[2
 car_material_id = 0
 car_structure_name = 'car'
 # name of the antenna points in `base_txrx_file_name`
-antenna_points_name = 'Rx'
+antenna_points_name = insite_rx_name
 
 if use_sumo == True:
-    seed = 12 #Original's ITA paper seed = 1517605264
+    seed = 250 #Original's ITA paper seed = 1517605264
     np.random.seed(seed)
     sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', str(sampling_interval), '--seed', '{}'.format(seed)]
     #mapping from SUMO to InSite coordinates

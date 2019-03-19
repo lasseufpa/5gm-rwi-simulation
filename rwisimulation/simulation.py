@@ -22,9 +22,11 @@ from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist
 import config as c
 from .placement import place_on_line, place_by_sumo #use this option to run from command line
 #from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
+if c.insite_version == '3.3':
+    from rwimodeling import  X3dXmlFile3_3
 
 
-def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna):
+def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna, fixedReceivers, use_pedestrians):
     '''Save as CSV text file some information obtained from SUMO for this specific scene.
     Note that all vehicles on the streets are retrieved from SUMO via traci, and the structure
     cars_with_antenna only helps to identify which are receivers (have antennas). If the simulation
@@ -32,15 +34,37 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
     '''
     #veh_i = None
     receiverIndexCounter = 0 #initialize counter to provide unique index for each receiver
-    with open(sumoOutputInfoFileName, 'a') as csv_file:
+    if use_pedestrians:
+        with open(sumoOutputInfoFileName[:-4] + 'Ped.txt', 'w') as csv_file:
+            w = csv.writer(csv_file)
+            # from http://sumo.dlr.de/wiki/TraCI/Person_Value_Retrieval
+            header2 = 'episode_i,scene_i,receiverIndex,ped,ped_i,typeID,xinsite,yinsite,x3,y3,' + \
+                        'angle,speed,length, width,waitTime,currentTime(ms)=' + \
+                        str(traci.simulation.getCurrentTime()) + ',Ts(s)=' + str(c.sampling_interval)
+            w.writerow([header2]) #make the string a list otherwise the function will print each character between commas
+            for ped_i, ped in enumerate(traci.person.getIDList()):
+                (x, y), angle, length, width, speed, typeID, waitTime = [f(ped) for f in [
+                    traci.person.getPosition,
+                    traci.person.getAngle, #Returns the angle of the named vehicle within the last step [degrees]
+                    traci.person.getLength,
+                    traci.person.getWidth,
+                    traci.person.getSpeed, #Returns the speed of the named person within the last step [m/s]; error value: -1001
+                    traci.person.getTypeID, #Returns the id of the type of the named vehicle
+                    traci.person.getWaitingTime #Returns the waiting time [s]
+                ]]
+                xinsite, yinsite = traci.simulation.convertGeo(x, y)
+                w.writerow([episode_i,scene_i,'-1',ped,ped_i,typeID,xinsite,yinsite,x,y,angle,speed,length, width ,waitTime])
+
+    with open(sumoOutputInfoFileName, 'w') as csv_file:
         w = csv.writer(csv_file)
+
         header = 'episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,' + \
                     'lane_id,angle,speed,length, width, height,distance,waitTime,currentTime(ms)=' + \
                     str(traci.simulation.getCurrentTime()) + ',Ts(s)=' + str(c.sampling_interval)
+
         w.writerow([header]) #make the string a list otherwise the function will print each character between commas
 
-        # 10 fixed receivers - Marcus' workaround
-        fixedReceivers = True
+        # Fixed receivers - Marcus' workaround
         if fixedReceivers:
             lane_id = 0
             angle = 0
@@ -50,20 +74,26 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
             height = 0
             distance = 0
             waitTime = 0
-            x3 = 0
-            y3 = 0
-            z3 = 0
 
-            w.writerow([episode_i,scene_i,'0','house0','0','House','777.000000000000000','455.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'1','house1','1','House','776.000000000000000','463.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'2','house2','2','House','768.000000000000000','637.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'3','house3','3','House','768.000000000000000','637.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'4','house4','4','House','702.000000000000000','435.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'5','house5','5','House','716.000000000000000','467.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'6','house6','6','House','658.000000000000000','534.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'7','house7','7','House','658.000000000000000','534.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'8','house8','8','House','711.000000000000000','659.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
-            w.writerow([episode_i,scene_i,'9','house9','9','House','702.000000000000000','658.000000000000000',x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
+            txrx_file = open(os.path.join(c.base_insite_project_path, 'base.txrx'), 'r')
+            counter = 0
+            cnt_rx = False
+            Rx_info = False
+            for line in txrx_file:
+                if 'begin_<points> ' + c.insite_rx_name in line:
+                    Rx_info = True
+                    continue
+                if 'nVertices' in line and Rx_info:
+                    cnt_rx = int(line.split(' ')[1]) 
+                    numOfFixedReceivers = cnt_rx
+                    continue
+                if cnt_rx:
+                    x = line.split(' ')[0]
+                    y = line.split(' ')[1]
+                    z = line.split(' ')[2].replace('\n', '')
+                    w.writerow([episode_i,scene_i,counter,'house'+str(counter), counter,'House',x,y,x,y,z,lane_id,angle,speed,length, width, height,distance,waitTime])
+                    counter += 1
+                    cnt_rx -= 1
 
         #from http://sumo.dlr.de/wiki/TraCI/Vehicle_Value_Retrieval
         for veh_i, veh in enumerate(traci.vehicle.getIDList()):
@@ -82,7 +112,8 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
             ]]
 
             #convert position from SUMO to InSite
-            xinsite, yinsite = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict)
+            #xinsite, yinsite = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict)
+            xinsite, yinsite = traci.simulation.convertGeo(x, y)
 
             #check if it's a receiver (has antenna) or not. Use -1 to identify it's not a receiver
             receiverIndex=-1
@@ -97,17 +128,24 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
                     receiverIndex = receiverIndexCounter #not -1, but the current Rx counter
                     receiverIndexCounter += 1 #update counter
 
-            if fixedReceivers: # FixedReceiver  AK-TODO Take out the magic number 10 below
-                numOfFixedReceivers = 10
+            if fixedReceivers:
                 w.writerow([episode_i,scene_i,receiverIndex,veh,veh_i+numOfFixedReceivers,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
             else:
                 w.writerow([episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,lane_id,angle,speed,length, width, height,distance,waitTime])
 
 
+def onlyDronesList(idList):
+    for v_id, veh in enumerate(idList[:]):
+        if not veh.startswith('dflow'):
+            idList.remove(veh)
+    return idList
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--place-only', action='store_true',
                         help='Run only the objects placement and save files for ray-tracing')
+    parser.add_argument('-j', '--jump', action='store_true',
+                        help='Jumping runs that already have results (works only if utilized with the option \'-r\' )')
     parser.add_argument('-r', '--ray-tracing-only', action='store_true',
                         help='Run only ray-tracing with previoulsy generated files')
     parser.add_argument('-c', '--run-calcprop', action='store_true',
@@ -121,7 +159,7 @@ def main():
     #check consistency of user input
     if c.use_fixed_receivers:
         if c.n_antenna_per_episode != 0:
-            print('ERROR: if use_fixed_receivers=True, n_antenna_per_episode must be 1 but it is', c.n_antenna_per_episode)
+            print('ERROR: if use_fixed_receivers=True, n_antenna_per_episode must be 0 but it is', c.n_antenna_per_episode)
             raise Exception()
 
     #setup_path=c.setup_path, xml_path=c.dst_x3d_xml_path.replace(' ', '\ ')
@@ -139,10 +177,19 @@ def main():
             run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
             #Ray-tracing output folder (where InSite will store the results (Study Area name)).
             #They will be later copied to the corresponding output folder specified by results_dir
-            project_output_dir = os.path.join(run_dir, 'study') #output InSite folder
-            xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
-            xml_full_path=xml_full_path.replace(' ', '\ ')
-            insite_project.run_x3d(xml_full_path, project_output_dir)
+            project_output_dir = os.path.join(run_dir, c.insite_study_area_name) #output InSite folder
+
+            p2mpaths_file = os.path.join(project_output_dir, c.insite_setup_name + '.paths.t001_01.r002.p2m')
+            if not os.path.exists(p2mpaths_file) or args.remove_results_dir:
+                xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
+                xml_full_path=xml_full_path.replace(' ', '\ ')
+                insite_project.run_x3d(xml_full_path, project_output_dir)
+            elif os.path.exists(p2mpaths_file) and args.jump:
+                continue
+            else: 
+                print("ERROR: " + p2mpaths_file + " already exists, aborting simulation!") 
+                raise Exception()
+
         print('Finished running ray-tracing')
         exit(1)
 
@@ -166,7 +213,10 @@ def main():
     with open(c.base_txrx_file_name) as infile:
         txrxFile = txrx.TxRxFile.from_file(infile)
     print('Opened file with transmitters and receivers:', c.base_txrx_file_name)
-    x3d_xml_file = X3dXmlFile(c.base_x3d_xml_path)
+    if c.insite_version == '3.3':
+        x3d_xml_file = X3dXmlFile3_3(c.base_x3d_xml_path)
+    else:
+        x3d_xml_file = X3dXmlFile(c.base_x3d_xml_path)
     print('Opened file with InSite XML:', c.base_x3d_xml_path)
 
     #AK-TODO document and comment the methods below.
@@ -183,11 +233,49 @@ def main():
 
     scene_i = None
     episode_i = None
+
+    # Trick to start simulations from a given run as it was started from 0
+    if c.n_run[0] != 0:
+        tmp_var = 0
+        while (tmp_var < int(c.n_run[0])):
+            if c.use_sumo:
+                # when to start a new episode
+                if scene_i is None or scene_i >= c.time_of_episode:
+                    #first scene of an episode
+                    if episode_i is None:
+                        episode_i = 0
+                    else:
+                        episode_i += 1
+                    scene_i = 0
+                    # step time_between_episodes from the last one
+                    for count in range(c.time_between_episodes):
+                        traci.simulationStep()
+
+                    traci_vehicle_IDList = traci.vehicle.getIDList()
+                    # Filter list to have only drones
+                    if c.drone_simulation: 
+                        traci_vehicle_IDList = onlyDronesList(traci.vehicle.getIDList())
+                    while len(traci_vehicle_IDList) < c.n_antenna_per_episode:
+                        traci_vehicle_IDList = traci.vehicle.getIDList()
+                        if c.drone_simulation: 
+                            traci_vehicle_IDList = onlyDronesList(traci.vehicle.getIDList())
+
+                        logging.warning('not enough vehicles at time ' + str(traci.simulation.getCurrentTime()) )
+                        traci.simulationStep()
+                    cars_with_antenna = np.random.choice(traci_vehicle_IDList, c.n_antenna_per_episode, replace=False)
+                else:
+                    traci.simulationStep()
+                scene_i += 1 #update scene counter
+            tmp_var += 1
+            print('Jump until the step '+ str(c.n_run[0]) + ': '+ str(int((tmp_var/c.n_run[0])* 100))+ '%')
+
+    count_nar = 0 # Number of Runs without cars with antenna while mobile
     for i in c.n_run:
-        run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
+
+        run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i - count_nar))
         #Ray-tracing output folder (where InSite will store the results (Study Area name)).
         #They will be later copied to the corresponding output folder specified by results_dir
-        project_output_dir = os.path.join(run_dir, 'study') #output InSite folder
+        project_output_dir = os.path.join(run_dir, c.insite_study_area_name) #output InSite folder
 
         #Disabled below because the paths will be created later on by shutil.copytree
         #and shutil.copytree does not support folders that already exist
@@ -215,19 +303,27 @@ def main():
                 else:
                     # ensure that there enough cars to place antennas. If use_fixed_receivers, then wait to have at least
                     # one vehicle
-                    while len(traci.vehicle.getIDList()) < c.n_antenna_per_episode:
-                        logging.warning('not enough cars at time ' + str(traci.simulation.getCurrentTime()))
+
+                    traci_vehicle_IDList = traci.vehicle.getIDList()
+                    # Filter list to have only drones
+                    if c.drone_simulation: 
+                        traci_vehicle_IDList = onlyDronesList(traci.vehicle.getIDList())
+                    while len(traci_vehicle_IDList) < c.n_antenna_per_episode:
+                        traci_vehicle_IDList = traci.vehicle.getIDList()
+                        if c.drone_simulation: 
+                            traci_vehicle_IDList = onlyDronesList(traci.vehicle.getIDList())
+                        logging.warning('not enough vehicles at time ' + str(traci.simulation.getCurrentTime()) )
                         traci.simulationStep()
-                    #AK-TODO here we should choose to use fixed antennas or not
-                    cars_with_antenna = np.random.choice(traci.vehicle.getIDList(), c.n_antenna_per_episode, replace=False)
+                    cars_with_antenna = np.random.choice(traci_vehicle_IDList, c.n_antenna_per_episode, replace=False)
 
             else:
                 traci.simulationStep()
 
-            structure_group, location = place_by_sumo(
+            structure_group, location, str_vehicles = place_by_sumo(
                 antenna, c.car_material_id, lane_boundary_dict=c.lane_boundary_dict,
                 cars_with_antenna=cars_with_antenna,
-                use_fixed_receivers = c.use_fixed_receivers)
+                use_fixed_receivers = c.use_fixed_receivers,
+                use_pedestrians = c.use_pedestrians)
             print(traci.simulation.getCurrentTime())
 
             #if location is None:  #there are not cars with antennas in this episode (all have left)
@@ -244,8 +340,10 @@ def main():
 
             if location is None:  #there are not cars with antennas in this episode (all have left)
                 if not c.use_fixed_receivers:
+                    count_nar = count_nar + 1
                     #abort, there is not reason to continue given that there will be no receivers along the whole episode
-                    logging.warning("No vehicles with antennnas in scene " + str(scene_i) + " time " + str(traci.simulation.getCurrentTime()))
+                    logging.warning("No vehicles with antennas in scene " + str(scene_i) + " time " + str(traci.simulation.getCurrentTime()))
+                    os.makedirs(run_dir + '_noAntennaVehicles') #create an empty folder to "indicate" the situation
                     scene_i = np.Infinity #update scene counter
                     continue
         else: #in case we should not use SUMO to position vehicles, then get a fixed position
@@ -261,6 +359,13 @@ def main():
         objFile.add_structure_groups(structure_group)
         dst_object_full_path = os.path.join(run_dir, c.dst_object_file_name)
         objFile.write(dst_object_full_path)
+
+        #write new model of vehicles to the final folder
+        if c.use_vehicles_template:
+            dst_new_object_full_path = os.path.join(run_dir, c.insite_vehicles_name_model + '.object')
+            f_dst_new_object = open(dst_new_object_full_path,'w')
+            f_dst_new_object.write(str_vehicles)
+            f_dst_new_object.close()
 
         #get name of XML
         xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
@@ -296,7 +401,7 @@ def main():
 
         #save SUMO information for this scene as text CSV file
         sumoOutputInfoFileName = os.path.join(run_dir,'sumoOutputInfoFileName.txt')
-        writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, c.lane_boundary_dict, cars_with_antenna)
+        writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, c.lane_boundary_dict, cars_with_antenna, c.use_fixed_receivers, c.use_pedestrians)
 
         scene_i += 1 #update scene counter
 

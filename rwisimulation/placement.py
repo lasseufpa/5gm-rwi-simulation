@@ -9,20 +9,55 @@ from rwimodeling import errors, objects, txrx, X3dXmlFile
 
 from sumo import coord
 
+import config as c
+
+if c.use_vehicles_template:
+    from Cheetah.Template import Template
+    import vehicles_template as vt
+
 
 #def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenna=None):
-def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenna, use_fixed_receivers=False):
+def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenna, use_fixed_receivers=False, use_pedestrians=False):
     antenna = copy.deepcopy(antenna)
     antenna.clear()
 
     structure_group = objects.StructureGroup()
     structure_group.name = 'SUMO cars'
 
+    str_vehicles = ''
     veh_i = None
     c_present = False
+
+    if use_pedestrians:
+        for ped_i, ped in enumerate(traci.person.getIDList()):
+            (x, y), angle, length, width = [f(ped) for f in [
+                traci.person.getPosition,
+                traci.person.getAngle, #Returns the angle of the named vehicle within the last step [degrees]
+                traci.person.getLength,
+                traci.person.getWidth
+            ]]
+            xinsite, yinsite = traci.simulation.convertGeo(x, y)
+            pedestrian = objects.RectangularPrism(length, width, 1.72, material=car_material_id)
+            pedestrian.translate((-length/2, -width/2, 0))
+            pedestrian.rotate(90-angle) #use 90 degrees - angle to convert from y to x-axis the reference
+
+            thisAngleInRad = np.radians(angle) #*np.pi/180
+            deltaX = (length/2.0) * np.sin(thisAngleInRad)
+            deltaY = (length/2.0) * np.cos(thisAngleInRad)
+            pedestrian.translate((xinsite-deltaX, yinsite-deltaY, 0)) #now can translate
+
+            pedestrian_structure = objects.Structure(name=ped)
+            pedestrian_structure.add_sub_structures(pedestrian)
+            structure_group.add_structures(pedestrian_structure)
+
+            # 1.72 size of a perdestrian
+            if c.use_vehicles_template:
+                str_vehicles = get_model(str_vehicles,ped,xinsite-deltaX,yinsite-deltaY,0,90-angle,1.72) 
+
     for veh_i, veh in enumerate(traci.vehicle.getIDList()):
-        (x, y), angle, lane_id, length, width, height = [f(veh) for f in [
+        (x, y), (x3,y3,z3), angle, lane_id, length, width, height = [f(veh) for f in [
             traci.vehicle.getPosition,
+            traci.vehicle.getPosition3D, #Returns the 3D-position(three doubles) of the named vehicle (center of the front bumper) within the last step [m,m,m]
             traci.vehicle.getAngle,
             traci.vehicle.getLaneID,
             traci.vehicle.getLength,
@@ -30,7 +65,9 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
             traci.vehicle.getHeight
         ]]
 
-        x, y = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict)
+        #x, y = coord.convert_distances(lane_id, (x,y), lane_boundary_dict=lane_boundary_dict)
+        x, y = traci.simulation.convertGeo(x, y)
+        #x2, y2 = traci.simulation.convertGeo(lon, lat, fromGeo=True)
 
         #the prism is draw using the first coordinate aligned with x, then y and z. Length is initially along x
         #and later the object will be rotates
@@ -47,33 +84,42 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
         thisAngleInRad = np.radians(angle) #*np.pi/180
         deltaX = (length/2.0) * np.sin(thisAngleInRad)
         deltaY = (length/2.0) * np.cos(thisAngleInRad)
-        car.translate((x-deltaX, y-deltaY, 0)) #now can translate
+        car.translate((x-deltaX, y-deltaY, z3)) #now can translate
 
         car_structure = objects.Structure(name=veh)
         car_structure.add_sub_structures(car)
         structure_group.add_structures(car_structure)
 
+        if c.use_vehicles_template:
+            str_vehicles = get_model(str_vehicles,veh,x-deltaX,y-deltaY,z3,90-angle,height,length,width) 
+
         #antenna_vertice
-        #if cars_with_antenna is None or veh in cars_with_antenna:
-            #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
-            #antenna.add_vertice((x-deltaX, y-deltaY, height))
-        #AK-TODO: not sure why Pedro checks cars_with_antenna is None. It seems it will add arbitrary cars
-        #if cars_with_antenna is None or veh in cars_with_antenna:
         if veh in cars_with_antenna:
             c_present = True
             #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
-            antenna.add_vertice((x-deltaX, y-deltaY, height))
+            #adding Rx 0.1 above car's height, to ensure that it will not be blocked by the vehicle itself
+            # if drone
+            if ( veh.startswith('dflow') ):
+                antenna.add_vertice((x-deltaX, y-deltaY, z3 - 0.1))
+            else:
+                antenna.add_vertice((x-deltaX, y-deltaY, z3 + height + 0.1))
 
+
+
+    if c.use_vehicles_template:
+        all_vehicles = str(vt.vehicles_template(searchList=[{'a':str_vehicles,'long':c.longitude,'lat':c.latitude}]))
+    else:
+        all_vehicles = ''
     if use_fixed_receivers:
-        return structure_group, None
+        return structure_group, None, all_vehicles
 
     if not c_present: #there are no vehicles with antennas
-        return None, None
+        return None, None, None
 
     if veh_i is None: #there are no vehicles in the scene according to SUMO (traci)
-        return None, None
+        return None, None, None
 
-    return structure_group, antenna
+    return structure_group, antenna, all_vehicles
 
 
 def place_on_line(origin_array, destination_list, dim_list, space, object,
@@ -145,6 +191,67 @@ def place_on_line(origin_array, destination_list, dim_list, space, object,
         return structure_group, vertice_list
     else:
         return structure_group
+
+def rotate(vertice, angle):
+    """Rotate counterclockwise by a given angle around a given origin.
+    The angle should be given in degrees.
+    """
+    angle = np.radians(angle)
+
+    c = np.cos(angle)
+    s = np.sin(angle)
+    rot_mat = np.array([[c, -s, 0], [s, c, 0], [0, 0, 1]])
+
+    vertice_array = np.matmul(rot_mat, vertice)
+
+    return vertice_array
+
+def get_model(str_vehicles,name,x,y,z,angle,height,length=1,width=1):
+
+    # The height here is utilized as trick to choose which model will be utilized .
+    # TODO: Find a new way to classify the models, instead of height.
+    if (height == 4.3):
+        model_object = open(os.path.join(c.working_directory,'objects/truck.object'), 'r')
+    elif (height == 3.2):               
+        model_object = open(os.path.join(c.working_directory,'./objects/bus.object'), 'r')
+    elif (height == 1.59):              
+        model_object = open(os.path.join(c.working_directory,'./objects/car.object'), 'r')
+    elif (height == 1.72):              
+        model_object = open(os.path.join(c.working_directory,'./objects/pedestrian.object'), 'r')
+    elif (height == 0.295): 
+        model_object = open(os.path.join(c.working_directory,'./objects/drone.object'), 'r')
+    else:
+        print('There is no model object ready for this object')
+        exit(1)
+
+    cn_points = False
+    
+    for line in model_object:
+        if 'begin_<structure_group>' in line:
+            tmp = line.split(' ')
+            tmp[1] = str(name+ ' ')
+            line = ' '.join(tmp)
+            str_vehicles += line + "\n"
+            continue
+        if 'nVertices' in line:
+            cn_points = int(line.split(' ')[1]) 
+            str_vehicles += line
+            continue
+        if cn_points:
+            tmp = line.split(' ')
+            tmp[0] = float(tmp[0])
+            tmp[1] = float(tmp[1])
+            tmp[2] = float(tmp[2])
+            myarray = np.asarray(tmp)
+            rotated_v = list(rotate(myarray,angle))
+            rotated_v[0] = str(rotated_v[0] + x)
+            rotated_v[1] = str(rotated_v[1] + y)
+            rotated_v[2] = str(rotated_v[2] + z) + "\n"
+            line = ' '.join(rotated_v)
+            cn_points -= 1
+        str_vehicles += line
+
+    return str_vehicles
 
 if __name__ == '__main__':
     import sys
