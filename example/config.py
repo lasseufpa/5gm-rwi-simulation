@@ -28,6 +28,13 @@ def get_lat_long(base_insite_project_path):
         if latitude and longitude:
             return latitude,longitude
 
+def get_insite_version(base_insite_project_path):
+    model_file = open(os.path.join(base_insite_project_path, 'model.study.xml'), 'r')
+    insite_version = False
+    for line in model_file:
+        if '<InSite version="' in line:
+            insite_version = line.split('version=')[1].split(' ')[0][1:4]
+            return insite_version
 
 ###############################################################
 ## Most information in this configuration file is used in the Stage 1 of 
@@ -54,8 +61,8 @@ results_dir = os.path.join(working_directory, 'simulations/tst')
 #the path to the executable files, not minding about the license file location.
 #Folders for SUMO and InSite. Use executable sumo-gui if want to see the GUI or sumo otherwise
 
+insite_version = get_insite_version(base_insite_project_path)
 
-insite_version = '3.2'
 if insite_version == '3.3':
     sumo_bin = '/usr/bin/sumo'
     calcprop_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
