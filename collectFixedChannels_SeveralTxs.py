@@ -7,6 +7,10 @@ the JSON file and confirmed (redundancy) with the file 'sumoOutputInfoFileName.t
 Wrote by Ailton to support having multiple transmitters and 1 receiver.
 Important: this script assumes that each transmitter in this case has only 1 receiver associated to it.
 
+We get paired simulations with the very same number of channels. For both the DL and UL we
+have X runs. There is a single p2m file in a DL simulations with the same positions of Tx and Rx of
+the several (e.g. 10) corresponding files in the UL simulation.
+
 InSite writes a p2m file for each transmitter. Hence, when there are several receivers for a given Tx - Rx pair, one
 will obtain the number of the receiver from (inside) the p2m file. When there are several transmitters, in order to
 identify the Tx number, one needs to look in a different way. One alternative is to obtain the Tx number from the
@@ -121,12 +125,13 @@ while not should_stop:
     allInteractionsNumbers = np.zeros((numScenesPerEpisode, numTxRxPairsPerScene, numRaysPerTxRxPair), dtype=np.int64)
     allInteractionsNumbers.fill(-1)
 
-    for transmitter_number in range(numTx):
+    should_reset_episode = True
+    for s in range(numScenesPerEpisode):
+    #for transmitter_number in range(numTx):
         #should_stop = False
         # at_least_one_valid_scene_in_this_episode = False
-        #for transmitter_number in range(numTx):
-        should_reset_episode = True
-        for s in range(numScenesPerEpisode):
+        for transmitter_number in range(numTx):
+        #for s in range(numScenesPerEpisode):
             #if should_stop:
             #    break  # AKTODO ugly hack just to break extra loop and avoid error message
             run_dir = os.path.join(results_dir, base_run_dir_fn(total_num_scenes))
