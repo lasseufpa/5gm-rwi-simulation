@@ -54,9 +54,9 @@ working_directory = os.path.dirname(os.path.realpath(__file__))
 if False:
     base_insite_project_path = 'D:/insitedata/insite_new_simuls/'
 else:
-    base_insite_project_path = os.path.join(working_directory,'bases_insite_3_2_0/rosslyn/boxes/base60_nofoliage')
+    base_insite_project_path = os.path.join(working_directory,'2018_02_04_insiteproject_ita')
 #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-results_dir = os.path.join(working_directory, 'simulations/tst')
+results_dir = os.path.join(working_directory, 'simulations/rt_results')
 #Folders and files for InSite and its license. For Windows you may simply inform
 #the path to the executable files, not minding about the license file location.
 #Folders for SUMO and InSite. Use executable sumo-gui if want to see the GUI or sumo otherwise
@@ -84,12 +84,12 @@ elif insite_version == '3.2': #general case, assuming Windows
 
 ### HERE STARTS CONFIGURATION ### NOTE: ONLY CHANGE IF YOU KNOW WHAT ARE YOU DOING
 #SUMO configuration file:
-sumo_cfg = os.path.join(working_directory, 'sumo_drone', 'drone.sumocfg')
+sumo_cfg = os.path.join(working_directory, 'sumo', 'ita.sumocfg')
 
 use_fixed_receivers = False #set to False if only vehicles are receivers
 use_pedestrians = False # only set True if your sumo is ready for pedestrians
 use_vehicles_template = False # set True to use pre-made vehicle ( not boxes ), NOTE: only set True if you have the folder objects with the models.
-drone_simulation = True # Only drones will be chosen to be receivers
+drone_simulation = False # Only drones will be chosen to be receivers
 
 print('########## Scripts will assume the following files: ##########')
 print('SUMO executable: ', sumo_bin)
@@ -101,11 +101,11 @@ print('InSite input files folder: ', base_insite_project_path)
 #print('InSite temporary output folder: ', project_output_dir)
 print('Final output parent folder: ', results_dir)
 
-n_run = range(0,100,1) # iterator that determines maximum number of RT simulations
+n_run = range(0,5800,1) # iterator that determines maximum number of RT simulations
 
-sampling_interval = 0.01 #time interval between scenes (in seconds)
-time_of_episode = 10 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
-time_between_episodes = int(1 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
+sampling_interval = 0.1 #time interval between scenes (in seconds)
+time_of_episode = 50 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
+time_between_episodes = int(3 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
 if use_fixed_receivers: #set to False if only vehicles are receivers
     n_antenna_per_episode = 0 #number of receivers per episode
 else:
@@ -113,7 +113,7 @@ else:
 # where to map the received to TFRecords (minx, miny, maxx, maxy)
 analysis_area = (729, 453, 666, 666)
 analysis_area_resolution = 0.5
-antenna_number = 4
+antenna_number = 10
 frequency = 60e9 # frequency in Hz for the RT simulation
 
 ###############################################################
