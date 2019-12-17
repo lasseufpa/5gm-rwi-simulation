@@ -41,7 +41,10 @@ session = fgdb.Session()
 results_dir = argv[1] #'D:/owncloud-lasse/5GM_DATA/flat_simulation/results_new_lidar/'
 
 #The info below typically does not change
-dst_object_file_nameBaseName = "random-line.object"
+if use_template:
+    dst_object_file_nameBaseName = "random-line_.object"
+else:
+    dst_object_file_nameBaseName = "random-line.object"
 #Ray-tracing output folder (where InSite will store the results (Study Area name)).
 #They will be later copied to the corresponding output folder specified by results_dir
 project_output_dirBaseName = 'study'
