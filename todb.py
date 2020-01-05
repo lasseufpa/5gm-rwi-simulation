@@ -40,7 +40,10 @@ session = fgdb.Session()
 #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
 results_dir = argv[1] #'D:/owncloud-lasse/5GM_DATA/flat_simulation/results_new_lidar/'
 
-#The info below typically does not change
+#if use 3d detaileds models instead of boxes models
+use_template = False
+
+#The infos below typically does not change
 if use_template:
     dst_object_file_nameBaseName = "random-line_.object"
 else:
