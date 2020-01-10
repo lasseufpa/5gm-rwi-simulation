@@ -3,6 +3,7 @@ This code executes Sumo and InSite repeatedly.
 '''
 import sys
 import os
+import platform
 import shutil
 import argparse
 import numpy as np
@@ -33,9 +34,18 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
     has fixed receivers, then cars_with_antenna will have at most 1 car.
     '''
     #veh_i = None
+
+    # In Windows, the default 'newline' adds an empty line between each call of
+    # csv.writerow, and it causes the other scripts to fail. So, for Windows it
+    # is needed to change the default new line.
+    if platform.system() == 'Windows':
+        newline = ''
+    elif platform.system() == 'Linux':
+        newline = None
+
     receiverIndexCounter = 0 #initialize counter to provide unique index for each receiver
     if use_pedestrians:
-        with open(sumoOutputInfoFileName[:-4] + 'Ped.txt', 'w') as csv_file:
+        with open(sumoOutputInfoFileName[:-4] + 'Ped.txt', 'w', newline=newline) as csv_file:
             w = csv.writer(csv_file)
             # from http://sumo.dlr.de/wiki/TraCI/Person_Value_Retrieval
             header2 = 'episode_i,scene_i,receiverIndex,ped,ped_i,typeID,xinsite,yinsite,x3,y3,' + \
@@ -55,7 +65,7 @@ def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_bound
                 xinsite, yinsite = traci.simulation.convertGeo(x, y)
                 w.writerow([episode_i,scene_i,'-1',ped,ped_i,typeID,xinsite,yinsite,x,y,angle,speed,length, width ,waitTime])
 
-    with open(sumoOutputInfoFileName, 'w') as csv_file:
+    with open(sumoOutputInfoFileName, 'w', newline=newline) as csv_file:
         w = csv.writer(csv_file)
 
         header = 'episode_i,scene_i,receiverIndex,veh,veh_i,typeID,xinsite,yinsite,x3,y3,z3,' + \
