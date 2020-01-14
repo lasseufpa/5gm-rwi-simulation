@@ -150,7 +150,7 @@ while True:
                 object.dimension = dimension_max - dimension_min
                 object.position = dimension_max - (object.dimension / 2)
 
-                if structure.name in simulation_info['cars_with_antenna']:
+                if structure.name.rstrip() in simulation_info['cars_with_antenna']:
                     receiver = fgdb.InsiteReceiver()
                     if paths.get_total_received_power(rec_i+1) is not None:
                         receiver.total_received_power = paths.get_total_received_power(rec_i+1)
