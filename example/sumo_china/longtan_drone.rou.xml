@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes>
+  <vTypeDistribution id="typeDroneDistribution">
+        <vType id="Maverick" departSpeed="max" accel="2.0" decel="4.5" length="0.520" width="0.455" height="0.295" maxSpeed="20" speedDev="0.1" sigma="0.2" minGap="0.3" probability="1.0"/>
+  </vTypeDistribution>
+      <flow id="dflow0" color="0,0,1" begin="0" end= "999999" probability="0.03"  type="typeDroneDistribution">
+          <route edges="dr0"/>
+      </flow>
+      <flow id="dflow1" color="0,0,1" begin="0" end= "999999" probability="0.03"  type="typeDroneDistribution">
+          <route edges="dr1"/>
+      </flow>
+      <flow id="dflow2" color="0,0,1" begin="0" end= "999999" probability="0.03"  type="typeDroneDistribution">
+          <route edges="dr2"/>
+      </flow>
+      <flow id="dflow3" color="0,0,1" begin="0" end= "999999" probability="0.03"  type="typeDroneDistribution">
+          <route edges="dr3"/>
+      </flow>
+      <flow id="dflow4" color="0,0,1" begin="0" end= "999999" probability="0.03"  type="typeDroneDistribution">
+          <route edges="dr4"/>
+      </flow>
+      <flow id="dflow5" color="0,0,1" begin="0" end= "999999" probability="0.03"  type="typeDroneDistribution">
+          <route edges="dr5"/>
+      </flow>
+      <flow id="dflow6" color="0,0,1" begin="0" end= "999999" probability="0.03"  type="typeDroneDistribution">
+          <route edges="dr6"/>
+      </flow>
+      <flow id="dflow7" color="0,0,1" begin="0" end= "999999" probability="0.03"  type="typeDroneDistribution">
+          <route edges="dr7"/>
+      </flow>
+      <flow id="dflow8" color="0,0,1" begin="0" end= "999999" probability="0.03"  type="typeDroneDistribution">
+          <route edges="dr8"/>
+      </flow>
+      <flow id="dflow9" color="0,0,1" begin="0" end= "999999" probability="0.03"  type="typeDroneDistribution">
+          <route edges="dr9"/>
+      </flow>
+</routes>
