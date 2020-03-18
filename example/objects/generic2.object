@@ -1,0 +1,54 @@
+begin_<structure_group> 0
+begin_<structure>
+begin_<sub_structure> 
+begin_<face> top
+Material 5
+nVertices 4
+0.0000000000 0.0000000000 $height
+$lenght 0.0000000000 $height
+$lenght $width $height
+0.0000000000 $width $height
+end_<face>
+begin_<face> bottom
+Material 5
+nVertices 4
+0.0000000000 $width 0.0000000000
+$lenght $width 0.0000000000
+$lenght 0.0000000000 0.0000000000
+0.0000000000 0.0000000000 0.0000000000
+end_<face>
+begin_<face> front
+Material 5
+nVertices 4
+0.0000000000 $width $height
+$lenght $width $height
+$lenght $width 0.0000000000
+0.0000000000 $width 0.0000000000
+end_<face>
+begin_<face> back
+Material 5
+nVertices 4
+0.0000000000 0.0000000000 0.0000000000
+$lenght 0.0000000000 0.0000000000
+$lenght 0.0000000000 $height
+0.0000000000 0.0000000000 $height
+end_<face>
+begin_<face> left
+Material 5
+nVertices 4
+0.0000000000 0.0000000000 $height
+0.0000000000 $width $height
+0.0000000000 $width 0.0000000000
+0.0000000000 0.0000000000 0.0000000000
+end_<face>
+begin_<face> right
+Material 5
+nVertices 4
+$lenght 0.0000000000 0.0000000000
+$lenght $width 0.0000000000
+$lenght $width $height
+$lenght 0.0000000000 $height
+end_<face>
+end_<sub_structure>
+end_<structure>
+end_<structure_group>

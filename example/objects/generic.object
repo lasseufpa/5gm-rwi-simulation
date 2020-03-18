@@ -1,0 +1,54 @@
+begin_<structure_group> 0
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> top
+Material 5
+nVertices 4
+-$lenghtdiv2 -$widthdiv2 $height
+$lenghtdiv2 -$widthdiv2 $height
+$lenghtdiv2 $widthdiv2 $height
+-$lenghtdiv2 $widthdiv2 $height
+end_<face>
+begin_<face> bottom
+Material 5
+nVertices 4
+-$lenghtdiv2 $widthdiv2 0.0000000000
+$lenghtdiv2 $widthdiv2 0.0000000000
+$lenghtdiv2 -$widthdiv2 0.0000000000
+-$lenghtdiv2 -$widthdiv2 0.0000000000
+end_<face>
+begin_<face> front
+Material 5
+nVertices 4
+-$lenghtdiv2 $widthdiv2 $height
+$lenghtdiv2 $widthdiv2 $height
+$lenghtdiv2 $widthdiv2 0.0000000000
+-$lenghtdiv2 $widthdiv2 0.0000000000
+end_<face>
+begin_<face> back
+Material 5
+nVertices 4
+-$lenghtdiv2 -$widthdiv2 0.0000000000
+$lenghtdiv2 -$widthdiv2 0.0000000000
+$lenghtdiv2 -$widthdiv2 $height
+-$lenghtdiv2 -$widthdiv2 $height
+end_<face>
+begin_<face> left
+Material 5
+nVertices 4
+-$lenghtdiv2 -$widthdiv2 $height
+-$lenghtdiv2 $widthdiv2 $height
+-$lenghtdiv2 $widthdiv2 0.0000000000
+-$lenghtdiv2 -$widthdiv2 0.0000000000
+end_<face>
+begin_<face> right
+Material 5
+nVertices 4
+$lenghtdiv2 -$widthdiv2 0.0000000000
+$lenghtdiv2 $widthdiv2 0.0000000000
+$lenghtdiv2 $widthdiv2 $height
+$lenghtdiv2 -$widthdiv2 $height
+end_<face>
+end_<sub_structure>
+end_<structure>
+end_<structure_group>
