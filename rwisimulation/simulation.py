@@ -164,6 +164,8 @@ def main():
                         help='Interactive run')
     parser.add_argument('-o', '--remove-results-dir', action='store_true',
                         help='ONLY IF YOU KNOW WHAT YOU ARE DOING: it will remove the whole results folder')
+    parser.add_argument('-m', '--mimo-only', action='store_true',
+                        help='Run only ray-tracing with native mimo from InSite previoulsy generated files')
     args = parser.parse_args()
 
     #check consistency of user input
@@ -201,6 +203,31 @@ def main():
                 raise Exception()
 
         print('Finished running ray-tracing')
+        exit(1)
+
+    if args.mimo_only:
+        if args.run_calcprop:
+            print('Option -r is not compatible with -c')
+            exit(-1)
+        print('Will run MIMO ray-tracing. I am assuming all files have been placed.')
+        for i in c.n_run:
+            run_dir = os.path.join(c.results_dir, c.base_run_dir_fn(i))
+            #Ray-tracing output folder (where InSite will store the results (Study Area name)).
+            #They will be later copied to the corresponding output folder specified by results_dir
+            project_output_dir = os.path.join(run_dir, c.insite_study_area_name) #output InSite folder
+
+            db_file = os.path.join(project_output_dir, c.insite_setup_name + '.study.sqlite')
+            if not os.path.exists(db_file) or args.remove_results_dir:
+                xml_full_path = os.path.join(run_dir, c.dst_x3d_xml_file_name) #input InSite folder
+                xml_full_path=xml_full_path.replace(' ', '\ ')
+                insite_project.run_x3d(xml_full_path, project_output_dir)
+            elif os.path.exists(p2mpaths_file) and args.jump:
+                continue
+            else: 
+                print("ERROR: " + db_file + " already exists, aborting simulation!") 
+                raise Exception()
+
+        print('Finished running MIMO ray-tracing')
         exit(1)
 
     #copy files from initial (source folder) to results base folder
