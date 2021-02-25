@@ -5,7 +5,7 @@ import numpy as np
 
 import traci
 
-from rwimodeling import errors, objects, txrx, X3dXmlFile
+from rwimodeling import errors, objects, txrx, X3dXmlFile, mimo
 
 from sumo import coord
 
@@ -99,6 +99,24 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
             #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
             #adding Rx 0.1 above car's height, to ensure that it will not be blocked by the vehicle itself
             # if drone
+            if c.mimo_orientation:
+                with open(c.base_setup_path) as infile:
+                    MIMO_setup = mimo.SetupFile.from_file(infile)
+                    mimo_angle = np.radians(90-angle)
+                    delta_y = np.sin(mimo_angle)
+                    delta_x = np.cos(mimo_angle)
+                    offset = 0.02
+                    for child in MIMO_setup._child_list:
+                        x = 0
+                        y = 0
+                        Xoffset = round((delta_x*offset),5)
+                        Yoffset = round((delta_y*offset),5)
+                        for mimo_element in child._child_list:
+                            position = '{} {} {}'.format(x,y,0)
+                            mimo_element.position=position
+                            x = round((x + Xoffset),5)
+                            y = round((y + Yoffset),5)
+                    MIMO_setup.write(c.setup_path)
             if ( veh.startswith('dflow') ):
                 antenna.add_vertice((x-deltaX, y-deltaY, z3 - 0.1))
             else:
@@ -120,7 +138,6 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
         return None, None, None
 
     return structure_group, antenna, all_vehicles
-
 
 def place_on_line(origin_array, destination_list, dim_list, space, object,
                   antenna=None, antenna_origin=None):

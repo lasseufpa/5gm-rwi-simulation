@@ -18,11 +18,11 @@ except ImportError:
 import traci
 from sumo import coord
 
-from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist
+from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist, mimo
 
 import config as c
-from .placement import place_on_line, place_by_sumo #use this option to run from command line
-#from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
+#from .placement import place_on_line, place_by_sumo #use this option to run from command line
+from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
 if c.insite_version == '3.3':
     from rwimodeling import  X3dXmlFile3_3
 
@@ -361,10 +361,8 @@ def main():
                 cars_with_antenna=cars_with_antenna,
                 use_fixed_receivers = c.use_fixed_receivers,
                 use_pedestrians = c.use_pedestrians)
-            print(traci.simulation.getCurrentTime())
 
             #if location is None:  #there are not cars with antennas in this episode (all have left)
-            #    print('BBBBBBBBBUg')
             # no vehicles in the environment (not only the ones without antennas, but no vehicles at all)
             if traci.vehicle.getIDList() is None:
                 logging.warning("No vehicles in scene " + str(scene_i) + " time " + str(traci.simulation.getCurrentTime()))
@@ -409,13 +407,22 @@ def main():
         xml_full_path=xml_full_path.replace(' ', '\ ')
 
         if not c.use_fixed_receivers: #Marcus' workaround
-            x3d_xml_file.add_vertice_list(location, c.dst_x3d_txrx_xpath)
-            x3d_xml_file.write(xml_full_path)
+            if not args.mimo_only: #Ailton workaround
+                x3d_xml_file.add_vertice_list(location, c.dst_x3d_txrx_xpath)
+                x3d_xml_file.write(xml_full_path)
 
-            txrxFile[c.antenna_points_name].location_list[0] = location
-            # txrx modified in the RWI project
-            dst_txrx_full_path = os.path.join(run_dir, c.dst_txrx_file_name)
-            txrxFile.write(dst_txrx_full_path)
+                txrxFile[c.antenna_points_name].location_list[0] = location
+                # txrx modified in the RWI project
+                dst_txrx_full_path = os.path.join(run_dir, c.dst_txrx_file_name)
+                txrxFile.write(dst_txrx_full_path)
+            else:
+                x3d_xml_file.add_vertice_list(location, c.dst_x3d_txrx_xpath)
+                x3d_xml_file.write(xml_full_path)
+
+                txrxFile[c.antenna_points_name].location_list[0] = location
+                # txrx modified in the RWI project
+                dst_txrx_full_path = os.path.join(run_dir, c.dst_txrx_file_name)
+                txrxFile.write(dst_txrx_full_path)
 
         #check if we should run ray-tracing
         if not args.place_only:

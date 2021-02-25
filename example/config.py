@@ -54,9 +54,9 @@ working_directory = os.path.dirname(os.path.realpath(__file__))
 if False:
     base_insite_project_path = 'D:/insitedata/insite_new_simuls/'
 else:
-    base_insite_project_path = os.path.join(working_directory,'2018_02_04_insiteproject_ita')
+    base_insite_project_path = os.path.join(working_directory,'mimo_tst_base/60GHz')
 #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-results_dir = os.path.join(working_directory, 'simulations/rt_results')
+results_dir = os.path.join(working_directory, 'simulations/mobile_mimo_60GHz_no_orientation')
 #Folders and files for InSite and its license. For Windows you may simply inform
 #the path to the executable files, not minding about the license file location.
 #Folders for SUMO and InSite. Use executable sumo-gui if want to see the GUI or sumo otherwise
@@ -84,12 +84,13 @@ elif insite_version == '3.2': #general case, assuming Windows
 
 ### HERE STARTS CONFIGURATION ### NOTE: ONLY CHANGE IF YOU KNOW WHAT ARE YOU DOING
 #SUMO configuration file:
-sumo_cfg = os.path.join(working_directory, 'sumo', 'ita.sumocfg')
+sumo_cfg = os.path.join(working_directory, 'sumo', 'seasonal.sumocfg')
 
 use_fixed_receivers = False #set to False if only vehicles are receivers
 use_pedestrians = False # only set True if your sumo is ready for pedestrians
 use_vehicles_template = False # set True to use pre-made vehicle ( not boxes ), NOTE: only set True if you have the folder objects with the models.
 drone_simulation = False # Only drones will be chosen to be receivers
+mimo_orientation = False # Only avaliable for a single Rx
 
 print('########## Scripts will assume the following files: ##########')
 print('SUMO executable: ', sumo_bin)
@@ -101,15 +102,15 @@ print('InSite input files folder: ', base_insite_project_path)
 #print('InSite temporary output folder: ', project_output_dir)
 print('Final output parent folder: ', results_dir)
 
-n_run = range(0,5800,1) # iterator that determines maximum number of RT simulations
+n_run = range(0,10,1) # iterator that determines maximum number of RT simulations
 
-sampling_interval = 0.1 #time interval between scenes (in seconds)
-time_of_episode = 50 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
+sampling_interval = 10 #time interval between scenes (in seconds)
+time_of_episode = 2 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
 time_between_episodes = int(3 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
 if use_fixed_receivers: #set to False if only vehicles are receivers
     n_antenna_per_episode = 0 #number of receivers per episode
 else:
-    n_antenna_per_episode = 10 #number of receivers per episode
+    n_antenna_per_episode = 1 #number of receivers per episode
 # where to map the received to TFRecords (minx, miny, maxx, maxy)
 analysis_area = (729, 453, 666, 666)
 analysis_area_resolution = 0.5
@@ -139,7 +140,8 @@ results_base_model_dir.replace('\\', '/')
 #Input files, which are read by the Python scripts
 # File that has the base InSite project:
 setup_path = os.path.join(base_insite_project_path, insite_setup_name + '.setup')
-setup_path = setup_path.replace(' ', '\ ') #deal with paths with blank spaces
+base_setup_path = os.path.join(base_insite_project_path, 'base.setup')
+#setup_path = setup_path.replace(' ', '\ ') #deal with paths with blank spaces
 # XML that has information about the simulations
 base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.' + insite_study_area_name+'.xml')
 # Name (basename) of the paths file generated in the simulation
@@ -190,7 +192,7 @@ car_structure_name = 'car'
 antenna_points_name = insite_rx_name
 
 if use_sumo == True:
-    seed = 250 #Original's ITA paper seed = 1517605264
+    seed = 353432 #3501970 Original's ITA paper seed = 1517605264
     np.random.seed(seed)
     sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', str(sampling_interval), '--seed', '{}'.format(seed)]
     #mapping from SUMO to InSite coordinates
