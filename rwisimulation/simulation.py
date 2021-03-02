@@ -21,11 +21,11 @@ from sumo import coord
 from rwimodeling import insite, objects, txrx, X3dXmlFile, verticelist, mimo
 
 import config as c
-#from .placement import place_on_line, place_by_sumo #use this option to run from command line
-from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
+from .placement import place_on_line, place_by_sumo #use this option to run from command line
+#from placement import place_on_line, place_by_sumo #use this option to run from within IntelliJ IDE and debug
+
 if c.insite_version == '3.3':
     from rwimodeling import  X3dXmlFile3_3
-
 
 def writeSUMOInfoIntoFile(sumoOutputInfoFileName, episode_i, scene_i, lane_boundary_dict, cars_with_antenna, fixedReceivers, use_pedestrians):
     '''Save as CSV text file some information obtained from SUMO for this specific scene.
