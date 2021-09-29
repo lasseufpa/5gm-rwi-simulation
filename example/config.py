@@ -37,79 +37,47 @@ def get_insite_version(base_insite_project_path):
             return insite_version
 
 ###############################################################
-## Most information in this configuration file is used in the Stage 1 of 
-## the three stages below. But some are also used in the other stages.
-## Stage 1: Running the ray-tracing (RT) and traffic simulators
-## Stage 2: Organizing raw data into a 5GMdata database
-## Stage 3: Converting the database into a file suitable to machine learning packages such as Keras
-## This file is split into two parts. In most cases Part II is not modified.
-###############################################################
-
-###############################################################
 ## Part I - Basic information that typically needs to be modified / checked
 ###############################################################
-# Current folder (or directory). Some paths are relative to this folder:
-working_directory = os.path.dirname(os.path.realpath(__file__)) 
-# InSite will look for input files in this folder. These files will be used to generate all simulations
-if False:
-    base_insite_project_path = 'D:/insitedata/insite_new_simuls/'
-else:
-    base_insite_project_path = os.path.join(working_directory,r'Rosslyn_3.3.0.4\60GHz')
-#Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-results_dir = os.path.join(working_directory, r'simulations\rt_results')
+working_directory = os.path.dirname(os.path.realpath(__file__)) # Current folder (or directory). Some paths are relative to this folder:
+base_insite_project_path = os.path.join(working_directory,r'Rosslyn_3.3.0.4\60GHz') # InSite will look for input files in this folder. These files will be used to generate all simulations
+results_dir = os.path.join(working_directory, r'simulations\rt_results') #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
+
+insite_version = get_insite_version(base_insite_project_path)
 #Folders and files for InSite and its license. For Windows you may simply inform
 #the path to the executable files, not minding about the license file location.
 #Folders for SUMO and InSite. Use executable sumo-gui if want to see the GUI or sumo otherwise
-
-insite_version = get_insite_version(base_insite_project_path)
-
 if insite_version == '3.3':
     sumo_bin = 'C:/Program Files (x86)/Eclipse/Sumo/bin/sumo.exe'
     calcprop_bin = ('"C:\\Program Files\\Remcom\\Wireless InSite 3.3.3\\bin\\calc\\calcprop.exe"')
     wibatch_bin = ('"C:\\Program Files\\Remcom\\Wireless InSite 3.3.3\\bin\\calc\\wibatch.exe"')
 elif insite_version == '3.2': #general case, assuming Windows    
-    sumo_bin = '/usr/bin/sumo'
-    calcprop_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
-                    'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
-                    '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/ ' +
-                    '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/calcprop_3.2.0.3')
-    wibatch_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
-               'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
-               '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
+    sumo_bin = 'C:/Program Files (x86)/Eclipse/Sumo/bin/sumo.exe'
+    calcprop_bin = ('"C:\\Program Files\\Remcom\\Wireless InSite 3.2.0\\bin\\calc\\calcprop.exe"')
+    wibatch_bin = ('"C:\\Program Files\\Remcom\\Wireless InSite 3.2.0\\bin\\calc\\wibatch.exe"')
 
 ### HERE STARTS CONFIGURATION ### NOTE: ONLY CHANGE IF YOU KNOW WHAT ARE YOU DOING
 #SUMO configuration file: 
-#sumo_cfg = str(os.path.join(working_directory, 'sumo', 'seasonal.sumocfg'))
-sumo_cfg = 'C:/Users/Ailton/git/5gm-rwi-simulation/example/sumo/seasonal.sumocfg'
+sumo_cfg = str(os.path.join(working_directory, 'sumo', 'seasonal.sumocfg'))
+#sumo_cfg = 'C:/Users/Ailton/git/5gm-rwi-simulation/example/sumo/seasonal.sumocfg'
 use_fixed_receivers = False #set to False if only vehicles are receivers
 use_pedestrians = False # only set True if your sumo is ready for pedestrians
-use_vehicles_template = False # set True to use pre-made vehicle ( not boxes ), NOTE: only set True if you have the folder objects with the models.
+use_vehicles_template = False # set True to use pre-made vehicle ( not boxes ), NOTE: Not avaliable in windows
 drone_simulation = False # Only drones will be chosen to be receivers
 
-print('########## Scripts will assume the following files: ##########')
-print('SUMO executable: ', sumo_bin)
-print('SUMO configuration: ', sumo_cfg)
-print('InSite calcprop executable: ', calcprop_bin)
-print('InSite wibatch executable: ', wibatch_bin)
-print('Working folder (base for several folders): ', working_directory)
-print('InSite input files folder: ', base_insite_project_path)
-#print('InSite temporary output folder: ', project_output_dir)
-print('Final output parent folder: ', results_dir)
-
-n_run = range(0,10,1) # iterator that determines maximum number of RT simulations
+n_run = range(0,100,1) # iterator that determines maximum number of RT simulations
 
 sampling_interval = 0.1 #time interval between scenes (in seconds)
 time_of_episode = 50 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
 time_between_episodes = int(3 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
+frequency = 60e9 # frequency in Hz for the RT simulation
 if use_fixed_receivers: #set to False if only vehicles are receivers
     n_antenna_per_episode = 0 #number of receivers per episode
 else:
     n_antenna_per_episode = 10 #number of receivers per episode
-# where to map the received to TFRecords (minx, miny, maxx, maxy)
 analysis_area = (729, 453, 666, 666)
 analysis_area_resolution = 0.5
 antenna_number = 10
-frequency = 60e9 # frequency in Hz for the RT simulation
 
 ###############################################################
 ## Part II - Extra information that typically does not need to be modified
@@ -121,6 +89,17 @@ insite_tx_name = 'Tx'
 insite_rx_name = 'Rx'
 insite_setup_name = 'model'
 insite_vehicles_name = 'random-line'
+
+
+print('########## Scripts will assume the following files: ##########')
+print('SUMO executable: ', sumo_bin)
+print('SUMO configuration: ', sumo_cfg)
+print('InSite calcprop executable: ', calcprop_bin)
+print('InSite wibatch executable: ', wibatch_bin)
+print('Working folder (base for several folders): ', working_directory)
+print('InSite input files folder: ', base_insite_project_path)
+#print('InSite temporary output folder: ', project_output_dir)
+print('Final output parent folder: ', results_dir)
 
 if use_vehicles_template:
     latitude, longitude = get_lat_long((base_insite_project_path))
