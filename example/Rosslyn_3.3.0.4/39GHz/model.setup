@@ -1,0 +1,300 @@
+Format type:keyword version: 1.1.0
+begin_<project> Untitled Project
+project_id 13694
+begin_<globals> 
+longitude -77.0787
+latitude 38.8907
+end_<globals>
+FirstAvailableUnknownLayoutNumber 0
+FirstAvailableStudyAreaNumber 1
+begin_<studyarea> study
+StudyAreaNumber 0
+active
+begin_<partitioning> 
+partitioning_type disabled
+queuing_type disabled
+max_threads 0
+num_partitions 2
+end_<partitioning>
+begin_<apg_acceleration> 
+enabled yes
+workflow_mode full
+binary_output_mode per_path_utm
+binary_rate 0 active
+database_mode write
+path_depth 25
+adjacency_distance 1
+end_<apg_acceleration>
+begin_<diffuse_scattering> 
+enabled no
+diffuse_reflections 2
+diffuse_diffractions 1
+diffuse_transmissions 0
+final_interaction_only yes
+end_<diffuse_scattering>
+autoboundary 1
+begin_<model> 
+x3d
+num_threads 12
+initial_ray_mode uniform_sweep
+foliage_model 0
+foliage_attenuation_vert 1
+foliage_attenuation_hor 1
+terrain_diffractions Yes
+ray_spacing 1
+plane_wave_phase_reference automatic
+616.069 542.41 50.475
+begin_<OutputRequests> 
+CEF no
+ComplexImpulseResponse yes
+DelaySpread no
+DirectionOfArrival no
+DirectionOfDeparture no
+ElectroMagneticFields no
+FSPathloss no
+FSPower no
+MeanDirectionOfArrival no
+MeanDirectionOfDeparture no
+MeanTimeOfArrival no
+Pathloss yes
+Paths yes
+Power yes
+TimeOfArrival no
+XPathloss no
+end_<OutputRequests>
+end_<model>
+begin_<boundary> 
+begin_<reference> 
+cartesian
+longitude -77.0787
+latitude 38.8907
+visible no
+terrain
+end_<reference>
+zmin -0.25
+zmax 101.199996948242
+nVertices 4
+268.925506591797 187.422760009766 0
+963.2119140625 187.422760009766 0
+963.2119140625 897.396667480469 0
+268.925506591797 897.396667480469 0
+end_<boundary>
+begin_<MonteCarlo> 
+monte_carlo_updated no
+monte_carlo_active no
+monte_carlo_mean yes
+monte_carlo_min no
+monte_carlo_max no
+monte_carlo_median no
+monte_carlo_sdev no
+monte_carlo_iterations 10
+monte_carlo_seed 1
+end_<MonteCarlo>
+begin_<MPE> 
+mpe_is_active inactive
+mpestandard controlled
+mpe_averaging_time 300
+mpe_averaging_time_short 0.1
+mpe_user_efield_peak 100000
+mpe_user_efield_rms 61.4
+mpe_user_hfield_rms 0.163
+mpe_user_power_short 10
+mpe_user_power 2
+end_<MPE>
+end_<studyarea>
+begin_<feature> 
+feature 0
+city
+active
+filename ./Rosslyn.city
+end_<feature>
+begin_<feature> 
+feature 1
+object
+active
+filename ./random-line.object
+end_<feature>
+begin_<feature> 
+feature 2
+terrain
+active
+filename ./Rosslyn_DTED.ter
+end_<feature>
+begin_<feature> 
+feature 3
+foliage
+active
+filename ./foliage.veg
+end_<feature>
+begin_<feature> 
+feature 4
+foliage
+active
+filename ./sparse.veg
+end_<feature>
+begin_<txrx_sets> 
+filename ./model.txrx
+FirstAvailableTxRxNumber 3
+end_<txrx_sets>
+FirstAvailableCommSystemNumber 1
+begin_<CommSystem> AK comm
+CommSystemNumber 0
+active
+BaseStations 1 
+Receivers 2 
+AnalysisOption None
+NoisePowerDensity -174
+UniformInterference -250
+BestTxCriterion 0
+BerBandwidth 1
+ModulationScheme DPSK
+AlphabetSize 2
+SpreadSpectrumProcessingGain 1
+AnalysisType AWGN
+BitRate 1e+06
+OutageBerThreshold 0.001
+WirelessAccessMethod WiMax
+ThroughputBandwidth 20
+NumberOfDataStreams 1
+UserDefinedFile internal
+MimoMethod Beamforming / Diversity
+TxBeamformingOption No Beamforming/Precoding
+RxDiversity Selection Combining
+PrecodingFilename 
+DoBaseStationsInterfere 0
+SigParSignalBandwidth 1
+end_<CommSystem>
+begin_<antenna> Isotropic
+antenna 1
+type isotropic
+waveform 0
+polarization vertical
+power_threshold -250
+cable_loss 0
+VSWR 1
+component TotalGain
+gain_range 40
+show_arrow no
+is_sphere no
+end_<antenna>
+begin_<Waveform> Sinusoid
+Sinusoid
+waveform 0
+frequencyDistribution Uniform 500.000 1500.000 inactive nosampling 10
+CarrierFrequency 39000000000.000
+phase 0.000
+bandwidth 1000000.000
+end_<Waveform>
+FirstAvailableFilterNumber 0
+begin_<graph> 
+Title Tx (#1) --> Rx : Path gain
+Xlabel Receiver
+Ylabel Path Gain
+type rectangular
+LegendPos 4
+xgrid 2
+ygrid 2
+rgrid 2
+tgrid 2
+autoxmin 1
+autoxmax 1
+autoymin 1
+autoymax 1
+autormin 1
+autormax 1
+autofmin 1
+autofmax 1
+xmin 1.000000e+00 
+xmax 1.000000e+01 
+actualxmin 0.000000000000
+actualxmax 10.000000000000
+ymin -1.544800e+02 
+ymax -1.039990e+02 
+rmin -1.544800e+02 
+rmax -1.039990e+02 
+actualymin -180.000000000000
+actualymax -100.000000000000
+actualrmin -154.479995727539
+actualrmax -103.999000549316
+fmin 0.0       
+fmax 1.0       
+bgcolor 255 255 255
+gridcolor 128 128 128
+labelcolor 0 0 0
+begin_<plot> 
+filename D:\Insite_tsts\base5\model.pg.t001_01.r002.p2m
+value Path Gain
+axis Receiver number
+legend Tx (#1) --> Rx : Path gain
+linetype lines
+color 255 0 0
+begin_<xAxisUnits> 
+base meters
+option base
+log false
+special quantity
+end_<xAxisUnits>
+begin_<yAxisUnits> 
+base meters
+option base
+log true
+special ratio
+end_<yAxisUnits>
+end_<plot>
+end_<graph>
+begin_<requests> 
+cartesian
+sealevel
+local
+CalculationMode New
+MaxRenderedPaths 100
+FieldAnimationIncrement 10
+FieldAnimationTimeAveraged yes
+CEF no
+ComplexImpulseResponse yes
+DelaySpread no
+FieldAnimation no
+DirectionOfArrival no
+DirectionOfDeparture no
+ElectricFieldVsFrequency no
+ElectricFieldVsTime no
+EMFields no
+FSPathloss no
+FSPower no
+InputData no
+MeanDirectionOfArrival no
+MeanDirectionOfDeparture no
+MeanTimeOfArrival no
+Pathloss yes
+Paths yes
+Power yes
+PowerDelayProfile no
+TimeOfArrival no
+XPathloss no
+TerrainProfile no
+end_<requests>
+begin_<Scales> 
+begin_<MpeThreshhold> 
+AutoScaling 0
+DrawValues 0
+AutoUpdating 0
+Discrete 1
+UseGlobalOpacity 1
+ManualValuesSet 1
+ClampedHigh 1
+ClampedLow 1
+Alpha 1.000e+00
+ManualMin 0.000e+00
+ManualMax 2.000e+02
+TextColor 1.000 1.000 1.000
+Colors 4
+0.300 0.000 0.500
+0.000 1.000 0.000
+1.000 1.000 0.000
+1.000 0.000 0.000
+PartitionValues 
+3
+0.001 50.000 100.000 
+end_<MpeThreshhold>
+end_<Scales>
+end_<project>

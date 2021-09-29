@@ -1,0 +1,56 @@
+Format type:keyword version: 1.1.0
+begin_<terrain> Flat Terrain
+begin_<reference> 
+cartesian
+longitude -77.078700000000012
+latitude 38.890700000000002
+visible no
+sealevel
+end_<reference>
+begin_<Material> ITU Concrete 28 GHz
+Material 5
+LayeredDielectric
+begin_<Color> 
+ambient 0.750000 0.820000 0.810000 1.000000
+diffuse 0.750000 0.820000 0.810000 1.000000
+specular 0.750000 0.820000 0.810000 1.000000
+emission 0.000000 0.000000 0.000000 0.000000
+shininess 5.000000
+end_<Color>
+diffuse_scattering_model none
+fields_diffusively_scattered 0.273000
+cross_polarized_power 0.400000
+directive_alpha 4
+directive_beta 4
+directive_lambda 0.750000
+subdivide_facets yes
+reflection_coefficient_options do_not_use
+nLayers 1
+begin_<DielectricLayer> 
+conductivity 4.838e-01
+permittivity 5.310000
+roughness 0.000e+00
+thickness 3.000e-01
+end_<DielectricLayer>
+end_<Material>
+begin_<structure_group> 
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 5
+nVertices 3
+269.1755065918 187.6727600098 0.0000000000
+962.9619140625 187.6727600098 0.0000000000
+962.9619140625 897.1466674805 0.0000000000
+end_<face>
+begin_<face> 
+Material 5
+nVertices 3
+269.1755065918 897.1466674805 0.0000000000
+269.1755065918 187.6727600098 0.0000000000
+962.9619140625 897.1466674805 0.0000000000
+end_<face>
+end_<sub_structure>
+end_<structure>
+end_<structure_group>
+end_<terrain>

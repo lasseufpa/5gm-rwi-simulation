@@ -54,9 +54,9 @@ working_directory = os.path.dirname(os.path.realpath(__file__))
 if False:
     base_insite_project_path = 'D:/insitedata/insite_new_simuls/'
 else:
-    base_insite_project_path = os.path.join(working_directory,'2018_02_04_insiteproject_ita')
+    base_insite_project_path = os.path.join(working_directory,r'Rosslyn_3.3.0.4\60GHz')
 #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-results_dir = os.path.join(working_directory, 'simulations/rt_results')
+results_dir = os.path.join(working_directory, r'simulations\rt_results')
 #Folders and files for InSite and its license. For Windows you may simply inform
 #the path to the executable files, not minding about the license file location.
 #Folders for SUMO and InSite. Use executable sumo-gui if want to see the GUI or sumo otherwise
@@ -64,14 +64,9 @@ results_dir = os.path.join(working_directory, 'simulations/rt_results')
 insite_version = get_insite_version(base_insite_project_path)
 
 if insite_version == '3.3':
-    sumo_bin = '/usr/bin/sumo'
-    calcprop_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
-                    'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
-                    '/home/psb/insite/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/ ' +
-                    '/home/psb/insite/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/calcprop_3.3.0.4')
-    wibatch_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
-               'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
-               '/home/psb/insite/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/wibatch')
+    sumo_bin = 'C:/Program Files (x86)/Eclipse/Sumo/bin/sumo.exe'
+    calcprop_bin = ('"C:\\Program Files\\Remcom\\Wireless InSite 3.3.3\\bin\\calc\\calcprop.exe"')
+    wibatch_bin = ('"C:\\Program Files\\Remcom\\Wireless InSite 3.3.3\\bin\\calc\\wibatch.exe"')
 elif insite_version == '3.2': #general case, assuming Windows    
     sumo_bin = '/usr/bin/sumo'
     calcprop_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
@@ -83,9 +78,9 @@ elif insite_version == '3.2': #general case, assuming Windows
                '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
 
 ### HERE STARTS CONFIGURATION ### NOTE: ONLY CHANGE IF YOU KNOW WHAT ARE YOU DOING
-#SUMO configuration file:
-sumo_cfg = os.path.join(working_directory, 'sumo', 'ita.sumocfg')
-
+#SUMO configuration file: 
+#sumo_cfg = str(os.path.join(working_directory, 'sumo', 'seasonal.sumocfg'))
+sumo_cfg = 'C:/Users/Ailton/git/5gm-rwi-simulation/example/sumo/seasonal.sumocfg'
 use_fixed_receivers = False #set to False if only vehicles are receivers
 use_pedestrians = False # only set True if your sumo is ready for pedestrians
 use_vehicles_template = False # set True to use pre-made vehicle ( not boxes ), NOTE: only set True if you have the folder objects with the models.
@@ -101,7 +96,7 @@ print('InSite input files folder: ', base_insite_project_path)
 #print('InSite temporary output folder: ', project_output_dir)
 print('Final output parent folder: ', results_dir)
 
-n_run = range(0,5800,1) # iterator that determines maximum number of RT simulations
+n_run = range(0,10,1) # iterator that determines maximum number of RT simulations
 
 sampling_interval = 0.1 #time interval between scenes (in seconds)
 time_of_episode = 50 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
