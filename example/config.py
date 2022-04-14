@@ -54,33 +54,33 @@ working_directory = os.path.dirname(os.path.realpath(__file__))
 if False:
     base_insite_project_path = 'D:/insitedata/insite_new_simuls/'
 else:
-    base_insite_project_path = os.path.join(working_directory,'mimo_tst_base/60GHz')
+    base_insite_project_path = os.path.join(working_directory,'Rosslyn_60GHz')
 #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
-results_dir = os.path.join(working_directory, 'simulations/mobile_mimo_60GHz_no_orientation')
+results_dir = os.path.join(working_directory, 'simulations/ray_tracing_output')
 #Folders and files for InSite and its license. For Windows you may simply inform
 #the path to the executable files, not minding about the license file location.
 #Folders for SUMO and InSite. Use executable sumo-gui if want to see the GUI or sumo otherwise
 
-insite_version = get_insite_version(base_insite_project_path)
+insite_version = get_insite_version(base_insite_project_path) # Indentify Insite version
+locale = 'LC_CTYPE=en_US.UTF-8 LC_NUMERIC=en_US.UTF-8 LC_TIME=en_US.UTF-8 ' # Insite env variable
+sumo_bin = '/usr/bin/sumo' # SUMO bin path variable
 
 if insite_version == '3.3':
-    sumo_bin = '/usr/bin/sumo'
     calcprop_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
-                    'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
-                    '/home/psb/insite/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/ ' +
-                    '/home/psb/insite/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/calcprop_3.3.0.4')
-    wibatch_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
-               'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
-               '/home/psb/insite/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/wibatch')
-elif insite_version == '3.2': #general case, assuming Windows    
-    sumo_bin = '/usr/bin/sumo'
+                    'LD_LIBRARY_PATH=/home/takashi/software/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
+                    '/home/takashi/software/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/ ' +
+                    '/home/takashi/software/remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/calcprop_3.3.0.4')
+    wibatch_bin = (locale + 'REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
+               'LD_LIBRARY_PATH=/home/takashi/Remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
+               '/home/takashi/Remcom/WirelessInSite/3.3.0.4/Linux-x86_64RHEL6/bin/wibatch')
+elif insite_version == '3.2':
     calcprop_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
-                    'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
-                    '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/ ' +
-                    '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/calcprop_3.2.0.3')
-    wibatch_bin = ('REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
-               'LD_LIBRARY_PATH=/home/psb/insite/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
-               '/home/psb/insite/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
+                    'LD_LIBRARY_PATH=/home/takashi/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/:' +
+                    '/home/takashi/software/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/ ' +
+                    '/home/takashi/software/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/calcprop_3.2.0.3')
+    wibatch_bin = (locale + 'REMCOMINC_LICENSE_FILE=2508@200.239.93.26 ' +
+               'LD_LIBRARY_PATH=/home/takashi/software/remcom/OpenMPI/1.4.4/Linux-x86_64RHEL6/lib/ ' +
+               '/home/takashi/software/remcom/WirelessInSite/3.2.0.3/Linux-x86_64RHEL6/bin/wibatch')
 
 ### HERE STARTS CONFIGURATION ### NOTE: ONLY CHANGE IF YOU KNOW WHAT ARE YOU DOING
 #SUMO configuration file:
@@ -90,7 +90,8 @@ use_fixed_receivers = False #set to False if only vehicles are receivers
 use_pedestrians = False # only set True if your sumo is ready for pedestrians
 use_vehicles_template = False # set True to use pre-made vehicle ( not boxes ), NOTE: only set True if you have the folder objects with the models.
 drone_simulation = False # Only drones will be chosen to be receivers
-mimo_orientation = False # Only avaliable for a single Rx
+mimo_orientation = False # Only avaliable for a single Rx (not available)
+use_V2V = True # set True to use V2V (transmitters and receivers are vehicles)
 
 print('########## Scripts will assume the following files: ##########')
 print('SUMO executable: ', sumo_bin)
@@ -102,15 +103,18 @@ print('InSite input files folder: ', base_insite_project_path)
 #print('InSite temporary output folder: ', project_output_dir)
 print('Final output parent folder: ', results_dir)
 
-n_run = range(0,10,1) # iterator that determines maximum number of RT simulations
+n_run = range(0,100,1) # iterator that determines maximum number of RT simulations
 
-sampling_interval = 10 #time interval between scenes (in seconds)
-time_of_episode = 2 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
+sampling_interval = 0.5 #time interval between scenes (in seconds)
+time_of_episode = 10 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
 time_between_episodes = int(3 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
 if use_fixed_receivers: #set to False if only vehicles are receivers
     n_antenna_per_episode = 0 #number of receivers per episode
 else:
-    n_antenna_per_episode = 1 #number of receivers per episode
+    n_antenna_per_episode = 3 #number of receivers per episode
+if use_V2V:
+    n_Tx_per_episode = 2 #number of transmitters per episode
+    n_antenna_per_episode = 5 #number of receivers per episode
 # where to map the received to TFRecords (minx, miny, maxx, maxy)
 analysis_area = (729, 453, 666, 666)
 analysis_area_resolution = 0.5
@@ -174,8 +178,12 @@ print('Generated .txrx file that will be used: ', dst_txrx_file_name)
 if insite_version == '3.3':
     dst_x3d_txrx_xpath = ("./remcom__rxapi__Job/Scene/remcom__rxapi__Scene/TxRxSetList/remcom__rxapi__TxRxSetList/TxRxSet/remcom__rxapi__PointSet/OutputID/remcom__rxapi__Integer[@Value='2']" +
                       "/../../ControlPoints/remcom__rxapi__ProjectedPointList")
+    dst_x3d_txrx_xpath_to_tx = ("./remcom__rxapi__Job/Scene/remcom__rxapi__Scene/TxRxSetList/remcom__rxapi__TxRxSetList/TxRxSet/remcom__rxapi__PointSet/OutputID/remcom__rxapi__Integer[@Value='1']" +
+                      "/../../ControlPoints/remcom__rxapi__ProjectedPointList")
 else:
     dst_x3d_txrx_xpath = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSet/OutputID/Integer[@Value='2']" +
+                      "/../../ControlPoints/ProjectedPointList")
+    dst_x3d_txrx_xpath_to_tx = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSet/OutputID/Integer[@Value='1']" +
                       "/../../ControlPoints/ProjectedPointList")
 
 use_sumo = True

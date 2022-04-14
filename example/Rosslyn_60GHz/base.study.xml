@@ -1,0 +1,1014 @@
+<!DOCTYPE InSite>
+<InSite version="3.3.0.4" revision="60227" shared="false" location="branches" host="JW7-58" date="Thu Nov 8 2018">
+  <remcom__rxapi__Job>
+    <Model>
+      <remcom__rxapi__X3D>
+        <APGAccelerationParameters>
+          <remcom__rxapi__APGAccelerationParameters>
+            <APGAccelerationBinaryOutput>
+              <remcom__rxapi__APGAccelerationBinaryOutputMode Value="None"/>
+            </APGAccelerationBinaryOutput>
+            <APGAccelerationWorkflow>
+              <remcom__rxapi__APGAccelerationWorkflowMode Value="Full"/>
+            </APGAccelerationWorkflow>
+            <AdjacencyDistance>
+              <remcom__rxapi__Double Value="1"/>
+            </AdjacencyDistance>
+            <BinaryOutputRate>
+              <remcom__rxapi__Double Value="0"/>
+            </BinaryOutputRate>
+            <PathDepth>
+              <remcom__rxapi__Integer Value="25"/>
+            </PathDepth>
+            <WriteDatabase>
+              <remcom__rxapi__Boolean Value="true"/>
+            </WriteDatabase>
+          </remcom__rxapi__APGAccelerationParameters>
+        </APGAccelerationParameters>
+        <CPUThreads>
+          <remcom__rxapi__Integer Value="12"/>
+        </CPUThreads>
+        <Diffractions>
+          <remcom__rxapi__Integer Value="1"/>
+        </Diffractions>
+        <DiffuseScatteringParameters>
+          <remcom__rxapi__DiffuseScatteringParameters>
+            <DiffuseScatteringDiffractions>
+              <remcom__rxapi__Integer Value="1"/>
+            </DiffuseScatteringDiffractions>
+            <DiffuseScatteringEnabled>
+              <remcom__rxapi__Boolean Value="true"/>
+            </DiffuseScatteringEnabled>
+            <DiffuseScatteringFinalInteractionOnly>
+              <remcom__rxapi__Boolean Value="true"/>
+            </DiffuseScatteringFinalInteractionOnly>
+            <DiffuseScatteringReflections>
+              <remcom__rxapi__Integer Value="10"/>
+            </DiffuseScatteringReflections>
+            <DiffuseScatteringTransmissions>
+              <remcom__rxapi__Integer Value="0"/>
+            </DiffuseScatteringTransmissions>
+          </remcom__rxapi__DiffuseScatteringParameters>
+        </DiffuseScatteringParameters>
+        <FoliageModel>
+          <remcom__rxapi__FoliageModelEnum Value="None"/>
+        </FoliageModel>
+        <Humidity>
+          <remcom__rxapi__Double Value="50"/>
+        </Humidity>
+        <InitialRayMode>
+          <remcom__rxapi__PhiThetaSweepRayMode>
+            <StartPhi>
+              <remcom__rxapi__Double Value="0"/>
+            </StartPhi>
+            <StartTheta>
+              <remcom__rxapi__Double Value="0"/>
+            </StartTheta>
+            <StopPhi>
+              <remcom__rxapi__Double Value="360"/>
+            </StopPhi>
+            <StopTheta>
+              <remcom__rxapi__Double Value="180"/>
+            </StopTheta>
+          </remcom__rxapi__PhiThetaSweepRayMode>
+        </InitialRayMode>
+        <MaximumStoredPaths>
+          <remcom__rxapi__Integer Value="250"/>
+        </MaximumStoredPaths>
+        <OutputRequestList>
+          <remcom__rxapi__OutputRequestList>
+            <BinaryOutputRequestList>
+              <remcom__rxapi__BinaryOutputRequestList>
+                <BinaryOutputRequest>
+                  <remcom__rxapi__BinaryOutputRequest>
+                    <BinaryOutputRequestType>
+                      <remcom__rxapi__BinaryOutputRequestTypeEnum Value="None"/>
+                    </BinaryOutputRequestType>
+                  </remcom__rxapi__BinaryOutputRequest>
+                </BinaryOutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__BinaryOutputRequestList>
+            </BinaryOutputRequestList>
+            <ComplexE_Field>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </ComplexE_Field>
+            <ComplexImpulseResponse>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </ComplexImpulseResponse>
+            <DelaySpread>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </DelaySpread>
+            <DiffuseScatterReceivedPower>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </DiffuseScatterReceivedPower>
+            <DirectionOfArrival>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </DirectionOfArrival>
+            <DirectionOfDeparture>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </DirectionOfDeparture>
+            <Doppler>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </Doppler>
+            <E_Field>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </E_Field>
+            <E_FieldRMS>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </E_FieldRMS>
+            <E_FieldVsTime>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </E_FieldVsTime>
+            <ExcessPathLoss>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </ExcessPathLoss>
+            <ExcessPathLossWithoutAntennas>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </ExcessPathLossWithoutAntennas>
+            <ExcessTimeOfArrival>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </ExcessTimeOfArrival>
+            <FreeSpacePathLoss>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </FreeSpacePathLoss>
+            <FreeSpacePathLossWithoutAntennas>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </FreeSpacePathLossWithoutAntennas>
+            <FreeSpaceReceivedPower>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </FreeSpaceReceivedPower>
+            <FreeSpaceReceivedPowerWithoutAntennas>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </FreeSpaceReceivedPowerWithoutAntennas>
+            <H_Field>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </H_Field>
+            <H_FieldRMS>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </H_FieldRMS>
+            <MeanDirectionOfArrival>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </MeanDirectionOfArrival>
+            <MeanDirectionOfDeparture>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </MeanDirectionOfDeparture>
+            <MeanTimeOfArrival>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </MeanTimeOfArrival>
+            <PathGain>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </PathGain>
+            <PathLoss>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </PathLoss>
+            <PoyntingVector>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </PoyntingVector>
+            <PoyntingVectorRMS>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </PoyntingVectorRMS>
+            <PropagationPaths>
+              <remcom__rxapi__PropagationPathRequest>
+                <MaximumPathsPerReceiverPoint>
+                  <remcom__rxapi__Integer Value="30"/>
+                </MaximumPathsPerReceiverPoint>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </Requested>
+                <SumEFields>
+                  <remcom__rxapi__EFieldSumEnum Value="AllPaths"/>
+                </SumEFields>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__PropagationPathRequest>
+            </PropagationPaths>
+            <ReceivedPower>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </ReceivedPower>
+            <TimeOfArrival>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </TimeOfArrival>
+            <TransmissionLoss>
+              <remcom__rxapi__OutputRequest>
+                <Requested>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </Requested>
+                <ValidForModel>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ValidForModel>
+              </remcom__rxapi__OutputRequest>
+            </TransmissionLoss>
+          </remcom__rxapi__OutputRequestList>
+        </OutputRequestList>
+        <PhaseReferencePoint>
+          <remcom__rxapi__CartesianPoint>
+            <X>
+              <remcom__rxapi__Double Value="477.9454231262207"/>
+            </X>
+            <Y>
+              <remcom__rxapi__Double Value="445.03779983520508"/>
+            </Y>
+            <Z>
+              <remcom__rxapi__Double Value="50.474998474121094"/>
+            </Z>
+          </remcom__rxapi__CartesianPoint>
+        </PhaseReferencePoint>
+        <Pressure>
+          <remcom__rxapi__Double Value="1013.25"/>
+        </Pressure>
+        <RaySpacing>
+          <remcom__rxapi__Double Value="1"/>
+        </RaySpacing>
+        <Reflections>
+          <remcom__rxapi__Integer Value="6"/>
+        </Reflections>
+        <Temperature>
+          <remcom__rxapi__Double Value="22.199999999999999"/>
+        </Temperature>
+        <TerminalRefraction>
+          <remcom__rxapi__Boolean Value="false"/>
+        </TerminalRefraction>
+        <TerrainDiffractions>
+          <remcom__rxapi__Boolean Value="true"/>
+        </TerrainDiffractions>
+        <Transmissions>
+          <remcom__rxapi__Integer Value="0"/>
+        </Transmissions>
+        <UseGPU>
+          <remcom__rxapi__Boolean Value="true"/>
+        </UseGPU>
+      </remcom__rxapi__X3D>
+    </Model>
+    <OutputLocation>
+      <remcom__rxapi__String Value="study"/>
+    </OutputLocation>
+    <OutputPrefix>
+      <remcom__rxapi__String Value="model"/>
+    </OutputPrefix>
+    <PathResultsDatabase>
+      <remcom__rxapi__PathResultsDatabase>
+        <Filename>
+          <remcom__rxapi__FileDescription>
+            <Filename>
+              <remcom__rxapi__String Value="./study/model.study.sqlite"/>
+            </Filename>
+            <FilenameChecksum>
+              <remcom__rxapi__String/>
+            </FilenameChecksum>
+          </remcom__rxapi__FileDescription>
+        </Filename>
+      </remcom__rxapi__PathResultsDatabase>
+    </PathResultsDatabase>
+    <ProjectID>
+      <remcom__rxapi__String Value="13694"/>
+    </ProjectID>
+    <Scene>
+      <remcom__rxapi__Scene>
+        <AntennaList>
+          <remcom__rxapi__AntennaList>
+            <Antenna>
+              <remcom__rxapi__Isotropic>
+                <CableLoss>
+                  <remcom__rxapi__Double Value="0"/>
+                </CableLoss>
+                <Polarization>
+                  <remcom__rxapi__PolarizationEnum Value="Vertical"/>
+                </Polarization>
+                <PowerThreshold>
+                  <remcom__rxapi__Double Value="-250"/>
+                </PowerThreshold>
+                <Temperature>
+                  <remcom__rxapi__Double Value="293"/>
+                </Temperature>
+                <VSWR>
+                  <remcom__rxapi__Double Value="1"/>
+                </VSWR>
+                <Waveform>
+                  <remcom__rxapi__Sinusoid>
+                    <Amplitude>
+                      <remcom__rxapi__Double Value="1"/>
+                    </Amplitude>
+                    <Bandwidth>
+                      <remcom__rxapi__Double Value="1"/>
+                    </Bandwidth>
+                    <CarrierFrequency>
+                      <remcom__rxapi__Double Value="60000000000"/>
+                    </CarrierFrequency>
+                    <Dispersive>
+                      <remcom__rxapi__Boolean Value="false"/>
+                    </Dispersive>
+                    <Phase>
+                      <remcom__rxapi__Double Value="0"/>
+                    </Phase>
+                  </remcom__rxapi__Sinusoid>
+                </Waveform>
+              </remcom__rxapi__Isotropic>
+            </Antenna>
+          </remcom__rxapi__AntennaList>
+        </AntennaList>
+        <GeometryList>
+          <remcom__rxapi__GeometryList>
+            <Geometry>
+              <remcom__rxapi__City>
+                <GeometrySource>
+                  <remcom__rxapi__WirelessInSiteGeometry>
+                    <Filename>
+                      <remcom__rxapi__FileDescription>
+                        <Filename>
+                          <remcom__rxapi__String Value="./Rosslyn.city"/>
+                        </Filename>
+                        <FilenameChecksum>
+                          <remcom__rxapi__String/>
+                        </FilenameChecksum>
+                      </remcom__rxapi__FileDescription>
+                    </Filename>
+                  </remcom__rxapi__WirelessInSiteGeometry>
+                </GeometrySource>
+              </remcom__rxapi__City>
+            </Geometry>
+            <Geometry>
+              <remcom__rxapi__Object>
+                <GeometrySource>
+                  <remcom__rxapi__WirelessInSiteGeometry>
+                    <Filename>
+                      <remcom__rxapi__FileDescription>
+                        <Filename>
+                          <remcom__rxapi__String Value="./random-line.object"/>
+                        </Filename>
+                        <FilenameChecksum>
+                          <remcom__rxapi__String/>
+                        </FilenameChecksum>
+                      </remcom__rxapi__FileDescription>
+                    </Filename>
+                  </remcom__rxapi__WirelessInSiteGeometry>
+                </GeometrySource>
+              </remcom__rxapi__Object>
+            </Geometry>
+            <Geometry>
+              <remcom__rxapi__Terrain>
+                <GeometrySource>
+                  <remcom__rxapi__WirelessInSiteGeometry>
+                    <Filename>
+                      <remcom__rxapi__FileDescription>
+                        <Filename>
+                          <remcom__rxapi__String Value="./Rosslyn_DTED.ter"/>
+                        </Filename>
+                        <FilenameChecksum>
+                          <remcom__rxapi__String/>
+                        </FilenameChecksum>
+                      </remcom__rxapi__FileDescription>
+                    </Filename>
+                    <MaterialList>
+                      <remcom__rxapi__MaterialList>
+                        <Material>
+                          <remcom__rxapi__LayeredDielectric>
+                            <DielectricLayer>
+                              <remcom__rxapi__DielectricLayer>
+                                <Conductivity>
+                                  <remcom__rxapi__Double Value="0.89670000000000005"/>
+                                </Conductivity>
+                                <Description>
+                                  <remcom__rxapi__String/>
+                                </Description>
+                                <Permittivity>
+                                  <remcom__rxapi__Double Value="5.3099999999999996"/>
+                                </Permittivity>
+                                <Roughness>
+                                  <remcom__rxapi__Double Value="0"/>
+                                </Roughness>
+                                <Thickness>
+                                  <remcom__rxapi__Double Value="0.29999999999999999"/>
+                                </Thickness>
+                              </remcom__rxapi__DielectricLayer>
+                            </DielectricLayer>
+                            <DiffuseScattering>
+                              <remcom__rxapi__DiffuseScatteringMaterialProperties>
+                                <Alpha>
+                                  <remcom__rxapi__Integer Value="4"/>
+                                </Alpha>
+                                <Beta>
+                                  <remcom__rxapi__Integer Value="4"/>
+                                </Beta>
+                                <CrossPolFraction>
+                                  <remcom__rxapi__Double Value="0.40000000000000002"/>
+                                </CrossPolFraction>
+                                <Lambda>
+                                  <remcom__rxapi__Double Value="0.75"/>
+                                </Lambda>
+                                <ScatteringFactor>
+                                  <remcom__rxapi__Double Value="0.40000000000000002"/>
+                                </ScatteringFactor>
+                                <ScatteringModel>
+                                  <remcom__rxapi__DiffuseScatteringModelEnum Value="Lambertian"/>
+                                </ScatteringModel>
+                                <SubdivideFacets>
+                                  <remcom__rxapi__Boolean Value="true"/>
+                                </SubdivideFacets>
+                                <UseReflectionCoefficient>
+                                  <remcom__rxapi__UseReflectionCoefficientEnum Value="DoNotUse"/>
+                                </UseReflectionCoefficient>
+                              </remcom__rxapi__DiffuseScatteringMaterialProperties>
+                            </DiffuseScattering>
+                            <Index>
+                              <remcom__rxapi__Integer Value="3"/>
+                            </Index>
+                            <Thickness>
+                              <remcom__rxapi__Double Value="0"/>
+                            </Thickness>
+                          </remcom__rxapi__LayeredDielectric>
+                        </Material>
+                      </remcom__rxapi__MaterialList>
+                    </MaterialList>
+                  </remcom__rxapi__WirelessInSiteGeometry>
+                </GeometrySource>
+              </remcom__rxapi__Terrain>
+            </Geometry>
+            <Geometry>
+              <remcom__rxapi__Foliage>
+                <GeometrySource>
+                  <remcom__rxapi__WirelessInSiteGeometry>
+                    <Filename>
+                      <remcom__rxapi__FileDescription>
+                        <Filename>
+                          <remcom__rxapi__String Value="./foliage.veg"/>
+                        </Filename>
+                        <FilenameChecksum>
+                          <remcom__rxapi__String/>
+                        </FilenameChecksum>
+                      </remcom__rxapi__FileDescription>
+                    </Filename>
+                  </remcom__rxapi__WirelessInSiteGeometry>
+                </GeometrySource>
+              </remcom__rxapi__Foliage>
+            </Geometry>
+            <Geometry>
+              <remcom__rxapi__Foliage>
+                <GeometrySource>
+                  <remcom__rxapi__WirelessInSiteGeometry>
+                    <Filename>
+                      <remcom__rxapi__FileDescription>
+                        <Filename>
+                          <remcom__rxapi__String Value="./sparse.veg"/>
+                        </Filename>
+                        <FilenameChecksum>
+                          <remcom__rxapi__String/>
+                        </FilenameChecksum>
+                      </remcom__rxapi__FileDescription>
+                    </Filename>
+                  </remcom__rxapi__WirelessInSiteGeometry>
+                </GeometrySource>
+              </remcom__rxapi__Foliage>
+            </Geometry>
+          </remcom__rxapi__GeometryList>
+        </GeometryList>
+        <Origin>
+          <remcom__rxapi__GeographicPoint>
+            <Altitude>
+              <remcom__rxapi__Double Value="0"/>
+            </Altitude>
+            <Latitude>
+              <remcom__rxapi__Double Value="38.890700000000002"/>
+            </Latitude>
+            <Longitude>
+              <remcom__rxapi__Double Value="-77.078700000000012"/>
+            </Longitude>
+          </remcom__rxapi__GeographicPoint>
+        </Origin>
+        <TxRxSetList>
+          <remcom__rxapi__TxRxSetList>
+            <TxRxSet>
+              <remcom__rxapi__PointSet>
+                <AdjacencyDistance>
+                  <remcom__rxapi__Double Value="1"/>
+                </AdjacencyDistance>
+                <ConformToTerrain>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ConformToTerrain>
+                <ControlPoints>
+                  <remcom__rxapi__ProjectedPointList>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="746"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="560"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="4"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                  </remcom__rxapi__ProjectedPointList>
+                </ControlPoints>
+                <OutputID>
+                  <remcom__rxapi__Integer Value="1"/>
+                </OutputID>
+                <ShortDescription>
+                  <remcom__rxapi__String Value="Tx"/>
+                </ShortDescription>
+                <Transmitter>
+                  <remcom__rxapi__Transmitter>
+                    <Antenna>
+                      <remcom__rxapi__Isotropic>
+                        <CableLoss>
+                          <remcom__rxapi__Double Value="0"/>
+                        </CableLoss>
+                        <Polarization>
+                          <remcom__rxapi__PolarizationEnum Value="Vertical"/>
+                        </Polarization>
+                        <PowerThreshold>
+                          <remcom__rxapi__Double Value="-250"/>
+                        </PowerThreshold>
+                        <Temperature>
+                          <remcom__rxapi__Double Value="293"/>
+                        </Temperature>
+                        <VSWR>
+                          <remcom__rxapi__Double Value="1"/>
+                        </VSWR>
+                        <Waveform>
+                          <remcom__rxapi__Sinusoid>
+                            <Amplitude>
+                              <remcom__rxapi__Double Value="1"/>
+                            </Amplitude>
+                            <Bandwidth>
+                              <remcom__rxapi__Double Value="1"/>
+                            </Bandwidth>
+                            <CarrierFrequency>
+                              <remcom__rxapi__Double Value="60000000000"/>
+                            </CarrierFrequency>
+                            <Dispersive>
+                              <remcom__rxapi__Boolean Value="false"/>
+                            </Dispersive>
+                            <Phase>
+                              <remcom__rxapi__Double Value="0"/>
+                            </Phase>
+                          </remcom__rxapi__Sinusoid>
+                        </Waveform>
+                      </remcom__rxapi__Isotropic>
+                    </Antenna>
+                    <AntennaRotations>
+                      <remcom__rxapi__Rotations>
+                        <Bearing>
+                          <remcom__rxapi__Double Value="0"/>
+                        </Bearing>
+                        <Pitch>
+                          <remcom__rxapi__Double Value="0"/>
+                        </Pitch>
+                        <Roll>
+                          <remcom__rxapi__Double Value="0"/>
+                        </Roll>
+                      </remcom__rxapi__Rotations>
+                    </AntennaRotations>
+                    <InputPower>
+                      <remcom__rxapi__Double Value="0"/>
+                    </InputPower>
+                  </remcom__rxapi__Transmitter>
+                </Transmitter>
+                <UseAPGAcceleration>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </UseAPGAcceleration>
+              </remcom__rxapi__PointSet>
+            </TxRxSet>
+            <TxRxSet>
+              <remcom__rxapi__PointSet>
+                <AdjacencyDistance>
+                  <remcom__rxapi__Double Value="1"/>
+                </AdjacencyDistance>
+                <ConformToTerrain>
+                  <remcom__rxapi__Boolean Value="true"/>
+                </ConformToTerrain>
+                <ControlPoints>
+                  <remcom__rxapi__ProjectedPointList>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="777"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="455"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="3"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="776"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="463"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="3"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="768"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="637"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="3"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="768"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="637"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="10"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="702"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="435"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="3"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="716"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="467"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="3"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="658"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="534"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="3"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="658"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="534"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="9"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="711"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="659"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="3"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                    <ProjectedPoint>
+                      <remcom__rxapi__CartesianPoint>
+                        <X>
+                          <remcom__rxapi__Double Value="702"/>
+                        </X>
+                        <Y>
+                          <remcom__rxapi__Double Value="658"/>
+                        </Y>
+                        <Z>
+                          <remcom__rxapi__Double Value="3"/>
+                        </Z>
+                      </remcom__rxapi__CartesianPoint>
+                    </ProjectedPoint>
+                  </remcom__rxapi__ProjectedPointList>
+                </ControlPoints>
+                <OutputID>
+                  <remcom__rxapi__Integer Value="2"/>
+                </OutputID>
+                <Receiver>
+                  <remcom__rxapi__Receiver>
+                    <Antenna>
+                      <remcom__rxapi__Isotropic>
+                        <CableLoss>
+                          <remcom__rxapi__Double Value="0"/>
+                        </CableLoss>
+                        <Polarization>
+                          <remcom__rxapi__PolarizationEnum Value="Vertical"/>
+                        </Polarization>
+                        <PowerThreshold>
+                          <remcom__rxapi__Double Value="-250"/>
+                        </PowerThreshold>
+                        <Temperature>
+                          <remcom__rxapi__Double Value="293"/>
+                        </Temperature>
+                        <VSWR>
+                          <remcom__rxapi__Double Value="1"/>
+                        </VSWR>
+                        <Waveform>
+                          <remcom__rxapi__Sinusoid>
+                            <Amplitude>
+                              <remcom__rxapi__Double Value="1"/>
+                            </Amplitude>
+                            <Bandwidth>
+                              <remcom__rxapi__Double Value="1"/>
+                            </Bandwidth>
+                            <CarrierFrequency>
+                              <remcom__rxapi__Double Value="60000000000"/>
+                            </CarrierFrequency>
+                            <Dispersive>
+                              <remcom__rxapi__Boolean Value="false"/>
+                            </Dispersive>
+                            <Phase>
+                              <remcom__rxapi__Double Value="0"/>
+                            </Phase>
+                          </remcom__rxapi__Sinusoid>
+                        </Waveform>
+                      </remcom__rxapi__Isotropic>
+                    </Antenna>
+                    <AntennaRotations>
+                      <remcom__rxapi__Rotations>
+                        <Bearing>
+                          <remcom__rxapi__Double Value="0"/>
+                        </Bearing>
+                        <Pitch>
+                          <remcom__rxapi__Double Value="0"/>
+                        </Pitch>
+                        <Roll>
+                          <remcom__rxapi__Double Value="0"/>
+                        </Roll>
+                      </remcom__rxapi__Rotations>
+                    </AntennaRotations>
+                    <CollectionRadius>
+                      <remcom__rxapi__Double Value="0"/>
+                    </CollectionRadius>
+                  </remcom__rxapi__Receiver>
+                </Receiver>
+                <ShortDescription>
+                  <remcom__rxapi__String Value="Rx"/>
+                </ShortDescription>
+                <UseAPGAcceleration>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </UseAPGAcceleration>
+              </remcom__rxapi__PointSet>
+            </TxRxSet>
+          </remcom__rxapi__TxRxSetList>
+        </TxRxSetList>
+        <WaveformList>
+          <remcom__rxapi__WaveformList>
+            <Waveform>
+              <remcom__rxapi__Sinusoid>
+                <Amplitude>
+                  <remcom__rxapi__Double Value="1"/>
+                </Amplitude>
+                <Bandwidth>
+                  <remcom__rxapi__Double Value="1"/>
+                </Bandwidth>
+                <CarrierFrequency>
+                  <remcom__rxapi__Double Value="60000000000"/>
+                </CarrierFrequency>
+                <Dispersive>
+                  <remcom__rxapi__Boolean Value="false"/>
+                </Dispersive>
+                <Phase>
+                  <remcom__rxapi__Double Value="0"/>
+                </Phase>
+              </remcom__rxapi__Sinusoid>
+            </Waveform>
+          </remcom__rxapi__WaveformList>
+        </WaveformList>
+      </remcom__rxapi__Scene>
+    </Scene>
+  </remcom__rxapi__Job>
+</InSite>
