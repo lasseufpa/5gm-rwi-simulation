@@ -40,7 +40,7 @@ def get_insite_version(base_insite_project_path):
 ## Part I - Basic information that typically needs to be modified / checked
 ###############################################################
 working_directory = os.path.dirname(os.path.realpath(__file__)) # Current folder (or directory). Some paths are relative to this folder:
-base_insite_project_path = os.path.join(working_directory,r'Rosslyn_3.3.0.4\60GHz') # InSite will look for input files in this folder. These files will be used to generate all simulations
+base_insite_project_path = os.path.join(working_directory,r'Rosslyn_60GHz') # InSite will look for input files in this folder. These files will be used to generate all simulations
 results_dir = os.path.join(working_directory, r'simulations\rt_results') #Folder to store each InSite project and its results (will create subfolders for each "run", run0000, run0001, etc.)
 
 insite_version = get_insite_version(base_insite_project_path)
