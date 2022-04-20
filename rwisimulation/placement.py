@@ -5,7 +5,7 @@ import numpy as np
 
 import traci
 
-from rwimodeling import errors, objects, txrx, X3dXmlFile
+from rwimodeling import errors, objects, txrx, X3dXmlFile, mimo
 
 from sumo import coord
 
@@ -17,9 +17,12 @@ if c.use_vehicles_template:
 
 
 #def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenna=None):
-def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenna, use_fixed_receivers=False, use_pedestrians=False):
+def place_by_sumo(antenna, antenna_Tx, car_material_id, lane_boundary_dict, cars_with_antenna, cars_with_Tx = None, use_V2V=False, use_fixed_receivers=False, use_pedestrians=False):
     antenna = copy.deepcopy(antenna)
     antenna.clear()
+    if use_V2V:
+        antenna_Tx = copy.deepcopy(antenna_Tx)
+        antenna_Tx.clear()
 
     structure_group = objects.StructureGroup()
     structure_group.name = 'SUMO cars'
@@ -27,6 +30,7 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
     str_vehicles = ''
     veh_i = None
     c_present = False
+    c_tx_present = False
 
     if use_pedestrians:
         for ped_i, ped in enumerate(traci.person.getIDList()):
@@ -99,11 +103,35 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
             #translate the antenna as the vehicle. Note the antenna is not rotated (we are using isotropic anyways)
             #adding Rx 0.1 above car's height, to ensure that it will not be blocked by the vehicle itself
             # if drone
+            if c.mimo_orientation:
+                with open(c.base_setup_path) as infile:
+                    MIMO_setup = mimo.SetupFile.from_file(infile)
+                    mimo_angle = np.radians(90-angle)
+                    delta_y = np.sin(mimo_angle)
+                    delta_x = np.cos(mimo_angle)
+                    offset = 0.02
+                    for child in MIMO_setup._child_list:
+                        x = 0
+                        y = 0
+                        Xoffset = round((delta_x*offset),5)
+                        Yoffset = round((delta_y*offset),5)
+                        for mimo_element in child._child_list:
+                            position = '{} {} {}'.format(x,y,0)
+                            mimo_element.position=position
+                            x = round((x + Xoffset),5)
+                            y = round((y + Yoffset),5)
+                    MIMO_setup.write(c.setup_path)
             if ( veh.startswith('dflow') ):
                 antenna.add_vertice((x-deltaX, y-deltaY, z3 - 0.1))
             else:
                 antenna.add_vertice((x-deltaX, y-deltaY, z3 + height + 0.1))
-
+        if use_V2V:     
+            if veh in cars_with_Tx:
+                c_tx_present = True
+                if ( veh.startswith('dflow') ):
+                    antenna_Tx.add_vertice((x-deltaX, y-deltaY, z3 - 0.1))
+                else:
+                    antenna_Tx.add_vertice((x-deltaX, y-deltaY, z3 + height + 0.1))
 
 
     if c.use_vehicles_template:
@@ -111,16 +139,18 @@ def place_by_sumo(antenna, car_material_id, lane_boundary_dict, cars_with_antenn
     else:
         all_vehicles = ''
     if use_fixed_receivers:
-        return structure_group, None, all_vehicles
+        return structure_group, None, None, all_vehicles
 
     if not c_present: #there are no vehicles with antennas
-        return None, None, None
+        return None, None, None, None
+
+    if not c_tx_present and use_V2V: #there are no vehicles with antennas
+        return None, None, None, None
 
     if veh_i is None: #there are no vehicles in the scene according to SUMO (traci)
-        return None, None, None
+        return None, None, None, None
 
-    return structure_group, antenna, all_vehicles
-
+    return structure_group, antenna, antenna_Tx, all_vehicles
 
 def place_on_line(origin_array, destination_list, dim_list, space, object,
                   antenna=None, antenna_origin=None):

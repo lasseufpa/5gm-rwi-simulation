@@ -1,0 +1,338 @@
+begin_<structure_group> 0
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.2322820276 -0.1130854785 0.0621543229
+-0.2322820276 -0.0023466561 0.0621543229
+0.0703724921 -0.0023466561 0.7491649985
+0.0703724921 -0.1130854785 0.7491649985
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.0366538949 -0.1130854785 0.8106358051
+-0.3393084109 -0.1130854785 0.1236251295
+-0.2322820276 -0.1130854785 0.0621543229
+0.0703724921 -0.1130854785 0.7491649985
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.3393084109 -0.0023466561 0.1236251295
+-0.3393084109 -0.1130854785 0.1236251295
+-0.0366538949 -0.1130854785 0.8106358051
+-0.0366538949 -0.0023466561 0.8106358051
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.3393084109 -0.1130854785 0.1236251295
+-0.3393084109 -0.0023466561 0.1236251295
+-0.2322820276 -0.0023466561 0.0621543229
+-0.2322820276 -0.1130854785 0.0621543229
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.3393084109 -0.0023466561 0.1236251295
+-0.0366538949 -0.0023466561 0.8106358051
+0.0703724921 -0.0023466561 0.7491649985
+-0.2322820276 -0.0023466561 0.0621543229
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.2476061583 -0.0023466595 0.0632096231
+0.2476061583 0.1083921716 0.0632096231
+0.3374323845 0.1083921716 0.1119891107
+0.3374323845 -0.0023466595 0.1119891107
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.0447500423 0.1083921716 0.7810509205
+0.2476061583 0.1083921716 0.0632096231
+0.2476061583 -0.0023466595 0.0632096231
+-0.0447500423 -0.0023466586 0.7810509205
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.2476061583 0.1083921716 0.0632096231
+-0.0447500423 0.1083921716 0.7810509205
+0.0450761020 0.1083921716 0.8298304081
+0.3374323845 0.1083921716 0.1119891107
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.3374323845 -0.0023466595 0.1119891107
+0.3374323845 0.1083921716 0.1119891107
+0.0450761020 0.1083921716 0.8298304081
+0.0450761020 -0.0023466586 0.8298304081
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.2476061583 -0.0023466595 0.0632096231
+0.3374323845 -0.0023466595 0.1119891107
+0.0450761020 -0.0023466586 0.8298304081
+-0.0447500423 -0.0023466586 0.7810509205
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.0985162854 0.1083921716 1.3876484632
+0.0489215702 0.1083921716 1.4198417664
+0.0489215702 0.2093866169 1.4198417664
+-0.0985162854 0.2093866169 1.3876484632
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.1118430868 0.1083921716 0.6472198963
+0.1118430868 0.2093866169 0.6472198963
+0.2592809796 0.2093866169 0.6794132590
+0.2592809796 0.1083921716 0.6794132590
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.0985162854 0.2093866169 1.3876484632
+0.0489215702 0.2093866169 1.4198417664
+0.2592809796 0.2093866169 0.6794132590
+0.1118430868 0.2093866169 0.6472198963
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.0489215702 0.2093866169 1.4198417664
+0.0489215702 0.1083921716 1.4198417664
+0.2592809796 0.1083921716 0.6794132590
+0.2592809796 0.2093866169 0.6794132590
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.0985162854 0.1083921716 1.3876484632
+0.1118430868 0.1083921716 0.6472198963
+0.2592809796 0.1083921716 0.6794132590
+0.0489215702 0.1083921716 1.4198417664
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.0985162854 0.1083921716 1.3876484632
+-0.0985162854 0.2093866169 1.3876484632
+0.1118430868 0.2093866169 0.6472198963
+0.1118430868 0.1083921716 0.6472198963
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.2137074322 -0.1906133592 0.6931094527
+-0.1080084443 -0.1906133592 1.4397103786
+-0.1080084443 -0.1130854785 1.4397103786
+-0.2137074322 -0.1130854785 0.6931094527
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.2137074322 -0.1906133592 0.6931094527
+-0.0621488392 -0.1906133592 0.6667553186
+0.0435501188 -0.1906133592 1.4133563042
+-0.1080084443 -0.1906133592 1.4397103786
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.0435501188 -0.1130854785 1.4133563042
+-0.0621488392 -0.1130854785 0.6667553186
+-0.2137074322 -0.1130854785 0.6931094527
+-0.1080084443 -0.1130854785 1.4397103786
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.0621488392 -0.1130854785 0.6667553186
+0.0435501188 -0.1130854785 1.4133563042
+0.0435501188 -0.1906133592 1.4133563042
+-0.0621488392 -0.1906133592 0.6667553186
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.0435501188 -0.1130854785 1.4133563042
+-0.1080084443 -0.1130854785 1.4397103786
+-0.1080084443 -0.1906133592 1.4397103786
+0.0435501188 -0.1906133592 1.4133563042
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.2137074322 -0.1130854785 0.6931094527
+-0.0621488392 -0.1130854785 0.6667553186
+-0.0621488392 -0.1906133592 0.6667553186
+-0.2137074322 -0.1906133592 0.6931094527
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.0699236989 0.1083921716 0.7130086422
+-0.0973147750 0.1083921716 1.8511583805
+0.0555698872 0.1083921716 1.8476341963
+0.0829609334 0.1083921716 0.7094844580
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.0555698872 -0.1130854785 1.8476341963
+0.0555698872 0.1083921716 1.8476341963
+-0.0973147750 0.1083921716 1.8511583805
+-0.0973147750 -0.1130854785 1.8511583805
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.0973147750 0.1083921716 1.8511583805
+-0.0699236989 0.1083921716 0.7130086422
+-0.0699236989 -0.1130854785 0.7130086422
+-0.0973147750 -0.1130854785 1.8511583805
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+-0.0699236989 0.1083921716 0.7130086422
+0.0829609334 0.1083921716 0.7094844580
+0.0829609334 -0.1130854785 0.7094844580
+-0.0699236989 -0.1130854785 0.7130086422
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.0555698872 0.1083921716 1.8476341963
+0.0555698872 -0.1130854785 1.8476341963
+0.0829609334 -0.1130854785 0.7094844580
+0.0829609334 0.1083921716 0.7094844580
+end_<face>
+end_<sub_structure>
+end_<structure>
+begin_<structure> 
+begin_<sub_structure> 
+begin_<face> 
+Material 0
+nVertices 4
+0.0555698872 -0.1130854785 1.8476341963
+-0.0973147750 -0.1130854785 1.8511583805
+-0.0699236989 -0.1130854785 0.7130086422
+0.0829609334 -0.1130854785 0.7094844580
+end_<face>
+end_<sub_structure>
+end_<structure>
+end_<structure_group>

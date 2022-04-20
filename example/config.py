@@ -64,17 +64,23 @@ use_fixed_receivers = False #set to False if only vehicles are receivers
 use_pedestrians = False # only set True if your sumo is ready for pedestrians
 use_vehicles_template = False # set True to use pre-made vehicle ( not boxes ), NOTE: Not avaliable in windows
 drone_simulation = False # Only drones will be chosen to be receivers
+mimo_orientation = False # Only avaliable for a single Rx (not available)
+use_V2V = True # set True to use V2V (transmitters and receivers are vehicles)
 
 n_run = range(0,100,1) # iterator that determines maximum number of RT simulations
 
-sampling_interval = 0.1 #time interval between scenes (in seconds)
-time_of_episode = 50 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
+sampling_interval = 0.5 #time interval between scenes (in seconds)
+time_of_episode = 10 #Number of scenes of each episode | int(0.5 / sampling_interval) # in steps (number of scenes per episodes)
 time_between_episodes = int(3 / sampling_interval) # time among episodes, in steps (if you specify x/Ts, then x is in seconds)
 frequency = 60e9 # frequency in Hz for the RT simulation
 if use_fixed_receivers: #set to False if only vehicles are receivers
     n_antenna_per_episode = 0 #number of receivers per episode
 else:
-    n_antenna_per_episode = 10 #number of receivers per episode
+    n_antenna_per_episode = 3 #number of receivers per episode
+if use_V2V:
+    n_Tx_per_episode = 2 #number of transmitters per episode
+    n_antenna_per_episode = 5 #number of receivers per episode
+# where to map the received to TFRecords (minx, miny, maxx, maxy)
 analysis_area = (729, 453, 666, 666)
 analysis_area_resolution = 0.5
 antenna_number = 10
@@ -113,7 +119,8 @@ results_base_model_dir.replace('\\', '/')
 #Input files, which are read by the Python scripts
 # File that has the base InSite project:
 setup_path = os.path.join(base_insite_project_path, insite_setup_name + '.setup')
-setup_path = setup_path.replace(' ', '\ ') #deal with paths with blank spaces
+base_setup_path = os.path.join(base_insite_project_path, 'base.setup')
+#setup_path = setup_path.replace(' ', '\ ') #deal with paths with blank spaces
 # XML that has information about the simulations
 base_x3d_xml_path = os.path.join(base_insite_project_path, 'base.' + insite_study_area_name+'.xml')
 # Name (basename) of the paths file generated in the simulation
@@ -146,8 +153,12 @@ print('Generated .txrx file that will be used: ', dst_txrx_file_name)
 if insite_version == '3.3':
     dst_x3d_txrx_xpath = ("./remcom__rxapi__Job/Scene/remcom__rxapi__Scene/TxRxSetList/remcom__rxapi__TxRxSetList/TxRxSet/remcom__rxapi__PointSet/OutputID/remcom__rxapi__Integer[@Value='2']" +
                       "/../../ControlPoints/remcom__rxapi__ProjectedPointList")
+    dst_x3d_txrx_xpath_to_tx = ("./remcom__rxapi__Job/Scene/remcom__rxapi__Scene/TxRxSetList/remcom__rxapi__TxRxSetList/TxRxSet/remcom__rxapi__PointSet/OutputID/remcom__rxapi__Integer[@Value='1']" +
+                      "/../../ControlPoints/remcom__rxapi__ProjectedPointList")
 else:
     dst_x3d_txrx_xpath = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSet/OutputID/Integer[@Value='2']" +
+                      "/../../ControlPoints/ProjectedPointList")
+    dst_x3d_txrx_xpath_to_tx = ("./Job/Scene/Scene/TxRxSetList/TxRxSetList/TxRxSet/PointSet/OutputID/Integer[@Value='1']" +
                       "/../../ControlPoints/ProjectedPointList")
 
 use_sumo = True
@@ -164,7 +175,7 @@ car_structure_name = 'car'
 antenna_points_name = insite_rx_name
 
 if use_sumo == True:
-    seed = 250 #Original's ITA paper seed = 1517605264
+    seed = 353432 #3501970 Original's ITA paper seed = 1517605264
     np.random.seed(seed)
     sumo_cmd = [sumo_bin, '-c', sumo_cfg, '--step-length', str(sampling_interval), '--seed', '{}'.format(seed)]
     #mapping from SUMO to InSite coordinates

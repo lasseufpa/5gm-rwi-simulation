@@ -4,6 +4,8 @@ This code assumes Python 3.
 
 See datasets and more information at https://github.com/lasseufpa/5gm-data
 
+Read about the datasets in [Raymobtime](https://www.lasse.ufpa.br/raymobtime/) 
+
 # Reference
 
 If you use any data or code, please cite: "5G MIMO Data for Machine Learning: Application to Beam-Selection using Deep Learning", Aldebaro Klautau, Pedro Batista, Nuria Gonzalez-Prelcic, Yuyang Wang and Robert W. Heath Jr., ITA'2018 (available at http://ita.ucsd.edu/workshop/18/files/paper/paper_3313.pdf).
