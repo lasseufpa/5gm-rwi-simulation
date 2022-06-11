@@ -215,6 +215,10 @@ def main():
         print('Finished running ray-tracing')
         exit(1)
 
+    #set seed for numpy
+    if c.use_sumo:
+        np.random.seed(c.seed)
+
     if args.mimo_only:
         if args.run_calcprop:
             print('Option -r is not compatible with -c')
@@ -370,7 +374,7 @@ def main():
                         # chooses the cars with Rx antennas
                         cars_with_antenna = np.random.choice(traci_vehicle_IDList, c.n_antenna_per_episode, replace=False)
                         # chooses the cars with Tx antennas
-                        temp_cars = list(set(traci_vehicle_IDList) - set(cars_with_antenna))
+                        temp_cars = [x for x in traci_vehicle_IDList if x not in cars_with_antenna]
                         cars_with_Tx = np.random.choice(temp_cars, c.n_Tx_per_episode, replace=False)
                         antenna_Tx = txrxFile[c.insite_tx_name].location_list[0]
                     else:
