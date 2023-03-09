@@ -351,6 +351,8 @@ def main():
                     traci.simulationStep()
                 if c.use_fixed_receivers:
                     cars_with_antenna = []
+                    cars_with_Tx = None
+                    antenna_Tx = None
                 else:
                     # ensure that there enough cars to place antennas. If use_fixed_receivers, then wait to have at least
                     # one vehicle
